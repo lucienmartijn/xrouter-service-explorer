@@ -1,0 +1,69 @@
+<div *ngIf="isLoaded">
+    <h1>XRouter Service</h1>
+    <h2>{{serviceName}}</h2>
+    <table class="table">
+      <tbody>
+      <tr>
+        <td>Fee</td>
+        <td>{{result.service.fee}} BLOCK</td>
+      <tr>
+          <td>Parameter Types</td>
+          <td>{{result.service.parameters}}</td>
+      </tr>
+      <tr>
+        <td>Description</td>
+        <td>{{result.service.helpDescription}}</td>
+      </tr>
+      <tr>
+          <td>Usage Instructions</td>
+          <td>xrService {{serviceName}} [{{result.service.parameters}}]</td>
+      </tr>
+      </tbody>
+    </table>
+    
+    <h3>Offered By</h3>
+    <table class="table">
+      <tbody>
+        <tr>
+          <td>NodePubKey</td>
+          <td><a [routerLink]="['/xrouter-snode', result.node.nodePubKey]">{{result.node.nodePubKey}}</a></td>
+        </tr>
+        <tr>
+          <td>Score</td>
+          <td>{{result.node.score}}</td>
+        </tr>
+        <tr>
+          <td>Banned</td>
+          <td>{{result.node.banned}}</td>
+        </tr>
+        <tr>
+          <td>Default Fee</td>
+          <td>{{result.node.feeDefault}} BLOCK</td>
+        </tr>
+    
+      </tbody>
+    </table>
+    
+    <h3>Configuration {{serviceName}}.conf</h3>
+    <div class="well" style="white-space: pre-line">
+      <code>{{result.service.config}}</code>
+    </div>
+    
+    <h3>Service Nodes that offer this service</h3>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Address</th>
+          <th>Score</th>
+          <th>Banned</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let s of result.otherNodes">
+          <td><a [routerLink]="['/xrouter-snode', s.nodePubKey]">{{s.nodePubKey}}</a></td>
+          <td>{{s.score}}</td>
+          <td>{{s.banned}}</td>
+        </tr>
+      </tbody>
+    </table>
+</div>

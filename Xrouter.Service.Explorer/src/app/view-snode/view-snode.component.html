@@ -1,0 +1,77 @@
+<div *ngIf="isLoaded">
+    <h1>Service Node</h1>
+    <table class="table">
+      <tbody>
+        <tr>
+          <td>NodePubKey</td>
+          <td>{{nodePubKey}}</td>
+        </tr>
+        <tr>
+          <td>Score</td>
+          <td>{{result.score}}</td>
+        </tr>
+        <tr>
+          <td>Banned</td>
+          <td>{{result.banned}}</td>
+        </tr>
+        <tr>
+          <td>Payment Address</td>
+          <td>{{result.paymentAddress}}</td>
+        </tr>
+        <tr>
+          <td>Fee Default</td>
+          <td>{{result.feeDefault}} BLOCK</td>
+        </tr>
+      </tbody>
+    </table>
+    <h3>Fees</h3>
+    <table class="table">
+      <tbody>
+        <tr *ngFor="let fee of result.fees | keyvalue">
+          <td>{{fee.key}}</td>
+          <td>{{fee.value}}</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="form-group">
+      <h3>SPV Wallets</h3>
+        <label for="spvWallets"></label>
+        <select id="spvWallets" class="form-control" [(ngModel)]="selectedWalletName" (change)="onWalletChange()">
+            <option *ngFor="let wallet of result.spvWallets" [value]="wallet">{{ wallet }}</option>
+        </select>  
+    </div>
+    <table class="table">
+      <thead>
+          <tr>
+              <th>Command</th>
+              <th>Fee</th>
+              <th>Request Limit</th>
+              <th>Payment Address</th>
+              <th>Disabled</th>
+          </tr>
+      </thead>
+      <tbody>
+          <tr *ngFor="let c of selectedWallet.commands">
+              <td>{{c.command}}</td>
+              <td>{{c.fee}}</td>
+              <td>{{c.requestLimit}}</td>
+              <td>{{c.paymentAddress}}</td>
+              <td>{{c.disabled}}</td>
+          </tr>
+      </tbody>
+  </table>
+  <h3>Services offered by this Service Node</h3>
+  <table class="table">
+      <thead>
+          <tr>
+              <th>Service</th>
+          </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let s of result?.services">
+          <td><a [routerLink]="['/xrouter-services', 'xrs::' + s]">{{s}}</a></td>
+        </tr>
+      </tbody>
+  </table>
+</div>  

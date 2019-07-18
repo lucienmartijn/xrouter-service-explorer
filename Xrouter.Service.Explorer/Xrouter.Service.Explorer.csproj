@@ -1,0 +1,51 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>netcoreapp2.1</TargetFramework>
+        <TypeScriptToolsVersion>2.8</TypeScriptToolsVersion>
+        <Configurations>Debug;Release;Staging;QA</Configurations>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="AutoMapper" Version="8.1.1" />
+        <PackageReference Include="Microsoft.AspNetCore.App" />
+        <PackageReference Include="Microsoft.AspNetCore.SpaServices" Version="2.1.1" />
+        <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.1" />
+        <PackageReference Include="System.Configuration.ConfigurationManager" Version="4.5.0" />
+        <DotNetCliToolReference Include="Microsoft.DotNet.Xdt.Tools" Version="2.0.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Xrouter.Service.Explorer.Models\Xrouter.Service.Explorer.Models.csproj" />
+    </ItemGroup>
+
+    <!--<Target Name="Build Angular Debug" Condition="'$(Configuration)'=='Debug'" BeforeTargets="Build">
+        <Message Text="* * * * * * Building Debug Angular App * * * * * *" Importance="high" />
+        <Exec Command="ng build" />
+    </Target>
+
+    <Target Name="Build Angular Release" Condition="'$(Configuration)'=='Release'" BeforeTargets="Build">
+        <Message Text="* * * * * * Building Release Angular App * * * * * *" Importance="high" />
+        <Exec Command="ng build - -prod - -aot" />
+    </Target>
+
+    <Target Name="Build Angular QA" Condition="'$(Configuration)'=='QA'" BeforeTargets="Build">
+        <Message Text="* * * * * * Building QA Angular App * * * * * *" Importance="high" />
+        <Exec Command="ng build - -prod - -aot" />
+    </Target>
+
+    <Target Name="Build Angular Staging" Condition="'$(Configuration)'=='Staging'" BeforeTargets="Build">
+        <Message Text="* * * * * * Building Staging Angular App * * * * * *" Importance="high" />
+        <Exec Command="ng build - -prod - -aot" />
+    </Target>-->
+
+    <Target Name="ApplyXdtConfigTransform" BeforeTargets="_TransformWebConfig" Condition="'$(Configuration)'!='Debug'">
+        <PropertyGroup>
+            <_SourceWebConfig>$(MSBuildThisFileDirectory)Web.config</_SourceWebConfig>
+            <_XdtTransform>$(MSBuildThisFileDirectory)Web.$(Configuration).config</_XdtTransform>
+            <_TargetWebConfig>$(PublishDir)Web.config</_TargetWebConfig>
+        </PropertyGroup>
+        <Exec Command="dotnet transform-xdt --xml &quot;$(_SourceWebConfig)&quot; --transform &quot;$(_XdtTransform)&quot; --output &quot;$(_TargetWebConfig)&quot;" Condition="Exists('$(_XdtTransform)')" />
+    </Target>
+
+</Project>

@@ -1,0 +1,57 @@
+@page
+
+@using Microsoft.Extensions.Configuration;
+@using System.Net;
+@using CodeProject.AngularCore.Models.Models;
+@using System.IO;
+
+@inject IConfiguration configuration
+@inject Microsoft.AspNetCore.Hosting.IHostingEnvironment hostingEnv
+
+@model IndexModel
+@{
+
+    AppSettings appSettings = new AppSettings();
+    configuration.GetSection("AppSettings").Bind(appSettings);
+    string settings = Convert.ToString(Json.Serialize(appSettings));
+
+    IEnumerable<string> fileEntries = Enumerable.Empty<string>();
+    List<string> bundles = new List<string>();
+
+    bundles.Add("runtime.");
+    bundles.Add("polyfills");
+    bundles.Add("styles.");
+    bundles.Add("vendor.");
+    bundles.Add("main.");
+
+    fileEntries = Directory.EnumerateFiles(@Model._wwwroot);
+
+}
+
+@{
+
+    <script>
+        history.pushState({}, null, "@Model._currentRoutePath");
+    </script>
+
+    <app-root settings="@settings"></app-root>
+
+    <div style="visibility:hidden; display:none">
+        @WebUtility.HtmlEncode(settings)
+    </div>
+
+    foreach (string bundleName in bundles)
+    {
+        foreach (string fileName in fileEntries)
+        {
+            FileInfo fileInformation = new FileInfo(fileName);
+            if (fileInformation.Name.Contains(bundleName) == true && fileInformation.Name.Contains(".js") == true && fileInformation.Name.Contains(".js.map") == false)
+            {
+                <script type="text/javascript" src="@fileInformation.Name"></script>
+            }
+
+        }
+    }
+
+}
+
