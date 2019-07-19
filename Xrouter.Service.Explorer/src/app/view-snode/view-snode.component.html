@@ -29,7 +29,7 @@
       <tbody>
         <tr *ngFor="let fee of result.fees | keyvalue">
           <td>{{fee.key}}</td>
-          <td>{{fee.value}}</td>
+          <td>{{fee.value}} BLOCK</td>
         </tr>
       </tbody>
     </table>
@@ -45,7 +45,7 @@
       <thead>
           <tr>
               <th>Command</th>
-              <th>Fee</th>
+              <th>Fee (BLOCK)</th>
               <th>Request Limit</th>
               <th>Payment Address</th>
               <th>Disabled</th>
@@ -62,16 +62,19 @@
       </tbody>
   </table>
   <h3>Services offered by this Service Node</h3>
-  <table class="table">
-      <thead>
-          <tr>
-              <th>Service</th>
+  <div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Service</th>
+            </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let s of result?.services | paginate: config">
+            <td><a [routerLink]="['/xrouter-services', 'xrs::' + s]">{{s}}</a></td>
           </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let s of result?.services">
-          <td><a [routerLink]="['/xrouter-services', 'xrs::' + s]">{{s}}</a></td>
-        </tr>
-      </tbody>
-  </table>
+        </tbody>
+    </table>
+    <pagination-controls (pageChange)="pageChanged($event)"></pagination-controls>
+  </div>
 </div>  

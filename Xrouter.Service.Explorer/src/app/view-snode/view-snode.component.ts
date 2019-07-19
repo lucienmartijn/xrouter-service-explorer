@@ -11,6 +11,7 @@ import { isNullOrUndefined } from 'util';
 })
 export class ViewSnodeComponent implements OnInit {
   isLoaded:boolean = false;
+  config:any;
   nodePubKey:string;
   selectedWalletName:string;
   selectedWallet:any;
@@ -39,11 +40,21 @@ export class ViewSnodeComponent implements OnInit {
         this.selectedWalletName = this.result.spvConfigs[0].spvWallet;
         this.onWalletChange();
         this.isLoaded = true;
+
+        this.config = {
+          itemsPerPage: 10,
+          currentPage: 1,
+          totalItems: this.result.services.length
+        };
       });
   }
 
   onWalletChange(){
     this.selectedWallet = this.result.spvConfigs.find(c => c.spvWallet === this.selectedWalletName);
+  }
+
+  pageChanged(event){
+    this.config.currentPage = event;
   }
 
 }
