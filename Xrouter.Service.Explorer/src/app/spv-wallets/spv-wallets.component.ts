@@ -22,7 +22,9 @@ export class SpvWalletsComponent implements OnInit {
 
   constructor(private router: Router, private xrouterService: XrouterApiService) { }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.populateSpvWallets();
+  }
 
   private populateSpvWallets(){
     this.xrouterService.GetNetworkSpvWallets()

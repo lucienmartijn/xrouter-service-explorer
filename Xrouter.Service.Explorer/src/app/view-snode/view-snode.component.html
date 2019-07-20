@@ -16,7 +16,7 @@
         </tr>
         <tr>
           <td>Payment Address</td>
-          <td>{{result.paymentAddress}}</td>
+          <td><a href="https://chainz.cryptoid.info/block/address.dws?{{result.paymentAddress}}">{{result.paymentAddress}}</a></td>
         </tr>
         <tr>
           <td>Fee Default</td>
@@ -71,7 +71,7 @@
         </thead>
         <tbody>
           <tr *ngFor="let s of result?.services | paginate: config">
-            <td><a [routerLink]="['/xrouter-services', 'xrs::' + s]">{{s}}</a></td>
+            <td><a [routerLink]="['/xcloud-services', 'xrs::' + s]">{{s}}</a></td>
           </tr>
         </tbody>
     </table>

@@ -5,13 +5,13 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { isNullOrUndefined } from 'util';
 
 @Component({
-  selector: 'app-view-xr-service',
-  templateUrl: './view-xr-service.component.html',
-  styleUrls: ['./view-xr-service.component.css']
+  selector: 'app-view-spv-wallet',
+  templateUrl: './view-spv-wallet.component.html',
+  styleUrls: ['./view-spv-wallet.component.css']
 })
-export class ViewXrServiceComponent implements OnInit {
+export class ViewSpvWalletComponent implements OnInit {
   isLoaded:boolean = false;
-  serviceName:string;
+  spvWalletName:string;
   result:XrouterServiceInfo;
 
   constructor(
@@ -22,8 +22,8 @@ export class ViewXrServiceComponent implements OnInit {
     ) 
     { 
       route.params.subscribe(p => {
-        this.serviceName = p['name'];
-        if (isNullOrUndefined(this.serviceName)) {
+        this.spvWalletName = p['name'];
+        if (isNullOrUndefined(this.spvWalletName)) {
           router.navigate(['']);
           return; 
         }
@@ -32,11 +32,11 @@ export class ViewXrServiceComponent implements OnInit {
     }
 
   ngOnInit() {
-    this.xrouterApiService.GetServiceInfo(this.serviceName)
+    this.xrouterApiService.GetServiceInfo(this.spvWalletName)
       .subscribe(result => {
         this.result = result;
-        this.location.replaceState("xcloud-services/" + this.serviceName + "/" + this.result.node.nodePubKey);
-        this.serviceName = this.serviceName.replace("xrs::","");
+        this.location.replaceState("xrouter-services/" + this.spvWalletName + "/" + this.result.node.nodePubKey);
+        this.spvWalletName = this.spvWalletName.replace("xr::","");
         this.isLoaded = true;
       });
       

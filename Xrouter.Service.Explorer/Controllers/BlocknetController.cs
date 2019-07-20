@@ -71,17 +71,22 @@ namespace blocknet_xrouter.Controllers
             }
 
             var serviceName = service.Replace("xrs::", "");
-            var serviceConfig = configReply.Find(c => c.NodePubKey == serviceNode.NodePubKey).Plugins[serviceName];
+            var serviceNodeConfig = configReply.Find(c => c.NodePubKey == serviceNode.NodePubKey);
             var serv = serviceNode.Services[serviceName];
             
-            // Try get help key from config string
-            var dictConfig = serviceConfig.Split(new string[] {"\n", "\r\n"}, StringSplitOptions.RemoveEmptyEntries)
-                    .Select(value => value.Split('='))
-                    .ToDictionary(pair => pair[0], pair => pair[1]);
-            
-            string help;
-            dictConfig.TryGetValue("help", out help);
-                    
+            string help = string.Empty;
+            string xcloudConfig = string.Empty;
+            if(serviceNodeConfig.Plugins.Count > 0){
+                // Try get help key from config string
+                var dictConfig = serviceNodeConfig.Plugins[serviceName]
+                        .Split(new string[] {"\n", "\r\n"}, StringSplitOptions.RemoveEmptyEntries)
+                        .Select(value => value.Split('='))
+                        .ToDictionary(pair => pair[0], pair => pair[1]);
+                
+                dictConfig.TryGetValue("help", out help);
+                xcloudConfig = serviceNodeConfig.Plugins[serviceName];
+            }
+
             //TODO: Add AutoMapper to replace this.        
             var viewModel = new GetServiceInfoViewModel
             {
@@ -94,7 +99,7 @@ namespace blocknet_xrouter.Controllers
                     Parameters = serv.Parameters,
                     PaymentAddress = serv.PaymentAddress,
                     RequestLimit = serv.RequestLimit,
-                    Config = serviceConfig
+                    Config = xcloudConfig
                 },
                 Node = new NodeInfoViewModel
                 {
