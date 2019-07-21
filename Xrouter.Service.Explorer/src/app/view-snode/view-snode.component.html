@@ -8,22 +8,26 @@
         </tr>
         <tr>
           <td>Score</td>
-          <td>{{result.score}}</td>
+          <td>{{result?.score}}</td>
         </tr>
         <tr>
           <td>Banned</td>
-          <td>{{result.banned}}</td>
+          <td>{{result?.banned}}</td>
         </tr>
         <tr>
           <td>Payment Address</td>
-          <td><a href="https://chainz.cryptoid.info/block/address.dws?{{result.paymentAddress}}">{{result.paymentAddress}}</a></td>
+          <td><a href="https://chainz.cryptoid.info/block/address.dws?{{result.paymentAddress}}">{{result?.paymentAddress}}</a></td>
         </tr>
         <tr>
           <td>Fee Default</td>
-          <td>{{result.feeDefault}} BLOCK</td>
+          <td>{{result?.feeDefault}} BLOCK</td>
         </tr>
       </tbody>
     </table>
+    <h3>Config</h3>
+    <div class="well" style="white-space: pre-line">
+      <code>{{result?.config}}</code>
+    </div>
     <h3>Fees</h3>
     <table class="table">
       <tbody>

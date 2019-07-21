@@ -33,6 +33,15 @@ export class XrouterApiService extends BaseService{
     return this.http.get<XrouterServiceInfo>(url);
   }
 
+  GetSpvWalletInfo(service: string, nodePubKey?: string, node_count:number = 1){
+    let url = this.baseEndpoint + this.apiEndpoint + '/GetSpvWalletInfo/?service=' + service;
+    if(!isNullOrUndefined(nodePubKey)){
+      url += '&nodePubKey=' + nodePubKey;
+    }
+    url += '&node_count=' + node_count;
+    return this.http.get<XrouterServiceInfo>(url);
+  }
+
   GetNodeInfo(nodePubKey:string){
     let url = this.baseEndpoint + this.apiEndpoint + '/GetNodeInfo/?nodePubKey=' + nodePubKey;
     console.log(url);

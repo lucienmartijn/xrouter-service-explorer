@@ -1,25 +1,36 @@
 <div *ngIf="isLoaded">
-    <h1>XRouter Service</h1>
-    <h2>{{serviceName}}</h2>
+    <h1>SPV Wallet</h1>
+    <h2>{{spvWalletName}}</h2>
     <table class="table">
       <tbody>
-      <tr>
-        <td>Fee</td>
-        <td>{{result.service.fee}} BLOCK</td>
-      <tr>
-          <td>Parameter Types</td>
-          <td>{{result.service.parameters}}</td>
-      </tr>
-      <tr>
-        <td>Description</td>
-        <td>{{result.service.helpDescription}}</td>
-      </tr>
-      <tr>
+        <tr>
           <td>Usage Instructions</td>
-          <td>xrService {{serviceName}} [{{result.service.parameters}}]</td>
+          <td>xrService {{spvWalletName}}</td>
       </tr>
       </tbody>
     </table>
+
+    <h2>Commands</h2>
+    <table class="table">
+      <thead>
+          <tr>
+              <th>Command</th>
+              <th>Fee (BLOCK)</th>
+              <th>Request Limit</th>
+              <th>Payment Address</th>
+              <th>Disabled</th>
+          </tr>
+      </thead>
+      <tbody>
+          <tr *ngFor="let c of result.spvConfig.commands">
+              <td>{{c.command}}</td>
+              <td>{{c.fee}}</td>
+              <td>{{c.requestLimit}}</td>
+              <td>{{c.paymentAddress}}</td>
+              <td>{{c.disabled}}</td>
+          </tr>
+      </tbody>
+  </table>
     
     <h3>Offered By</h3>
     <table class="table">
@@ -43,11 +54,6 @@
     
       </tbody>
     </table>
-    
-    <h3>Configuration {{serviceName}}.conf</h3>
-    <div class="well" style="white-space: pre-line">
-      <code>{{result.service.config}}</code>
-    </div>
     
     <h3>Other Service Nodes that offer this service</h3>
     <table class="table">

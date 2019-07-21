@@ -41,15 +41,16 @@ import { ViewSpvWalletComponent } from './view-spv-wallet/view-spv-wallet.compon
     NgxPaginationModule,
     RouterModule.forRoot([
       { path: '', component: HomeComponent, pathMatch: 'full' },
-      { path: 'xrouter-services', component: SpvWalletsComponent },
-      { path: 'xrouter-services/:name', component: ViewSpvWalletComponent },
+      { path: 'spv-wallets', component: SpvWalletsComponent },
+      { path: 'spv-wallets/:name', component: ViewSpvWalletComponent },
+      { path: 'spv-wallets/:name/:nodePubKey', component: ViewSpvWalletComponent },
       { path: 'xcloud-services', component: XrServicesComponent },
       { path: 'xcloud-services/:name', component: ViewXrServiceComponent },
+      { path: 'xcloud-services/:name/:NodePubKey', component: ViewXrServiceComponent },
       { path: 'xrouter-snode/:nodePubKey', component: ViewSnodeComponent},
       { path: '**', component: PageNotFoundComponent }
       
-      
-    ])
+    ], { useHash: true })
   ],
   providers: [
     XrouterApiService, 

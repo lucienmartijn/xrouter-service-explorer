@@ -1,8 +1,6 @@
-interface XrouterService{
+interface XCloudService extends BaseXRouterService{
     name:string;
-    fee:number;
-    fetchLimit:number;
-    requestLimit:number;
+    fetchLimit:number;    
     helpDescription:string;
     parameterTypes:string;
     parameterNames:string;

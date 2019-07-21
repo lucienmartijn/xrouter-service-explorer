@@ -32,11 +32,11 @@ export class ViewSpvWalletComponent implements OnInit {
     }
 
   ngOnInit() {
-    this.xrouterApiService.GetServiceInfo(this.spvWalletName)
+    this.xrouterApiService.GetSpvWalletInfo(this.spvWalletName)
       .subscribe(result => {
         this.result = result;
-        this.location.replaceState("xrouter-services/" + this.spvWalletName + "/" + this.result.node.nodePubKey);
-        this.spvWalletName = this.spvWalletName.replace("xr::","");
+        this.location.replaceState("spv-wallets/" + this.spvWalletName + "/" + this.result.node.nodePubKey);
+        this.spvWalletName = this.spvWalletName.replace("xr::", "");
         this.isLoaded = true;
       });
       

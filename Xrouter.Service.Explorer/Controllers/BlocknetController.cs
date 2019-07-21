@@ -43,10 +43,72 @@ namespace blocknet_xrouter.Controllers
 
             return this._blocknetService.xrConnect(service, node_count);
         }
+        [HttpGet("Xrouter/[action]")]
+        public IActionResult GetSpvWalletInfo(string service, string nodePubKey = null, int node_count = 1){
+            ConnectedNodeResponse serviceNode;
+            List<ConnectedNodeResponse> otherNodes;
+
+            var connectReply = this._blocknetService.xrConnect(service, node_count).Reply;
+            var configReply = this._blocknetService.xrShowConfigs();
+
+            if(connectReply == null || configReply == null )
+                return BadRequest();
+                
+            if(string.IsNullOrWhiteSpace(nodePubKey)){
+                // Randomly choose a service node from the list if no nodePubKey is given
+                var r = new Random();
+                var index = r.Next(connectReply.Count);
+                serviceNode = connectReply[index];
+                // split node list
+                //otherNodes = connectReply.Skip(index + 1).ToList();
+                otherNodes = connectReply.Where(s => s.NodePubKey != nodePubKey).ToList();
+            }
+            else{
+                serviceNode = connectReply.Find(s => s.NodePubKey == nodePubKey);
+                //otherNodes = connectReply.Skip(connectReply.IndexOf(serviceNode)+1).ToList();
+                otherNodes = connectReply.Where(s => s.NodePubKey != nodePubKey).ToList();
+            }
+
+            var serviceNodeConfig = configReply.Find(c => c.NodePubKey == serviceNode.NodePubKey);
+            var serviceName = service.Replace("xr::", "");
+                
+            var spvConfig = serviceNode.SpvConfigs.Find(c => c.SpvWallet == serviceName);
+
+            //TODO: Add AutoMapper to replace this.        
+            var viewModel = new SpvWalletResultViewModel
+            {
+                SpvConfig = new SpvConfigViewModel
+                {
+                    SpvWallet = spvConfig.SpvWallet,
+                    Commands = spvConfig.Commands.Select(c => new SpvCommandViewModel{
+                        Command = c.Command,
+                        Disabled = c.Disabled,
+                        Fee = c.Fee,
+                        PaymentAddress = c.PaymentAddress,
+                        RequestLimit = c.RequestLimit
+                    }).ToList()
+                },
+                Node = new NodeInfoViewModel
+                {
+                    Banned = serviceNode.Banned,
+                    NodePubKey = serviceNode.NodePubKey,
+                    PaymentAddress = serviceNode.PaymentAddress,
+                    Score = serviceNode.Score
+                },
+                OtherNodes = otherNodes.Select(n => new NodeInfoViewModel{
+                    Banned = n.Banned,
+                    NodePubKey = n.NodePubKey,
+                    PaymentAddress = n.PaymentAddress,
+                    Score = n.Score
+                }).ToList()   
+            };
+            
+            return Ok(viewModel);
+        }
 
         [HttpGet("Xrouter/[action]")]
         public IActionResult GetServiceInfo(string service, string nodePubKey = null, int node_count = 1){
-            //TODO: refactor this so it becomes a thin controller.
+            //TODO: refactor this into a class so it becomes a thin controller.
 
             ConnectedNodeResponse serviceNode;
             List<ConnectedNodeResponse> otherNodes;
@@ -63,15 +125,18 @@ namespace blocknet_xrouter.Controllers
                 var index = r.Next(connectReply.Count);
                 serviceNode = connectReply[index];
                 // split node list
-                otherNodes = connectReply.Skip(index + 1).ToList();
+                //otherNodes = connectReply.Skip(index + 1).ToList();
+                otherNodes = connectReply.Where(s => s.NodePubKey != nodePubKey).ToList();
             }
             else{
                 serviceNode = connectReply.Find(s => s.NodePubKey == nodePubKey);
-                otherNodes = connectReply.Skip(connectReply.IndexOf(serviceNode)+1).ToList();
+                //otherNodes = connectReply.Skip(connectReply.IndexOf(serviceNode)+1).ToList();
+                otherNodes = connectReply.Where(s => s.NodePubKey != nodePubKey).ToList();
             }
 
-            var serviceName = service.Replace("xrs::", "");
             var serviceNodeConfig = configReply.Find(c => c.NodePubKey == serviceNode.NodePubKey);
+            
+            var serviceName = service.Replace("xrs::", "");
             var serv = serviceNode.Services[serviceName];
             
             string help = string.Empty;
@@ -88,9 +153,9 @@ namespace blocknet_xrouter.Controllers
             }
 
             //TODO: Add AutoMapper to replace this.        
-            var viewModel = new GetServiceInfoViewModel
+            var viewModel = new XCloudServiceResultViewModel
             {
-                Service = new XRouterServiceViewModel
+                Service = new XCloudServiceViewModel
                 {
                     HelpDescription = help,
                     Disabled = serv.Disabled,
@@ -114,7 +179,7 @@ namespace blocknet_xrouter.Controllers
                     PaymentAddress = n.PaymentAddress,
                     Score = n.Score
                 }).ToList()    
-            };
+            };       
 
             return Ok(viewModel);
         }
@@ -122,10 +187,16 @@ namespace blocknet_xrouter.Controllers
         [HttpGet("Xrouter/[action]")]
         public IActionResult GetNodeInfo(string nodePubKey){
             var connectReply = this._blocknetService.xrConnectedNodes().Reply;
+            var configReply = this._blocknetService.xrShowConfigs();
             var serviceNode = connectReply.Find(s => s.NodePubKey == nodePubKey);
-
             if (string.IsNullOrWhiteSpace(serviceNode.NodePubKey))
                 return BadRequest();
+
+            string config = string.Empty;
+            var serviceNodeConfig = configReply.Find(c => c.NodePubKey == serviceNode.NodePubKey);
+            
+            if(serviceNodeConfig != null)
+                config = serviceNodeConfig.Config;
 
             var viewModel = new NodeInfoViewModel
             {
@@ -135,6 +206,7 @@ namespace blocknet_xrouter.Controllers
                 NodePubKey = serviceNode.NodePubKey,
                 PaymentAddress = serviceNode.PaymentAddress,
                 Score = serviceNode.Score,
+                Config = config,
                 Services = serviceNode.Services.Select(s => s.Key).ToList(),
                 SpvWallets = serviceNode.SpvWallets,
                 SpvConfigs = serviceNode.SpvConfigs.Select(s => new SpvConfigViewModel{
@@ -209,7 +281,7 @@ namespace blocknet_xrouter.Controllers
                         NodeCount = s.Value
                     }).ToList();
                 
-            var viewModel = new GetNetworkServicesResponseViewModel
+            var viewModel = new NetworkServicesResponseViewModel
             {
                 Items = services,
                 TotalItems = services.Count
@@ -218,7 +290,7 @@ namespace blocknet_xrouter.Controllers
         }
 
         [HttpGet("Xrouter/[action]")]
-        public GetNetworkServicesResponseViewModel GetNetworkSpvWallets(){
+        public NetworkServicesResponseViewModel GetNetworkSpvWallets(){
             var response = this._blocknetService.xrGetNetworkServices();
             var services = response.Reply.NodeCounts
                 .Join(response.Reply.SpvWallets, m => m.Key, m => m.ToString(), 
@@ -227,7 +299,7 @@ namespace blocknet_xrouter.Controllers
                         NodeCount = s.Value
                     }).ToList();
                 
-            var viewModel = new GetNetworkServicesResponseViewModel
+            var viewModel = new NetworkServicesResponseViewModel
             {
                 Items = services,
                 TotalItems = services.Count                                   

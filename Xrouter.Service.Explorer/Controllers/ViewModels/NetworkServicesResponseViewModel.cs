@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 
 namespace blocknet_xrouter.Controllers.ViewModels
 {
-    public class GetNetworkServicesResponseViewModel
+    public class NetworkServicesResponseViewModel
     {
         public List<ServiceViewModel> Items { get; set; }
         public int TotalItems { get; set; }

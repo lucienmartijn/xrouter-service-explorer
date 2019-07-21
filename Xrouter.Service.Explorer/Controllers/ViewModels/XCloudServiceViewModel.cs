@@ -4,11 +4,12 @@ using Newtonsoft.Json;
 
 namespace blocknet_xrouter.Controllers.ViewModels
 {
-    public class XRouterServiceViewModel:BaseXRouterServiceViewModel
+    public class XCloudServiceViewModel:BaseXRouterServiceViewModel
     {
         public string Parameters { get; set; }
         public int FetchLimit { get; set; }
         public string HelpDescription { get; set; }
         public string Config { get; set; }
+        public int Timeout { get; set; }
     }
 }

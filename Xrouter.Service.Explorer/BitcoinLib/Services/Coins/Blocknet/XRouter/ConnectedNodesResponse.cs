@@ -13,7 +13,7 @@ namespace BitcoinLib.Services.Coins.Blocknet.Xrouter
         public List<string> SpvWallets { get; set; }
         public List<SpvConfig> SpvConfigs { get; set; }
         public double FeeDefault { get; set; }
-        public Dictionary<string,double> Fees { get; set; }
+        public Dictionary<string, double> Fees { get; set; }
         public Dictionary<string, XRouterService> Services { get; set; }
 
         public class SpvConfig
