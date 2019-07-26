@@ -169,9 +169,20 @@ namespace BitcoinLib.RPC.Specifications
         xrStatus,
         xrUpdateConfigs,
 
-        //2019-05-15: Added XCloud commands
+        //2019-05-15: Added Blocknet XCloud commands
         //== XCloud == 
         xrService,
         xrServiceConsensus,
+
+        //2019-07-23: Added Blocknet blocknetdx commands
+        mnbudget,
+        mnbudgetvoteraw,
+        mnfinalbudget,
+        mnsync,
+        obfuscation,
+        servicenode,
+        servicenodelist,
+        spork
+
     }
 }

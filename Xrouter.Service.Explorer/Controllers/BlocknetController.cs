@@ -314,12 +314,19 @@ namespace blocknet_xrouter.Controllers
 
 
         #endregion
-        #region 
+        #region XCloud
         [HttpGet("Xrouter/[action]")]
         public ServiceResponse Service(string service){
             //TODO: Check if service is already connected
             return this._blocknetService.xrService(service);
         }
         #endregion
+
+        [HttpGet("Xrouter/[action]")]
+        public IActionResult GetServiceNodeList()
+        {
+            var result = this._blocknetService.serviceNodeList();
+            return Ok(result);
+        }
     }
 }

@@ -6,6 +6,9 @@ using BitcoinLib.Services.Coins.Blocknet.Xrouter;
 using Microsoft.AspNetCore.Mvc;
 
 public interface IBlocknetService : ICoinService, IBlocknetConstants{
+    #region Blocknetdx
+    List<ServiceNodeResponse> serviceNodeList();
+    #endregion
     #region XCloud
     ServiceResponse xrService(string service);
     ServiceConsensusResponse xrServiceConsensus(string service, List<string> parameters);
@@ -19,7 +22,6 @@ public interface IBlocknetService : ICoinService, IBlocknetConstants{
     GetBlockResponse xrGetBlock(string blockchain, string block_hash, int node_count);
     GetBlocksResponse xrGetBlocks(string blockchain, string block_hashes, int node_count);
     GetConnectedNodesResponse xrConnectedNodes();
-
     GetNetworkServicesResponse xrGetNetworkServices();
     GetReplyResponse xrGetReply(string uuid);
     GetStatusResponse xrGetStatus();
@@ -30,7 +32,6 @@ public interface IBlocknetService : ICoinService, IBlocknetConstants{
     UpdateConfigsResponse xrUpdateConfigs(bool force_check = false);
 
     #endregion
-
     #region XBridge
     #endregion
 }

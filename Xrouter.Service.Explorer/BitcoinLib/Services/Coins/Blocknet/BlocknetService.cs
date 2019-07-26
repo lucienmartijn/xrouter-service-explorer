@@ -145,5 +145,12 @@ namespace BitcoinLib.Services.Coins.Blocknet
         {
             return _rpcConnector.MakeRequest<GetNetworkServicesResponse>(RpcMethods.xrGetNetworkServices);
         }
+
+        public List<ServiceNodeResponse> serviceNodeList()
+        {
+            var result = _rpcConnector.MakeRequest<List<ServiceNodeResponse>>(RpcMethods.servicenodelist);
+			
+			return result;
+        }
     }
 }
