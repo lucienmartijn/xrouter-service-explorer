@@ -18,6 +18,11 @@
                     </a>
                 </li>
                 <li [routerLinkActive]='["link-active"]'>
+                    <a [routerLink]='["/xrouter-snodes"]' (click)='collapse()'>
+                        <span class='glyphicon glyphicon-th-list'></span> XRouter Service Nodes
+                    </a>
+                </li>
+                <li [routerLinkActive]='["link-active"]'>
                     <a [routerLink]='["/spv-wallets"]' (click)='collapse()'>
                         <span class='glyphicon glyphicon-th-list'></span> SPV Wallets
                     </a>

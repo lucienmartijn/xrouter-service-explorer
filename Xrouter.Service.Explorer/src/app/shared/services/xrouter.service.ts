@@ -44,7 +44,11 @@ export class XrouterApiService extends BaseService{
 
   GetNodeInfo(nodePubKey:string){
     let url = this.baseEndpoint + this.apiEndpoint + '/GetNodeInfo/?nodePubKey=' + nodePubKey;
-    console.log(url);
     return this.http.get<ServiceNode>(url);
+  }
+
+  GetServiceNodeList(){
+    let url = this.baseEndpoint + this.apiEndpoint + '/GetServiceNodeList'
+    return this.http.get(url);
   }
 }

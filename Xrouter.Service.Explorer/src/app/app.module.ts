@@ -19,6 +19,7 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
 import { SessionService } from './shared/services/session.service';
 import { HttpErrorInterceptor } from './shared/error-handling/http-error.interceptor';
 import { ViewSpvWalletComponent } from './view-spv-wallet/view-spv-wallet.component';
+import { ServiceNodeListComponent } from './service-node-list/service-node-list.component';
 
 @NgModule({
   declarations: [
@@ -26,6 +27,7 @@ import { ViewSpvWalletComponent } from './view-spv-wallet/view-spv-wallet.compon
     NavMenuComponent,
     HomeComponent,
     PaginationComponent,
+    ServiceNodeListComponent,
     ServiceListComponent,
     XrServicesComponent,
     SpvWalletsComponent,
@@ -41,6 +43,7 @@ import { ViewSpvWalletComponent } from './view-spv-wallet/view-spv-wallet.compon
     NgxPaginationModule,
     RouterModule.forRoot([
       { path: '', component: HomeComponent, pathMatch: 'full' },
+      { path: 'xrouter-snodes', component: ServiceNodeListComponent },
       { path: 'spv-wallets', component: SpvWalletsComponent },
       { path: 'spv-wallets/:name', component: ViewSpvWalletComponent },
       { path: 'spv-wallets/:name/:nodePubKey', component: ViewSpvWalletComponent },
