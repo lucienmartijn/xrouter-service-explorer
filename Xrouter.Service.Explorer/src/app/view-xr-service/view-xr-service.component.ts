@@ -35,7 +35,7 @@ export class ViewXrServiceComponent implements OnInit {
     this.xrouterApiService.GetServiceInfo(this.serviceName)
       .subscribe(result => {
         this.result = result;
-        this.location.replaceState("xcloud-services/" + this.serviceName + "/" + this.result.node.nodePubKey);
+        this.location.replaceState("/xcloud-services/" + this.serviceName + "/" + this.result.node.nodePubKey);
         this.serviceName = this.serviceName.replace("xrs::","");
         this.isLoaded = true;
       });

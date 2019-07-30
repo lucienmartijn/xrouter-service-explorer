@@ -35,7 +35,7 @@ export class ViewSpvWalletComponent implements OnInit {
     this.xrouterApiService.GetSpvWalletInfo(this.spvWalletName)
       .subscribe(result => {
         this.result = result;
-        this.location.replaceState("spv-wallets/" + this.spvWalletName + "/" + this.result.node.nodePubKey);
+        this.location.replaceState("/spv-wallets/" + this.spvWalletName + "/" + this.result.node.nodePubKey);
         this.spvWalletName = this.spvWalletName.replace("xr::", "");
         this.isLoaded = true;
       });

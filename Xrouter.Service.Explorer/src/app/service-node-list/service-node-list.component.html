@@ -1,1 +1,39 @@
 <h2>Service Node List</h2>
+<table class="table">
+        <thead>
+          <tr>
+                <th>Rank</th>
+                <th>NodePubKey</th>
+                <th>Address</th>
+                <th>Version</th>
+                <th>Last Seen</th>
+                <th>Last Paid</th>
+                <th>Spv Wallets/Services</th>
+          </tr> 
+        </thead>
+        <tbody>
+                <tr *ngFor="let sn of serviceNodes; let i = index">
+                        <td>{{sn.rank}}</td>
+                        <td>
+                                <!-- <a [routerLink]="['/xrouter-snode', sn.nodePubKey, selectedWalletName]" (click)="onNodeClick(sn.NodePubKey)">{{sn.nodePubKey}}</a> -->
+
+                        <a href="javascript:void(0)" (click)="onNodeClick(i)"> {{sn.nodePubKey}}</a>
+                        </td>
+                        <td><a href="https://chainz.cryptoid.info/block/address.dws?{{sn.addr}}">{{sn.addr}}</a></td>
+                        <td>{{sn.version}}</td>
+                        <td>{{sn.lastseen}}</td>
+                        <td>{{sn.lastpaid}}</td>
+                        <td>
+                                <div *ngIf="sn.xWallets.length > 0;else other_content">
+                                        <div class="form-group">
+                                                <label for="xWallets"></label>
+                                                <select id="xWallets" class="form-control" [(ngModel)]="selectedWalletName" (change)="onWalletChange()">
+                                                        <option *ngFor="let wallet of sn.xWallets" [value]="wallet">{{ wallet }} </option>
+                                                </select>   
+                                        </div> 
+                                </div>
+                                <ng-template #other_content>This service node has no Services :(</ng-template>
+                        </td>
+                </tr>
+        </tbody>
+</table>

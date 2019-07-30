@@ -20,6 +20,7 @@ import { SessionService } from './shared/services/session.service';
 import { HttpErrorInterceptor } from './shared/error-handling/http-error.interceptor';
 import { ViewSpvWalletComponent } from './view-spv-wallet/view-spv-wallet.component';
 import { ServiceNodeListComponent } from './service-node-list/service-node-list.component';
+import { SearchFormComponent } from './search-form/search-form.component';
 
 @NgModule({
   declarations: [
@@ -34,6 +35,7 @@ import { ServiceNodeListComponent } from './service-node-list/service-node-list.
     ViewXrServiceComponent,
     ViewSpvWalletComponent,
     ViewSnodeComponent,
+    SearchFormComponent,
     PageNotFoundComponent
   ],
   imports: [
@@ -51,6 +53,7 @@ import { ServiceNodeListComponent } from './service-node-list/service-node-list.
       { path: 'xcloud-services/:name', component: ViewXrServiceComponent },
       { path: 'xcloud-services/:name/:NodePubKey', component: ViewXrServiceComponent },
       { path: 'xrouter-snode/:nodePubKey', component: ViewSnodeComponent},
+      { path: 'xrouter-snode/:nodePubKey/:service', component: ViewSnodeComponent},
       { path: '**', component: PageNotFoundComponent }
       
     ], { useHash: true })

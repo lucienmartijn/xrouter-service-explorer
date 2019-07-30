@@ -40,8 +40,9 @@ namespace blocknet_xrouter.Controllers
 
         [HttpGet("Xrouter/[action]")]
         public ConnectResponse Connect(string service, int node_count = 1){
-
-            return this._blocknetService.xrConnect(service, node_count);
+            var resp = this._blocknetService.xrConnect(service, node_count);
+            System.Console.WriteLine(resp.Reply.Count);
+            return resp;
         }
         [HttpGet("Xrouter/[action]")]
         public IActionResult GetSpvWalletInfo(string service, string nodePubKey = null, int node_count = 1){
@@ -185,12 +186,23 @@ namespace blocknet_xrouter.Controllers
         }
 
         [HttpGet("Xrouter/[action]")]
-        public IActionResult GetNodeInfo(string nodePubKey){
+        public IActionResult GetNodeInfo(string nodePubKey, string service = null, int node_count = 1){
+            if (string.IsNullOrWhiteSpace(nodePubKey))
+                return BadRequest("NodePubKey was not supplied");
+
             var connectReply = this._blocknetService.xrConnectedNodes().Reply;
-            var configReply = this._blocknetService.xrShowConfigs();
+
             var serviceNode = connectReply.Find(s => s.NodePubKey == nodePubKey);
-            if (string.IsNullOrWhiteSpace(serviceNode.NodePubKey))
-                return BadRequest();
+            if (serviceNode == null)
+            {
+                connectReply = this._blocknetService.xrConnect(service, node_count).Reply;
+                if(connectReply != null)
+                    serviceNode = connectReply.Find(s => s.NodePubKey == nodePubKey);
+                else
+                    return BadRequest("Servicenode is not properly configured. Servicenode info cannot be retrieved.");
+            }
+               
+            var configReply = this._blocknetService.xrShowConfigs();            
 
             string config = string.Empty;
             var serviceNodeConfig = configReply.Find(c => c.NodePubKey == serviceNode.NodePubKey);
@@ -290,7 +302,7 @@ namespace blocknet_xrouter.Controllers
         }
 
         [HttpGet("Xrouter/[action]")]
-        public NetworkServicesResponseViewModel GetNetworkSpvWallets(){
+        public IActionResult GetNetworkSpvWallets(){
             var response = this._blocknetService.xrGetNetworkServices();
             var services = response.Reply.NodeCounts
                 .Join(response.Reply.SpvWallets, m => m.Key, m => m.ToString(), 
@@ -304,7 +316,7 @@ namespace blocknet_xrouter.Controllers
                 Items = services,
                 TotalItems = services.Count                                   
             };
-            return viewModel;
+            return Ok(viewModel);
         }
 
         [HttpGet("Xrouter/[action]")]
@@ -326,7 +338,27 @@ namespace blocknet_xrouter.Controllers
         public IActionResult GetServiceNodeList()
         {
             var result = this._blocknetService.serviceNodeList();
-            return Ok(result);
+
+            //TODO: Add an automapper module
+            var viewModel = result.Select(sn => new ServiceNodeResponseViewModel
+            {
+              ActiveTime = DateTimeOffset.FromUnixTimeSeconds(sn.ActiveTime).UtcDateTime,
+              LastPaid = DateTimeOffset.FromUnixTimeSeconds(sn.LastPaid).UtcDateTime,
+              LastSeen = DateTimeOffset.FromUnixTimeSeconds(sn.LastSeen).UtcDateTime,
+              Addr = sn.Addr,
+              NodePubKey = sn.NodePubKey,
+              OutIdx = sn.OutIdx,
+              Rank = sn.Rank,
+              Status = sn.Status,
+              TxHash = sn.TxHash,
+              Version = sn.Version,
+              XBridgeVersion = sn.XBridgeVersion,
+              XRouterVersion = sn.XRouterVersion,
+              XWallets = sn.XWallets.Split(',').Where(w => !string.IsNullOrWhiteSpace(w) && !w.Equals("xr")).ToList()
+              
+            }).ToList();
+
+            return Ok(viewModel);
         }
     }
 }

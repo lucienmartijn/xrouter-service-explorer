@@ -42,8 +42,12 @@ export class XrouterApiService extends BaseService{
     return this.http.get<XrouterServiceInfo>(url);
   }
 
-  GetNodeInfo(nodePubKey:string){
+  GetNodeInfo(nodePubKey:string, service?:string, node_count:number = 1){
     let url = this.baseEndpoint + this.apiEndpoint + '/GetNodeInfo/?nodePubKey=' + nodePubKey;
+    if(!isNullOrUndefined(service)){
+      url += '&service=' + service;
+    }
+    url += '&node_count=' + node_count;
     return this.http.get<ServiceNode>(url);
   }
 

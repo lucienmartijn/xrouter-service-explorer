@@ -13,6 +13,7 @@ export class ViewSnodeComponent implements OnInit {
   isLoaded:boolean = false;
   config:any;
   nodePubKey:string;
+  service:string;
   selectedWalletName:string;
   selectedWallet:any;
   result:any;
@@ -26,6 +27,7 @@ export class ViewSnodeComponent implements OnInit {
   { 
     route.params.subscribe(p => {
       this.nodePubKey = p['nodePubKey'];
+      this.service = p['service'];
       if (isNullOrUndefined(this.nodePubKey)) {
         router.navigate(['']);
         return; 
@@ -34,7 +36,7 @@ export class ViewSnodeComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.xrouterApiService.GetNodeInfo(this.nodePubKey)
+    this.xrouterApiService.GetNodeInfo(this.nodePubKey, this.service)
       .subscribe(result => {
         this.result = result;
         this.selectedWalletName = this.result.spvConfigs[0].spvWallet;
