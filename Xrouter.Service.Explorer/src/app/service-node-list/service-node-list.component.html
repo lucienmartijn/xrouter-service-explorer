@@ -4,36 +4,41 @@
           <tr>
                 <th>Rank</th>
                 <th>NodePubKey</th>
-                <th>Address</th>
-                <th>Version</th>
-                <th>Last Seen</th>
-                <th>Last Paid</th>
-                <th>Spv Wallets/Services</th>
+                <!-- <th>Address</th> -->
+                <th>Spv Wallets</th>
+                <th></th>
+                <th>XCloud serviceNodes</th>
+                <th></th>
           </tr> 
         </thead>
         <tbody>
                 <tr *ngFor="let sn of serviceNodes; let i = index">
                         <td>{{sn.rank}}</td>
-                        <td>
-                                <!-- <a [routerLink]="['/xrouter-snode', sn.nodePubKey, selectedWalletName]" (click)="onNodeClick(sn.NodePubKey)">{{sn.nodePubKey}}</a> -->
-
-                        <a href="javascript:void(0)" (click)="onNodeClick(i)"> {{sn.nodePubKey}}</a>
+                        <td>                                
+                                <a href="javascript:void(0)" (click)="onNodeClick(i)"> {{sn.nodePubKey}}</a>
                         </td>
-                        <td><a href="https://chainz.cryptoid.info/block/address.dws?{{sn.addr}}">{{sn.addr}}</a></td>
-                        <td>{{sn.version}}</td>
-                        <td>{{sn.lastseen}}</td>
-                        <td>{{sn.lastpaid}}</td>
+                        <!-- <td><a href="https://chainz.cryptoid.info/block/address.dws?{{sn.addr}}">{{sn.addr}}</a></td> -->
                         <td>
-                                <div *ngIf="sn.xWallets.length > 0;else other_content">
+                                <div class="form-group">
+                                        <label for="spvWallets"></label>
+                                        <select id="spvWallets" class="form-control" (change)="onSpvWalletChange(i, $event)">
+                                                <option *ngFor="let w of sn.spvWallets" [value]="w">{{ w }} </option>
+                                        </select>   
+                                </div> 
+                        </td>
+                        <td><a href="javascript:void(0)" (click)="onSpvWalletClick(i)">View</a></td>
+                        <td>
+                                <div *ngIf = "sn.xCloudServices.length > 0">
                                         <div class="form-group">
-                                                <label for="xWallets"></label>
-                                                <select id="xWallets" class="form-control" [(ngModel)]="selectedWalletName" (change)="onWalletChange()">
-                                                        <option *ngFor="let wallet of sn.xWallets" [value]="wallet">{{ wallet }} </option>
+                                                <label for="xcloudServices"></label>
+                                                <select id="xcloudServices" class="form-control" (change)="onXCloudServiceChange(i, $event)">
+                                                        <option *ngFor="let s of sn.xCloudServices" [value]="s">{{ s }} </option>
                                                 </select>   
                                         </div> 
                                 </div>
-                                <ng-template #other_content>This service node has no Services :(</ng-template>
+                                
                         </td>
+                        <td><a href="javascript:void(0)" (click)="onXCloudServiceClick(i)">View</a></td>
                 </tr>
         </tbody>
 </table>

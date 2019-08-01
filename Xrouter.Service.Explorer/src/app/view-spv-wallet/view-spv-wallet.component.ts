@@ -12,6 +12,7 @@ import { isNullOrUndefined } from 'util';
 export class ViewSpvWalletComponent implements OnInit {
   isLoaded:boolean = false;
   spvWalletName:string;
+  nodePubKey:string;
   result:XrouterServiceInfo;
 
   constructor(
@@ -23,6 +24,7 @@ export class ViewSpvWalletComponent implements OnInit {
     { 
       route.params.subscribe(p => {
         this.spvWalletName = p['name'];
+        this.nodePubKey = p['nodePubKey'];
         if (isNullOrUndefined(this.spvWalletName)) {
           router.navigate(['']);
           return; 
@@ -32,7 +34,7 @@ export class ViewSpvWalletComponent implements OnInit {
     }
 
   ngOnInit() {
-    this.xrouterApiService.GetSpvWalletInfo(this.spvWalletName)
+    this.xrouterApiService.GetSpvWalletInfo(this.spvWalletName, this.nodePubKey)
       .subscribe(result => {
         this.result = result;
         this.location.replaceState("/spv-wallets/" + this.spvWalletName + "/" + this.result.node.nodePubKey);

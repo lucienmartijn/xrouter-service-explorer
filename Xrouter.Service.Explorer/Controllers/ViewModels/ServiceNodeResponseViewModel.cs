@@ -19,7 +19,8 @@ namespace blocknet_xrouter.Controllers.ViewModels
 		public DateTime LastSeen { get; set; }
 		public DateTime ActiveTime { get; set; }
 		public DateTime LastPaid { get; set; }
-		public List<string> XWallets { get; set; }
+		public List<string> SpvWallets { get; set; }
+		public List<string> XCloudServices { get; set; }
     }
     
 }

@@ -53,6 +53,6 @@ export class XrouterApiService extends BaseService{
 
   GetServiceNodeList(){
     let url = this.baseEndpoint + this.apiEndpoint + '/GetServiceNodeList'
-    return this.http.get(url);
+    return this.http.get<any[]>(url);
   }
 }

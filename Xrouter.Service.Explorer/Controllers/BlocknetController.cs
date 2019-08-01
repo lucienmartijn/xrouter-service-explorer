@@ -44,29 +44,29 @@ namespace blocknet_xrouter.Controllers
             System.Console.WriteLine(resp.Reply.Count);
             return resp;
         }
+        
         [HttpGet("Xrouter/[action]")]
         public IActionResult GetSpvWalletInfo(string service, string nodePubKey = null, int node_count = 1){
             ConnectedNodeResponse serviceNode;
             List<ConnectedNodeResponse> otherNodes;
 
             var connectReply = this._blocknetService.xrConnect(service, node_count).Reply;
-            var configReply = this._blocknetService.xrShowConfigs();
 
-            if(connectReply == null || configReply == null )
+            if(connectReply == null)
                 return BadRequest();
                 
+            var configReply = this._blocknetService.xrShowConfigs();
+
             if(string.IsNullOrWhiteSpace(nodePubKey)){
                 // Randomly choose a service node from the list if no nodePubKey is given
                 var r = new Random();
                 var index = r.Next(connectReply.Count);
                 serviceNode = connectReply[index];
                 // split node list
-                //otherNodes = connectReply.Skip(index + 1).ToList();
                 otherNodes = connectReply.Where(s => s.NodePubKey != nodePubKey).ToList();
             }
             else{
                 serviceNode = connectReply.Find(s => s.NodePubKey == nodePubKey);
-                //otherNodes = connectReply.Skip(connectReply.IndexOf(serviceNode)+1).ToList();
                 otherNodes = connectReply.Where(s => s.NodePubKey != nodePubKey).ToList();
             }
 
@@ -354,9 +354,10 @@ namespace blocknet_xrouter.Controllers
               Version = sn.Version,
               XBridgeVersion = sn.XBridgeVersion,
               XRouterVersion = sn.XRouterVersion,
-              XWallets = sn.XWallets.Split(',').Where(w => !string.IsNullOrWhiteSpace(w) && !w.Equals("xr")).ToList()
+              SpvWallets = sn.XWallets.Split(',').Where(s => s.Split(':')[0].Equals("xr")).Where(s => !s.Equals("xr")).ToList(),
+              XCloudServices = sn.XWallets.Split(',').Where(s => s.Split(':')[0].Equals("xrs")).Where(s => !s.Equals("xr")).ToList()
               
-            }).ToList();
+            }).Where(vm => vm.SpvWallets.Count > 0 || vm.XCloudServices.Count > 0).ToList();
 
             return Ok(viewModel);
         }

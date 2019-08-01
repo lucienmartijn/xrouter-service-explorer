@@ -11,8 +11,9 @@ export class ServiceNodeListComponent implements OnInit {
 
   private readonly PAGE_SIZE = 3; 
 
-  serviceNodes;
-  selectedWalletName:string;
+  serviceNodes:any[];
+  selectedSpvWallets:string[];
+  selectedXCloudServices:string[];
 
   query:any = {
     pageSize: this.PAGE_SIZE,
@@ -31,8 +32,14 @@ export class ServiceNodeListComponent implements OnInit {
     this.xrouterService.GetServiceNodeList()
       .subscribe(result => {
         this.serviceNodes = result;
-        // this.selectedWalletName = this.result.spvConfigs[0].spvWallet;
-        // this.onWalletChange();
+
+        this.selectedXCloudServices = new Array<string>(result.length);
+        this.selectedSpvWallets = new Array<string>(result.length);
+        
+        this.serviceNodes.forEach((sn, index) =>{  
+          this.selectedSpvWallets[index] = sn.spvWallets[0];          
+          this.selectedXCloudServices[index] = sn.xCloudServices[0];
+        });
       });
   }
 
@@ -41,17 +48,28 @@ export class ServiceNodeListComponent implements OnInit {
     this.populateServiceNodes();
   }
 
-  onWalletChange(){
-    console.log(this.selectedWalletName);
+  onSpvWalletChange(index:number, event:any){
+    this.selectedSpvWallets[index] = event.target.value;    
   }
 
-  onNodeClick(index){
+  onXCloudServiceChange(index:number, event:any){
+    this.selectedXCloudServices[index] = event.target.value;    
+  }
+
+  onSpvWalletClick(index:number){
+    if(this.selectedSpvWallets[index].includes('x'))
+    this.router.navigate(['/spv-wallets', this.selectedSpvWallets[index], this.serviceNodes[index].nodePubKey]);
+  }
+
+  onXCloudServiceClick(index:number){
+    if(this.selectedXCloudServices[index].includes('x'))
+    this.router.navigate(['/xcloud-services', this.selectedXCloudServices[index], this.serviceNodes[index].nodePubKey]);
+  }
+
+  onNodeClick(index:number){
     let node = this.serviceNodes[index];
-    if(node.xWallets.length > 0){
-      let service = "xr::" + node.xWallets[0];
-      this.router.navigate(['/xrouter-snode', node.nodePubKey, "xr::" + service]);
-    }
-      
+    let service = "xr::" + node.xWallets[0];
+    this.router.navigate(['/xrouter-snode', node.nodePubKey, "xr::" + service]);
   }
 
 
