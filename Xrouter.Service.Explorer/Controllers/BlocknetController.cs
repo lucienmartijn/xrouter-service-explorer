@@ -361,5 +361,38 @@ namespace blocknet_xrouter.Controllers
 
             return Ok(viewModel);
         }
+
+        [HttpGet("Xrouter")]
+        public IActionResult Index(string searchString)
+        {
+            var response = this._blocknetService.xrGetNetworkServices();
+
+            var services = response.Reply.NodeCounts
+                .Join(response.Reply.Services, m => m.Key, m => m.ToString(), 
+                    (s, sn) => new ServiceViewModel{
+                        Name = s.Key,
+                        NodeCount = s.Value
+                    }).ToList();
+
+            var spvWallets = response.Reply.NodeCounts
+                .Join(response.Reply.SpvWallets, m => m.Key, m => m.ToString(), 
+                    (s, sn) => new ServiceViewModel{
+                        Name = s.Key,
+                        NodeCount = s.Value
+                    }).ToList();
+            
+            var allServices = services.Union(spvWallets).ToList();
+
+            if (!String.IsNullOrEmpty(searchString))
+                allServices = allServices.Where(s => s.Name.Contains(searchString)).ToList();
+            
+            var viewModel = new NetworkServicesResponseViewModel
+            {
+                Items = allServices,
+                TotalItems = allServices.Count
+            };
+            return Ok(viewModel);
+        }
+
     }
 }

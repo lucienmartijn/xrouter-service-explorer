@@ -69,7 +69,7 @@ export class ServiceNodeListComponent implements OnInit {
   onNodeClick(index:number){
     let node = this.serviceNodes[index];
     let service = "xr::" + node.xWallets[0];
-    this.router.navigate(['/xrouter-snode', node.nodePubKey, "xr::" + service]);
+    this.router.navigate(['/xrouter-snodes', node.nodePubKey, "xr::" + service]);
   }
 
 

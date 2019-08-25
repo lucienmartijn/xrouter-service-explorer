@@ -1,6 +1,24 @@
-<form class="navbar-form navbar-left" (ngSubmit)="onSubmit()" role="search">
-    <div class="form-group">
-        <input type="text" class="form-control" placeholder="Search">
-    </div>
-    <button type="submit" class="btn btn-default">Submit</button>
-</form>
+<div>
+ 
+  <mat-form-field>
+    <input matInput placeholder="Search" aria-label="State" [matAutocomplete]="auto" [formControl]="searchServicesCtrl">
+    <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn" (optionSelected)="onSelectionChanged($event)">
+      <mat-option *ngIf="isLoading" class="is-loading">Loading...</mat-option>
+      <ng-container *ngIf="!isLoading">
+        <mat-option *ngFor="let service of filteredServices" [value]="service.name">
+          <span><b>{{service.name}}</b></span>
+        </mat-option>
+      </ng-container>
+    </mat-autocomplete>
+  </mat-form-field>
+ 
+  <br>
+<!--  
+<ng-container *ngIf="errorMsg; else elseTemplate">
+  {{errorMsg}}
+</ng-container>
+<ng-template #elseTemplate>
+  <h5>Selected Value: {{searchServicesCtrl.value}}</h5>
+</ng-template> -->
+ 
+</div>

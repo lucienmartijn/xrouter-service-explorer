@@ -1,4 +1,18 @@
 import { Component, OnInit } from '@angular/core';
+import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatAutocompleteModule, MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { NavigatorService } from '../shared/services/navigator.service.';
+import { XrouterApiService } from '../shared/services/xrouter.service';
+
+import { debounceTime, tap, switchMap, finalize } from 'rxjs/operators';
+import { HttpClient } from '@angular/common/http';
+
+// const NODEPUBKEY_REGEX = '^[0][a-zA-Z0-9]{65}$'; 
+// const ADDRESS_REGEX = '^[B][a-zA-Z0-9]{33}$';
+// const TXHASH_REGEX = '[a-zA-Z0-9]{64}$';
 
 @Component({
   selector: 'search-form',
@@ -6,14 +20,55 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./search-form.component.css']
 })
 export class SearchFormComponent implements OnInit {
+  searchServicesCtrl = new FormControl();
+  filteredServices: any;
+  isLoading = false;
+  errorMsg: string;
 
-  constructor() { }
+  constructor(
+    private http: HttpClient,
+    private navigatorService: NavigatorService
+  ) { }
 
   ngOnInit() {
+    this.searchServicesCtrl.valueChanges
+      .pipe(
+        debounceTime(500),
+        tap(() => {
+          this.errorMsg = "";
+          this.filteredServices = [];
+          this.isLoading = true;
+        }),
+        switchMap(value => this.http.get("https://localhost:44305/api/Blocknet/Xrouter/?searchString=" + value)
+          .pipe(
+            finalize(() => {
+              this.isLoading = false
+            }),
+          )
+        )
+      )
+      .subscribe(data => {
+        if (data['items'] == undefined) {
+          //this.errorMsg = data['Error'];
+          this.filteredServices = [];
+        } else {
+          this.errorMsg = "";
+          this.filteredServices = data['items'];
+        }
+      });
   }
 
-  onSubmit(){
-    console.log("submitted!");
-  }
+  onSelectionChanged(event: MatAutocompleteSelectedEvent) {
+    let serviceName = event.option.value as string;
 
+    if(serviceName.includes("xrs::")){
+      console.log("xcloud");
+      this.navigatorService.xCloudServiceDetails(serviceName);
+    } else{
+      console.log("spv");
+      this.navigatorService.spvWalletDetails(serviceName);
+    }
+  }
 }
+
+

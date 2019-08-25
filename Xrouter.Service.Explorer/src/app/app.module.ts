@@ -1,9 +1,13 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import { NgxPaginationModule } from 'ngx-pagination';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 
 import { AppComponent } from './app.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
@@ -21,6 +25,8 @@ import { HttpErrorInterceptor } from './shared/error-handling/http-error.interce
 import { ViewSpvWalletComponent } from './view-spv-wallet/view-spv-wallet.component';
 import { ServiceNodeListComponent } from './service-node-list/service-node-list.component';
 import { SearchFormComponent } from './search-form/search-form.component';
+import { NavigatorService } from './shared/services/navigator.service.';
+import { SearchFormErrorComponent } from './search-form-error/search-form-error.component';
 
 @NgModule({
   declarations: [
@@ -36,13 +42,19 @@ import { SearchFormComponent } from './search-form/search-form.component';
     ViewSpvWalletComponent,
     ViewSnodeComponent,
     SearchFormComponent,
+    SearchFormErrorComponent,
     PageNotFoundComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
     HttpClientModule,
     FormsModule,
+    BrowserAnimationsModule,
+    ReactiveFormsModule,
     NgxPaginationModule,
+    MatAutocompleteModule,
+    MatFormFieldModule,
+    MatInputModule,
     RouterModule.forRoot([
       { path: '', component: HomeComponent, pathMatch: 'full' },
       { path: 'xrouter-snodes', component: ServiceNodeListComponent },
@@ -52,8 +64,9 @@ import { SearchFormComponent } from './search-form/search-form.component';
       { path: 'xcloud-services', component: XrServicesComponent },
       { path: 'xcloud-services/:name', component: ViewXrServiceComponent },
       { path: 'xcloud-services/:name/:NodePubKey', component: ViewXrServiceComponent },
-      { path: 'xrouter-snode/:nodePubKey', component: ViewSnodeComponent},
-      { path: 'xrouter-snode/:nodePubKey/:service', component: ViewSnodeComponent},
+      { path: 'xrouter-snodes/:nodePubKey', component: ViewSnodeComponent},
+      { path: 'xrouter-snodes/:nodePubKey/:service', component: ViewSnodeComponent},
+      { path: 'search-not-found', component: SearchFormErrorComponent},
       { path: '**', component: PageNotFoundComponent }
       
     ], { useHash: true })
@@ -61,6 +74,7 @@ import { SearchFormComponent } from './search-form/search-form.component';
   providers: [
     XrouterApiService, 
     SessionService,
+    NavigatorService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: HttpErrorInterceptor,

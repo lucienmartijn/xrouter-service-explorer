@@ -117,20 +117,27 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm5/http.js");
 /* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm5/router.js");
 /* harmony import */ var ngx_pagination__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ngx-pagination */ "./node_modules/ngx-pagination/dist/ngx-pagination.js");
-/* harmony import */ var _app_component__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./app.component */ "./src/app/app.component.ts");
-/* harmony import */ var _nav_menu_nav_menu_component__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./nav-menu/nav-menu.component */ "./src/app/nav-menu/nav-menu.component.ts");
-/* harmony import */ var _home_home_component__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./home/home.component */ "./src/app/home/home.component.ts");
-/* harmony import */ var _shared_pagination_pagination_component__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./shared/pagination/pagination.component */ "./src/app/shared/pagination/pagination.component.ts");
-/* harmony import */ var _service_list_service_list_component__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./service-list/service-list.component */ "./src/app/service-list/service-list.component.ts");
-/* harmony import */ var _xr_services_xr_services_component__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./xr-services/xr-services.component */ "./src/app/xr-services/xr-services.component.ts");
-/* harmony import */ var _spv_wallets_spv_wallets_component__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./spv-wallets/spv-wallets.component */ "./src/app/spv-wallets/spv-wallets.component.ts");
-/* harmony import */ var _shared_services_xrouter_service__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./shared/services/xrouter.service */ "./src/app/shared/services/xrouter.service.ts");
-/* harmony import */ var _view_xr_service_view_xr_service_component__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./view-xr-service/view-xr-service.component */ "./src/app/view-xr-service/view-xr-service.component.ts");
-/* harmony import */ var _view_snode_view_snode_component__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./view-snode/view-snode.component */ "./src/app/view-snode/view-snode.component.ts");
-/* harmony import */ var _page_not_found_page_not_found_component__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./page-not-found/page-not-found.component */ "./src/app/page-not-found/page-not-found.component.ts");
-/* harmony import */ var _shared_services_session_service__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./shared/services/session.service */ "./src/app/shared/services/session.service.ts");
-/* harmony import */ var _shared_error_handling_http_error_interceptor__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ./shared/error-handling/http-error.interceptor */ "./src/app/shared/error-handling/http-error.interceptor.ts");
-/* harmony import */ var _view_spv_wallet_view_spv_wallet_component__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ./view-spv-wallet/view-spv-wallet.component */ "./src/app/view-spv-wallet/view-spv-wallet.component.ts");
+/* harmony import */ var _angular_material_autocomplete__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @angular/material/autocomplete */ "./node_modules/@angular/material/esm5/autocomplete.es5.js");
+/* harmony import */ var _angular_material_form_field__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @angular/material/form-field */ "./node_modules/@angular/material/esm5/form-field.es5.js");
+/* harmony import */ var _angular_material_input__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @angular/material/input */ "./node_modules/@angular/material/esm5/input.es5.js");
+/* harmony import */ var _app_component__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./app.component */ "./src/app/app.component.ts");
+/* harmony import */ var _nav_menu_nav_menu_component__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./nav-menu/nav-menu.component */ "./src/app/nav-menu/nav-menu.component.ts");
+/* harmony import */ var _home_home_component__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./home/home.component */ "./src/app/home/home.component.ts");
+/* harmony import */ var _shared_pagination_pagination_component__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./shared/pagination/pagination.component */ "./src/app/shared/pagination/pagination.component.ts");
+/* harmony import */ var _service_list_service_list_component__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./service-list/service-list.component */ "./src/app/service-list/service-list.component.ts");
+/* harmony import */ var _xr_services_xr_services_component__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./xr-services/xr-services.component */ "./src/app/xr-services/xr-services.component.ts");
+/* harmony import */ var _spv_wallets_spv_wallets_component__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./spv-wallets/spv-wallets.component */ "./src/app/spv-wallets/spv-wallets.component.ts");
+/* harmony import */ var _shared_services_xrouter_service__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./shared/services/xrouter.service */ "./src/app/shared/services/xrouter.service.ts");
+/* harmony import */ var _view_xr_service_view_xr_service_component__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./view-xr-service/view-xr-service.component */ "./src/app/view-xr-service/view-xr-service.component.ts");
+/* harmony import */ var _view_snode_view_snode_component__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ./view-snode/view-snode.component */ "./src/app/view-snode/view-snode.component.ts");
+/* harmony import */ var _page_not_found_page_not_found_component__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ./page-not-found/page-not-found.component */ "./src/app/page-not-found/page-not-found.component.ts");
+/* harmony import */ var _shared_services_session_service__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ./shared/services/session.service */ "./src/app/shared/services/session.service.ts");
+/* harmony import */ var _shared_error_handling_http_error_interceptor__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! ./shared/error-handling/http-error.interceptor */ "./src/app/shared/error-handling/http-error.interceptor.ts");
+/* harmony import */ var _view_spv_wallet_view_spv_wallet_component__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! ./view-spv-wallet/view-spv-wallet.component */ "./src/app/view-spv-wallet/view-spv-wallet.component.ts");
+/* harmony import */ var _service_node_list_service_node_list_component__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(/*! ./service-node-list/service-node-list.component */ "./src/app/service-node-list/service-node-list.component.ts");
+/* harmony import */ var _search_form_search_form_component__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(/*! ./search-form/search-form.component */ "./src/app/search-form/search-form.component.ts");
+/* harmony import */ var _shared_services_navigator_service___WEBPACK_IMPORTED_MODULE_25__ = __webpack_require__(/*! ./shared/services/navigator.service. */ "./src/app/shared/services/navigator.service..ts");
+/* harmony import */ var _search_form_error_search_form_error_component__WEBPACK_IMPORTED_MODULE_26__ = __webpack_require__(/*! ./search-form-error/search-form-error.component */ "./src/app/search-form-error/search-form-error.component.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -157,49 +164,69 @@ var __decorate = (undefined && undefined.__decorate) || function (decorators, ta
 
 
 
+
+
+
+
+
+
+
 var AppModule = /** @class */ (function () {
     function AppModule() {
     }
     AppModule = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["NgModule"])({
             declarations: [
-                _app_component__WEBPACK_IMPORTED_MODULE_6__["AppComponent"],
-                _nav_menu_nav_menu_component__WEBPACK_IMPORTED_MODULE_7__["NavMenuComponent"],
-                _home_home_component__WEBPACK_IMPORTED_MODULE_8__["HomeComponent"],
-                _shared_pagination_pagination_component__WEBPACK_IMPORTED_MODULE_9__["PaginationComponent"],
-                _service_list_service_list_component__WEBPACK_IMPORTED_MODULE_10__["ServiceListComponent"],
-                _xr_services_xr_services_component__WEBPACK_IMPORTED_MODULE_11__["XrServicesComponent"],
-                _spv_wallets_spv_wallets_component__WEBPACK_IMPORTED_MODULE_12__["SpvWalletsComponent"],
-                _view_xr_service_view_xr_service_component__WEBPACK_IMPORTED_MODULE_14__["ViewXrServiceComponent"],
-                _view_spv_wallet_view_spv_wallet_component__WEBPACK_IMPORTED_MODULE_19__["ViewSpvWalletComponent"],
-                _view_snode_view_snode_component__WEBPACK_IMPORTED_MODULE_15__["ViewSnodeComponent"],
-                _page_not_found_page_not_found_component__WEBPACK_IMPORTED_MODULE_16__["PageNotFoundComponent"]
+                _app_component__WEBPACK_IMPORTED_MODULE_9__["AppComponent"],
+                _nav_menu_nav_menu_component__WEBPACK_IMPORTED_MODULE_10__["NavMenuComponent"],
+                _home_home_component__WEBPACK_IMPORTED_MODULE_11__["HomeComponent"],
+                _shared_pagination_pagination_component__WEBPACK_IMPORTED_MODULE_12__["PaginationComponent"],
+                _service_node_list_service_node_list_component__WEBPACK_IMPORTED_MODULE_23__["ServiceNodeListComponent"],
+                _service_list_service_list_component__WEBPACK_IMPORTED_MODULE_13__["ServiceListComponent"],
+                _xr_services_xr_services_component__WEBPACK_IMPORTED_MODULE_14__["XrServicesComponent"],
+                _spv_wallets_spv_wallets_component__WEBPACK_IMPORTED_MODULE_15__["SpvWalletsComponent"],
+                _view_xr_service_view_xr_service_component__WEBPACK_IMPORTED_MODULE_17__["ViewXrServiceComponent"],
+                _view_spv_wallet_view_spv_wallet_component__WEBPACK_IMPORTED_MODULE_22__["ViewSpvWalletComponent"],
+                _view_snode_view_snode_component__WEBPACK_IMPORTED_MODULE_18__["ViewSnodeComponent"],
+                _search_form_search_form_component__WEBPACK_IMPORTED_MODULE_24__["SearchFormComponent"],
+                _search_form_error_search_form_error_component__WEBPACK_IMPORTED_MODULE_26__["SearchFormErrorComponent"],
+                _page_not_found_page_not_found_component__WEBPACK_IMPORTED_MODULE_19__["PageNotFoundComponent"]
             ],
             imports: [
                 _angular_platform_browser__WEBPACK_IMPORTED_MODULE_0__["BrowserModule"].withServerTransition({ appId: 'ng-cli-universal' }),
                 _angular_common_http__WEBPACK_IMPORTED_MODULE_3__["HttpClientModule"],
                 _angular_forms__WEBPACK_IMPORTED_MODULE_2__["FormsModule"],
+                _angular_forms__WEBPACK_IMPORTED_MODULE_2__["ReactiveFormsModule"],
                 ngx_pagination__WEBPACK_IMPORTED_MODULE_5__["NgxPaginationModule"],
+                _angular_material_autocomplete__WEBPACK_IMPORTED_MODULE_6__["MatAutocompleteModule"],
+                _angular_material_form_field__WEBPACK_IMPORTED_MODULE_7__["MatFormFieldModule"],
+                _angular_material_input__WEBPACK_IMPORTED_MODULE_8__["MatInputModule"],
                 _angular_router__WEBPACK_IMPORTED_MODULE_4__["RouterModule"].forRoot([
-                    { path: '', component: _home_home_component__WEBPACK_IMPORTED_MODULE_8__["HomeComponent"], pathMatch: 'full' },
-                    { path: 'xrouter-services', component: _spv_wallets_spv_wallets_component__WEBPACK_IMPORTED_MODULE_12__["SpvWalletsComponent"] },
-                    { path: 'xrouter-services/:name', component: _view_spv_wallet_view_spv_wallet_component__WEBPACK_IMPORTED_MODULE_19__["ViewSpvWalletComponent"] },
-                    { path: 'xcloud-services', component: _xr_services_xr_services_component__WEBPACK_IMPORTED_MODULE_11__["XrServicesComponent"] },
-                    { path: 'xcloud-services/:name', component: _view_xr_service_view_xr_service_component__WEBPACK_IMPORTED_MODULE_14__["ViewXrServiceComponent"] },
-                    { path: 'xrouter-snode/:nodePubKey', component: _view_snode_view_snode_component__WEBPACK_IMPORTED_MODULE_15__["ViewSnodeComponent"] },
-                    { path: '**', component: _page_not_found_page_not_found_component__WEBPACK_IMPORTED_MODULE_16__["PageNotFoundComponent"] }
+                    { path: '', component: _home_home_component__WEBPACK_IMPORTED_MODULE_11__["HomeComponent"], pathMatch: 'full' },
+                    { path: 'xrouter-snodes', component: _service_node_list_service_node_list_component__WEBPACK_IMPORTED_MODULE_23__["ServiceNodeListComponent"] },
+                    { path: 'spv-wallets', component: _spv_wallets_spv_wallets_component__WEBPACK_IMPORTED_MODULE_15__["SpvWalletsComponent"] },
+                    { path: 'spv-wallets/:name', component: _view_spv_wallet_view_spv_wallet_component__WEBPACK_IMPORTED_MODULE_22__["ViewSpvWalletComponent"] },
+                    { path: 'spv-wallets/:name/:nodePubKey', component: _view_spv_wallet_view_spv_wallet_component__WEBPACK_IMPORTED_MODULE_22__["ViewSpvWalletComponent"] },
+                    { path: 'xcloud-services', component: _xr_services_xr_services_component__WEBPACK_IMPORTED_MODULE_14__["XrServicesComponent"] },
+                    { path: 'xcloud-services/:name', component: _view_xr_service_view_xr_service_component__WEBPACK_IMPORTED_MODULE_17__["ViewXrServiceComponent"] },
+                    { path: 'xcloud-services/:name/:NodePubKey', component: _view_xr_service_view_xr_service_component__WEBPACK_IMPORTED_MODULE_17__["ViewXrServiceComponent"] },
+                    { path: 'xrouter-snodes/:nodePubKey', component: _view_snode_view_snode_component__WEBPACK_IMPORTED_MODULE_18__["ViewSnodeComponent"] },
+                    { path: 'xrouter-snodes/:nodePubKey/:service', component: _view_snode_view_snode_component__WEBPACK_IMPORTED_MODULE_18__["ViewSnodeComponent"] },
+                    { path: 'search-not-found', component: _search_form_error_search_form_error_component__WEBPACK_IMPORTED_MODULE_26__["SearchFormErrorComponent"] },
+                    { path: '**', component: _page_not_found_page_not_found_component__WEBPACK_IMPORTED_MODULE_19__["PageNotFoundComponent"] }
                 ], { useHash: true })
             ],
             providers: [
-                _shared_services_xrouter_service__WEBPACK_IMPORTED_MODULE_13__["XrouterApiService"],
-                _shared_services_session_service__WEBPACK_IMPORTED_MODULE_17__["SessionService"],
+                _shared_services_xrouter_service__WEBPACK_IMPORTED_MODULE_16__["XrouterApiService"],
+                _shared_services_session_service__WEBPACK_IMPORTED_MODULE_20__["SessionService"],
+                _shared_services_navigator_service___WEBPACK_IMPORTED_MODULE_25__["NavigatorService"],
                 {
                     provide: _angular_common_http__WEBPACK_IMPORTED_MODULE_3__["HTTP_INTERCEPTORS"],
-                    useClass: _shared_error_handling_http_error_interceptor__WEBPACK_IMPORTED_MODULE_18__["HttpErrorInterceptor"],
+                    useClass: _shared_error_handling_http_error_interceptor__WEBPACK_IMPORTED_MODULE_21__["HttpErrorInterceptor"],
                     multi: true
                 }
             ],
-            bootstrap: [_app_component__WEBPACK_IMPORTED_MODULE_6__["AppComponent"]]
+            bootstrap: [_app_component__WEBPACK_IMPORTED_MODULE_9__["AppComponent"]]
         })
     ], AppModule);
     return AppModule;
@@ -272,7 +299,7 @@ module.exports = "li .glyphicon {\r\n    margin-right: 10px;\r\n}\r\n\r\n/* High
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class='main-nav'>\r\n    <div class='navbar navbar-inverse'>\r\n        <div class='navbar-header'>\r\n            <button type='button' class='navbar-toggle' data-toggle='collapse' data-target='.navbar-collapse' [attr.aria-expanded]='isExpanded' (click)='toggle()'>\r\n                <span class='sr-only'>Toggle navigation</span>\r\n                <span class='icon-bar'></span>\r\n                <span class='icon-bar'></span>\r\n                <span class='icon-bar'></span>\r\n            </button>\r\n            <a class='navbar-brand' [routerLink]='[\"/\"]'>blocknet_xrouter</a>\r\n        </div>\r\n        <div class='clearfix'></div>\r\n        <div class='navbar-collapse collapse' [ngClass]='{ \"in\": isExpanded }'>\r\n            <ul class='nav navbar-nav'>\r\n                <li [routerLinkActive]='[\"link-active\"]' [routerLinkActiveOptions]='{ exact: true }'>\r\n                    <a [routerLink]='[\"/\"]' (click)='collapse()'>\r\n                        <span class='glyphicon glyphicon-home'></span> Home\r\n                    </a>\r\n                </li>\r\n                <li [routerLinkActive]='[\"link-active\"]'>\r\n                    <a [routerLink]='[\"/xrouter-services\"]' (click)='collapse()'>\r\n                        <span class='glyphicon glyphicon-th-list'></span> XRouter Services\r\n                    </a>\r\n                </li>\r\n                <li [routerLinkActive]='[\"link-active\"]'>\r\n                    <a [routerLink]='[\"/xcloud-services\"]' (click)='collapse()'>\r\n                        <span class='glyphicon glyphicon-th-list'></span> XCloud Services\r\n                    </a>\r\n                </li>\r\n            </ul>\r\n        </div>\r\n    </div>\r\n</div>\r\n"
+module.exports = "<div class='main-nav'>\r\n    <div class='navbar navbar-inverse'>\r\n        <div class='navbar-header'>\r\n            <button type='button' class='navbar-toggle' data-toggle='collapse' data-target='.navbar-collapse' [attr.aria-expanded]='isExpanded' (click)='toggle()'>\r\n                <span class='sr-only'>Toggle navigation</span>\r\n                <span class='icon-bar'></span>\r\n                <span class='icon-bar'></span>\r\n                <span class='icon-bar'></span>\r\n            </button>\r\n            <a class='navbar-brand' [routerLink]='[\"/\"]'>XRouter Service Explorer</a>\r\n            <search-form></search-form>\r\n        </div>\r\n        <div class='clearfix'></div>\r\n        <div class='navbar-collapse collapse' [ngClass]='{ \"in\": isExpanded }'>\r\n            <ul class='nav navbar-nav'>\r\n                <li [routerLinkActive]='[\"link-active\"]' [routerLinkActiveOptions]='{ exact: true }'>\r\n                    <a [routerLink]='[\"/\"]' (click)='collapse()'>\r\n                        <span class='glyphicon glyphicon-home'></span> Home\r\n                    </a>\r\n                </li>\r\n                <li [routerLinkActive]='[\"link-active\"]'>\r\n                    <a [routerLink]='[\"/xrouter-snodes\"]' (click)='collapse()'>\r\n                        <span class='glyphicon glyphicon-th-list'></span> XRouter Service Nodes\r\n                    </a>\r\n                </li>\r\n                <li [routerLinkActive]='[\"link-active\"]'>\r\n                    <a [routerLink]='[\"/spv-wallets\"]' (click)='collapse()'>\r\n                        <span class='glyphicon glyphicon-th-list'></span> SPV Wallets\r\n                    </a>\r\n                </li>\r\n                <li [routerLinkActive]='[\"link-active\"]'>\r\n                    <a [routerLink]='[\"/xcloud-services\"]' (click)='collapse()'>\r\n                        <span class='glyphicon glyphicon-th-list'></span> XCloud Services\r\n                    </a>\r\n                </li>\r\n            </ul>\r\n        </div>\r\n    </div>\r\n</div>\r\n"
 
 /***/ }),
 
@@ -381,6 +408,199 @@ var PageNotFoundComponent = /** @class */ (function () {
 
 /***/ }),
 
+/***/ "./src/app/search-form-error/search-form-error.component.css":
+/*!*******************************************************************!*\
+  !*** ./src/app/search-form-error/search-form-error.component.css ***!
+  \*******************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = ""
+
+/***/ }),
+
+/***/ "./src/app/search-form-error/search-form-error.component.html":
+/*!********************************************************************!*\
+  !*** ./src/app/search-form-error/search-form-error.component.html ***!
+  \********************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "<p>Search not found</p>"
+
+/***/ }),
+
+/***/ "./src/app/search-form-error/search-form-error.component.ts":
+/*!******************************************************************!*\
+  !*** ./src/app/search-form-error/search-form-error.component.ts ***!
+  \******************************************************************/
+/*! exports provided: SearchFormErrorComponent */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SearchFormErrorComponent", function() { return SearchFormErrorComponent; });
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (undefined && undefined.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+var SearchFormErrorComponent = /** @class */ (function () {
+    function SearchFormErrorComponent() {
+    }
+    SearchFormErrorComponent.prototype.ngOnInit = function () { };
+    SearchFormErrorComponent = __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
+            selector: 'search-form-error',
+            template: __webpack_require__(/*! ./search-form-error.component.html */ "./src/app/search-form-error/search-form-error.component.html"),
+            styles: [__webpack_require__(/*! ./search-form-error.component.css */ "./src/app/search-form-error/search-form-error.component.css")]
+        }),
+        __metadata("design:paramtypes", [])
+    ], SearchFormErrorComponent);
+    return SearchFormErrorComponent;
+}());
+
+
+
+/***/ }),
+
+/***/ "./src/app/search-form/search-form.component.css":
+/*!*******************************************************!*\
+  !*** ./src/app/search-form/search-form.component.css ***!
+  \*******************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = ""
+
+/***/ }),
+
+/***/ "./src/app/search-form/search-form.component.html":
+/*!********************************************************!*\
+  !*** ./src/app/search-form/search-form.component.html ***!
+  \********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "<!-- <form [formGroup]=\"form\" class=\"navbar-form navbar-left\" (ngSubmit)=\"onSubmit()\" role=\"search\">\n    <div class=\"form-group\">\n        <input \n            maxlength=\"64\"\n            formControlName=\"searchField\"\n            type=\"text\" \n            class=\"form-control\" \n            placeholder=\"Search for Service, NodePubKey, Address\">\n    </div>\n    <button value=\"{{ 'action.find'}}\" type=\"submit\" class=\"btn btn-default\">Submit</button>\n</form> -->\n\n<div>\n \n  <mat-form-field>\n    <input matInput placeholder=\"Search\" aria-label=\"State\" [matAutocomplete]=\"auto\" [formControl]=\"searchMoviesCtrl\">\n    <mat-autocomplete #auto=\"matAutocomplete\" [displayWith]=\"displayFn\">\n      <mat-option *ngIf=\"isLoading\" class=\"is-loading\">Loading...</mat-option>\n      <ng-container *ngIf=\"!isLoading\">\n        <mat-option *ngFor=\"let movie of filteredMovies\" [value]=\"movie.Title\">\n          <span><b>{{movie.Title}}</b> ({{movie.Year}})</span>\n        </mat-option>\n      </ng-container>\n    </mat-autocomplete>\n  </mat-form-field>\n \n  <br>\n \n<ng-container *ngIf=\"errorMsg; else elseTemplate\">\n  {{errorMsg}}\n</ng-container>\n<ng-template #elseTemplate>\n  <h5>Selected Value: {{searchMoviesCtrl.value}}</h5>\n</ng-template>\n \n</div>"
+
+/***/ }),
+
+/***/ "./src/app/search-form/search-form.component.ts":
+/*!******************************************************!*\
+  !*** ./src/app/search-form/search-form.component.ts ***!
+  \******************************************************/
+/*! exports provided: SearchFormComponent */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SearchFormComponent", function() { return SearchFormComponent; });
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/forms */ "./node_modules/@angular/forms/fesm5/forms.js");
+/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! rxjs/operators */ "./node_modules/rxjs/_esm5/operators/index.js");
+/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm5/http.js");
+var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (undefined && undefined.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+
+// const NODEPUBKEY_REGEX = '^[0][a-zA-Z0-9]{65}$'; 
+// const ADDRESS_REGEX = '^[B][a-zA-Z0-9]{33}$';
+// const TXHASH_REGEX = '[a-zA-Z0-9]{64}$';
+var SearchFormComponent = /** @class */ (function () {
+    function SearchFormComponent(http) {
+        this.http = http;
+        // form: FormGroup;
+        // services:any;
+        // constructor(
+        //   private formBuilder: FormBuilder, 
+        //   private navigatorService: NavigatorService,
+        //   private xrouterService: XrouterApiService) {
+        //   this.createForm();
+        //  }
+        // ngOnInit() {
+        // }
+        // private createForm(){
+        //   //const pattern = `(${NODEPUBKEY_REGEX})|(${ADDRESS_REGEX})|(${TXHASH_REGEX})`;
+        //   this.form = this.formBuilder.group({
+        //     searchField: [null, [Validators.required]]
+        //   });
+        // }
+        // onSubmit(){
+        //   const searchField = this.form.get('searchField').value;
+        //   if(searchField == null){
+        //     this.navigatorService.go("search-not-found");
+        //     return;
+        //   }
+        //   if(new RegExp(NODEPUBKEY_REGEX).test(searchField)){
+        //     console.log("nodepubkey");
+        //   } else if (new RegExp(ADDRESS_REGEX).test(searchField)){
+        //     console.log("address");
+        //   } else if (new RegExp(TXHASH_REGEX).test(searchField)){
+        //     console.log("txhash");
+        //   } else {
+        //     console.log("service");
+        //   }
+        //   console.log("service");
+        // }
+        // private onNothingFound(){
+        // }
+        this.searchServicesCtrl = new _angular_forms__WEBPACK_IMPORTED_MODULE_1__["FormControl"]();
+        this.isLoading = false;
+    }
+    SearchFormComponent.prototype.ngOnInit = function () {
+        var _this = this;
+        this.searchServicesCtrl.valueChanges
+            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_2__["debounceTime"])(500), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_2__["tap"])(function () {
+            _this.errorMsg = "";
+            _this.filteredServices = [];
+            _this.isLoading = true;
+        }), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_2__["switchMap"])(function (value) { return _this.http.get("https://localhost:44305/api/Blocknet/Xrouter/?searchString=" + value)
+            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_2__["finalize"])(function () {
+            _this.isLoading = false;
+        })); }))
+            .subscribe(function (data) {
+            // if (data['Search'] == undefined) {
+            //   this.errorMsg = data['Error'];
+            //   this.filteredServices = [];
+            // } else {
+            //   this.errorMsg = "";
+            //   this.filteredServices = data['Search'];
+            // }
+            console.log(data);
+            console.log(_this.filteredServices);
+        });
+    };
+    SearchFormComponent = __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
+            selector: 'search-form',
+            template: __webpack_require__(/*! ./search-form.component.html */ "./src/app/search-form/search-form.component.html"),
+            styles: [__webpack_require__(/*! ./search-form.component.css */ "./src/app/search-form/search-form.component.css")]
+        }),
+        __metadata("design:paramtypes", [_angular_common_http__WEBPACK_IMPORTED_MODULE_3__["HttpClient"]])
+    ], SearchFormComponent);
+    return SearchFormComponent;
+}());
+
+
+
+/***/ }),
+
 /***/ "./src/app/service-list/service-list.component.ts":
 /*!********************************************************!*\
   !*** ./src/app/service-list/service-list.component.ts ***!
@@ -473,6 +693,119 @@ var ServiceListComponent = /** @class */ (function () {
         __metadata("design:paramtypes", [])
     ], ServiceListComponent);
     return ServiceListComponent;
+}());
+
+
+
+/***/ }),
+
+/***/ "./src/app/service-node-list/service-node-list.component.css":
+/*!*******************************************************************!*\
+  !*** ./src/app/service-node-list/service-node-list.component.css ***!
+  \*******************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = ""
+
+/***/ }),
+
+/***/ "./src/app/service-node-list/service-node-list.component.html":
+/*!********************************************************************!*\
+  !*** ./src/app/service-node-list/service-node-list.component.html ***!
+  \********************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "<h2>Service Node List</h2>\n<table class=\"table\">\n        <thead>\n          <tr>\n                <th>Rank</th>\n                <th>NodePubKey</th>\n                <!-- <th>Address</th> -->\n                <th>Spv Wallets</th>\n                <th></th>\n                <th>XCloud Services</th>\n                <th></th>\n          </tr> \n        </thead>\n        <tbody>\n                <tr *ngFor=\"let sn of serviceNodes; let i = index\">\n                        <td>{{sn.rank}}</td>\n                        <td>                                \n                                <a href=\"javascript:void(0)\" (click)=\"onNodeClick(i)\"> {{sn.nodePubKey}}</a>\n                        </td>\n                        <!-- <td><a href=\"https://chainz.cryptoid.info/block/address.dws?{{sn.addr}}\">{{sn.addr}}</a></td> -->\n                        <td>\n                                <div class=\"form-group\">\n                                        <label for=\"spvWallets\"></label>\n                                        <select id=\"spvWallets\" class=\"form-control\" (change)=\"onSpvWalletChange(i, $event)\">\n                                                <option *ngFor=\"let w of sn.spvWallets\" [value]=\"w\">{{ w }} </option>\n                                        </select>   \n                                </div> \n                        </td>\n                        <td><a href=\"javascript:void(0)\" (click)=\"onSpvWalletClick(i)\">View</a></td>\n                        <td>\n                                <div *ngIf = \"sn.xCloudServices.length > 0\">\n                                        <div class=\"form-group\">\n                                                <label for=\"xcloudServices\"></label>\n                                                <select id=\"xcloudServices\" class=\"form-control\" (change)=\"onXCloudServiceChange(i, $event)\">\n                                                        <option *ngFor=\"let s of sn.xCloudServices\" [value]=\"s\">{{ s }} </option>\n                                                </select>   \n                                        </div> \n                                </div>\n                                \n                        </td>\n                        <td><a href=\"javascript:void(0)\" (click)=\"onXCloudServiceClick(i)\">View</a></td>\n                </tr>\n        </tbody>\n</table>"
+
+/***/ }),
+
+/***/ "./src/app/service-node-list/service-node-list.component.ts":
+/*!******************************************************************!*\
+  !*** ./src/app/service-node-list/service-node-list.component.ts ***!
+  \******************************************************************/
+/*! exports provided: ServiceNodeListComponent */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ServiceNodeListComponent", function() { return ServiceNodeListComponent; });
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm5/router.js");
+/* harmony import */ var _shared_services_xrouter_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../shared/services/xrouter.service */ "./src/app/shared/services/xrouter.service.ts");
+var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (undefined && undefined.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+var ServiceNodeListComponent = /** @class */ (function () {
+    function ServiceNodeListComponent(router, xrouterService) {
+        this.router = router;
+        this.xrouterService = xrouterService;
+        this.PAGE_SIZE = 3;
+        this.query = {
+            pageSize: this.PAGE_SIZE,
+        };
+        this.queryPastCourses = {
+            pageSize: this.PAGE_SIZE,
+        };
+    }
+    ServiceNodeListComponent.prototype.ngOnInit = function () {
+        this.populateServiceNodes();
+    };
+    ServiceNodeListComponent.prototype.populateServiceNodes = function () {
+        var _this = this;
+        this.xrouterService.GetServiceNodeList()
+            .subscribe(function (result) {
+            _this.serviceNodes = result;
+            _this.selectedXCloudServices = new Array(result.length);
+            _this.selectedSpvWallets = new Array(result.length);
+            _this.serviceNodes.forEach(function (sn, index) {
+                _this.selectedSpvWallets[index] = sn.spvWallets[0];
+                _this.selectedXCloudServices[index] = sn.xCloudServices[0];
+            });
+        });
+    };
+    ServiceNodeListComponent.prototype.onQueryChange = function (query) {
+        this.query = query;
+        this.populateServiceNodes();
+    };
+    ServiceNodeListComponent.prototype.onSpvWalletChange = function (index, event) {
+        this.selectedSpvWallets[index] = event.target.value;
+    };
+    ServiceNodeListComponent.prototype.onXCloudServiceChange = function (index, event) {
+        this.selectedXCloudServices[index] = event.target.value;
+    };
+    ServiceNodeListComponent.prototype.onSpvWalletClick = function (index) {
+        if (this.selectedSpvWallets[index].includes('x'))
+            this.router.navigate(['/spv-wallets', this.selectedSpvWallets[index], this.serviceNodes[index].nodePubKey]);
+    };
+    ServiceNodeListComponent.prototype.onXCloudServiceClick = function (index) {
+        if (this.selectedXCloudServices[index].includes('x'))
+            this.router.navigate(['/xcloud-services', this.selectedXCloudServices[index], this.serviceNodes[index].nodePubKey]);
+    };
+    ServiceNodeListComponent.prototype.onNodeClick = function (index) {
+        var node = this.serviceNodes[index];
+        var service = "xr::" + node.xWallets[0];
+        this.router.navigate(['/xrouter-snodes', node.nodePubKey, "xr::" + service]);
+    };
+    ServiceNodeListComponent = __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
+            selector: 'app-service-node-list',
+            template: __webpack_require__(/*! ./service-node-list.component.html */ "./src/app/service-node-list/service-node-list.component.html"),
+            styles: [__webpack_require__(/*! ./service-node-list.component.css */ "./src/app/service-node-list/service-node-list.component.css")]
+        }),
+        __metadata("design:paramtypes", [_angular_router__WEBPACK_IMPORTED_MODULE_1__["Router"], _shared_services_xrouter_service__WEBPACK_IMPORTED_MODULE_2__["XrouterApiService"]])
+    ], ServiceNodeListComponent);
+    return ServiceNodeListComponent;
 }());
 
 
@@ -654,6 +987,58 @@ var BaseService = /** @class */ (function () {
 
 /***/ }),
 
+/***/ "./src/app/shared/services/navigator.service..ts":
+/*!*******************************************************!*\
+  !*** ./src/app/shared/services/navigator.service..ts ***!
+  \*******************************************************/
+/*! exports provided: NavigatorService */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "NavigatorService", function() { return NavigatorService; });
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm5/router.js");
+var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (undefined && undefined.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+var NavigatorService = /** @class */ (function () {
+    function NavigatorService(router) {
+        this.router = router;
+        this.apiEndpoint = 'blocknet/xrouter';
+        this.baseEndpoint = ''; // http://localhost
+    }
+    NavigatorService.prototype.go = function (path) {
+        this.router.navigate([path]);
+    };
+    NavigatorService.prototype.serviceNodeDetails = function (address) {
+        this.go('/xrouter-snodes/' + address);
+    };
+    NavigatorService.prototype.spvWalletDetails = function (blockhash) {
+        this.go('/spv-wallets/' + blockhash);
+    };
+    NavigatorService.prototype.xCloudServiceDetails = function (txid) {
+        this.go('/xcloud-services/' + txid);
+    };
+    NavigatorService = __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Injectable"])(),
+        __metadata("design:paramtypes", [_angular_router__WEBPACK_IMPORTED_MODULE_1__["Router"]])
+    ], NavigatorService);
+    return NavigatorService;
+}());
+
+
+
+/***/ }),
+
 /***/ "./src/app/shared/services/session.service.ts":
 /*!****************************************************!*\
   !*** ./src/app/shared/services/session.service.ts ***!
@@ -774,9 +1159,17 @@ var XrouterApiService = /** @class */ (function (_super) {
         url += '&node_count=' + node_count;
         return this.http.get(url);
     };
-    XrouterApiService.prototype.GetNodeInfo = function (nodePubKey) {
+    XrouterApiService.prototype.GetNodeInfo = function (nodePubKey, service, node_count) {
+        if (node_count === void 0) { node_count = 1; }
         var url = this.baseEndpoint + this.apiEndpoint + '/GetNodeInfo/?nodePubKey=' + nodePubKey;
-        console.log(url);
+        if (!Object(util__WEBPACK_IMPORTED_MODULE_3__["isNullOrUndefined"])(service)) {
+            url += '&service=' + service;
+        }
+        url += '&node_count=' + node_count;
+        return this.http.get(url);
+    };
+    XrouterApiService.prototype.GetServiceNodeList = function () {
+        var url = this.baseEndpoint + this.apiEndpoint + '/GetServiceNodeList';
         return this.http.get(url);
     };
     XrouterApiService = __decorate([
@@ -808,7 +1201,7 @@ module.exports = ""
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<h2>Xrouter Services</h2>\n<service-list \n        [services]=\"spvWallets\" \n        [query-init]=\"query\"\n        (query-changed)=\"onQueryChange($event)\">\n</service-list>"
+module.exports = "<h2>Spv Wallets</h2>\n<service-list \n        [services]=\"spvWallets\" \n        [query-init]=\"query\"\n        (query-changed)=\"onQueryChange($event)\">\n</service-list>"
 
 /***/ }),
 
@@ -939,6 +1332,7 @@ var ViewSnodeComponent = /** @class */ (function () {
         this.isLoaded = false;
         route.params.subscribe(function (p) {
             _this.nodePubKey = p['nodePubKey'];
+            _this.service = p['service'];
             if (Object(util__WEBPACK_IMPORTED_MODULE_4__["isNullOrUndefined"])(_this.nodePubKey)) {
                 router.navigate(['']);
                 return;
@@ -947,7 +1341,7 @@ var ViewSnodeComponent = /** @class */ (function () {
     }
     ViewSnodeComponent.prototype.ngOnInit = function () {
         var _this = this;
-        this.xrouterApiService.GetNodeInfo(this.nodePubKey)
+        this.xrouterApiService.GetNodeInfo(this.nodePubKey, this.service)
             .subscribe(function (result) {
             _this.result = result;
             _this.selectedWalletName = _this.result.spvConfigs[0].spvWallet;
@@ -1003,7 +1397,7 @@ module.exports = ""
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div *ngIf=\"isLoaded\">\n    <h1>XRouter Service</h1>\n    <h2>{{serviceName}}</h2>\n    <table class=\"table\">\n      <tbody>\n      <tr>\n        <td>Fee</td>\n        <td>{{result.service.fee}} BLOCK</td>\n      <tr>\n          <td>Parameter Types</td>\n          <td>{{result.service.parameters}}</td>\n      </tr>\n      <tr>\n        <td>Description</td>\n        <td>{{result.service.helpDescription}}</td>\n      </tr>\n      <tr>\n          <td>Usage Instructions</td>\n          <td>xrService {{serviceName}} [{{result.service.parameters}}]</td>\n      </tr>\n      </tbody>\n    </table>\n    \n    <h3>Offered By</h3>\n    <table class=\"table\">\n      <tbody>\n        <tr>\n          <td>NodePubKey</td>\n          <td><a [routerLink]=\"['/xrouter-snode', result.node.nodePubKey]\">{{result.node.nodePubKey}}</a></td>\n        </tr>\n        <tr>\n          <td>Score</td>\n          <td>{{result.node.score}}</td>\n        </tr>\n        <tr>\n          <td>Banned</td>\n          <td>{{result.node.banned}}</td>\n        </tr>\n        <tr>\n          <td>Default Fee</td>\n          <td>{{result.node.feeDefault}} BLOCK</td>\n        </tr>\n    \n      </tbody>\n    </table>\n    \n    <h3>Configuration {{serviceName}}.conf</h3>\n    <div class=\"well\" style=\"white-space: pre-line\">\n      <code>{{result.service.config}}</code>\n    </div>\n    \n    <h3>Other Service Nodes that offer this service</h3>\n    <table class=\"table\">\n      <thead>\n        <tr>\n          <th>Address</th>\n          <th>Score</th>\n          <th>Banned</th>\n        </tr>\n      </thead>\n      <tbody>\n        <tr *ngFor=\"let s of result.otherNodes\">\n          <td><a [routerLink]=\"['/xrouter-snode', s.nodePubKey]\">{{s.nodePubKey}}</a></td>\n          <td>{{s.score}}</td>\n          <td>{{s.banned}}</td>\n        </tr>\n      </tbody>\n    </table>\n</div>\n"
+module.exports = "<div *ngIf=\"isLoaded\">\n    <h1>SPV Wallet</h1>\n    <h2>{{spvWalletName}}</h2>\n    <table class=\"table\">\n      <tbody>\n        <tr>\n          <td>Usage Instructions</td>\n          <td>xrService {{spvWalletName}}</td>\n      </tr>\n      </tbody>\n    </table>\n\n    <h2>Commands</h2>\n    <table class=\"table\">\n      <thead>\n          <tr>\n              <th>Command</th>\n              <th>Fee (BLOCK)</th>\n              <th>Request Limit</th>\n              <th>Payment Address</th>\n              <th>Disabled</th>\n          </tr>\n      </thead>\n      <tbody>\n          <tr *ngFor=\"let c of result.spvConfig.commands\">\n              <td>{{c.command}}</td>\n              <td>{{c.fee}}</td>\n              <td>{{c.requestLimit}}</td>\n              <td>{{c.paymentAddress}}</td>\n              <td>{{c.disabled}}</td>\n          </tr>\n      </tbody>\n  </table>\n    \n    <h3>Offered By</h3>\n    <table class=\"table\">\n      <tbody>\n        <tr>\n          <td>NodePubKey</td>\n          <td><a [routerLink]=\"['/xrouter-snode', result.node.nodePubKey]\">{{result.node.nodePubKey}}</a></td>\n        </tr>\n        <tr>\n          <td>Score</td>\n          <td>{{result.node.score}}</td>\n        </tr>\n        <tr>\n          <td>Banned</td>\n          <td>{{result.node.banned}}</td>\n        </tr>\n        <tr>\n          <td>Default Fee</td>\n          <td>{{result.node.feeDefault}} BLOCK</td>\n        </tr>\n    \n      </tbody>\n    </table>\n    \n    <h3>Other Service Nodes that offer this service</h3>\n    <table class=\"table\">\n      <thead>\n        <tr>\n          <th>Address</th>\n          <th>Score</th>\n          <th>Banned</th>\n        </tr>\n      </thead>\n      <tbody>\n        <tr *ngFor=\"let s of result.otherNodes\">\n          <td><a [routerLink]=\"['/xrouter-snode', s.nodePubKey]\">{{s.nodePubKey}}</a></td>\n          <td>{{s.score}}</td>\n          <td>{{s.banned}}</td>\n        </tr>\n      </tbody>\n    </table>\n</div>\n"
 
 /***/ }),
 
@@ -1047,6 +1441,7 @@ var ViewSpvWalletComponent = /** @class */ (function () {
         this.isLoaded = false;
         route.params.subscribe(function (p) {
             _this.spvWalletName = p['name'];
+            _this.nodePubKey = p['nodePubKey'];
             if (Object(util__WEBPACK_IMPORTED_MODULE_4__["isNullOrUndefined"])(_this.spvWalletName)) {
                 router.navigate(['']);
                 return;
@@ -1055,10 +1450,10 @@ var ViewSpvWalletComponent = /** @class */ (function () {
     }
     ViewSpvWalletComponent.prototype.ngOnInit = function () {
         var _this = this;
-        this.xrouterApiService.GetServiceInfo(this.spvWalletName)
+        this.xrouterApiService.GetSpvWalletInfo(this.spvWalletName, this.nodePubKey)
             .subscribe(function (result) {
             _this.result = result;
-            _this.location.replaceState("xrouter-services/" + _this.spvWalletName + "/" + _this.result.node.nodePubKey);
+            _this.location.replaceState("/spv-wallets/" + _this.spvWalletName + "/" + _this.result.node.nodePubKey);
             _this.spvWalletName = _this.spvWalletName.replace("xr::", "");
             _this.isLoaded = true;
         });
@@ -1154,7 +1549,7 @@ var ViewXrServiceComponent = /** @class */ (function () {
         this.xrouterApiService.GetServiceInfo(this.serviceName)
             .subscribe(function (result) {
             _this.result = result;
-            _this.location.replaceState("xcloud-services/" + _this.serviceName + "/" + _this.result.node.nodePubKey);
+            _this.location.replaceState("/xcloud-services/" + _this.serviceName + "/" + _this.result.node.nodePubKey);
             _this.serviceName = _this.serviceName.replace("xrs::", "");
             _this.isLoaded = true;
         });
