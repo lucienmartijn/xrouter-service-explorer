@@ -10,7 +10,7 @@ import { isNullOrUndefined } from 'util';
   styleUrls: ['./view-xr-service.component.css']
 })
 export class ViewXrServiceComponent implements OnInit {
-  isLoaded:boolean = false;
+  loading:boolean = true;
   serviceName:string;
   result:XrouterServiceInfo;
 
@@ -37,7 +37,10 @@ export class ViewXrServiceComponent implements OnInit {
         this.result = result;
         this.location.replaceState("/xcloud-services/" + this.serviceName + "/" + this.result.node.nodePubKey);
         this.serviceName = this.serviceName.replace("xrs::","");
-        this.isLoaded = true;
+        this.loading = false;
+      },
+      error => {
+        this.router.navigate(['/error'], {queryParams: error});
       });
       
   }

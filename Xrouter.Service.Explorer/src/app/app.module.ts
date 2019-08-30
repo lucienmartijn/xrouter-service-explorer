@@ -26,7 +26,7 @@ import { ViewSpvWalletComponent } from './view-spv-wallet/view-spv-wallet.compon
 import { ServiceNodeListComponent } from './service-node-list/service-node-list.component';
 import { SearchFormComponent } from './search-form/search-form.component';
 import { NavigatorService } from './shared/services/navigator.service.';
-import { SearchFormErrorComponent } from './search-form-error/search-form-error.component';
+import { ErrorComponent } from './error/error.component';
 
 @NgModule({
   declarations: [
@@ -42,7 +42,7 @@ import { SearchFormErrorComponent } from './search-form-error/search-form-error.
     ViewSpvWalletComponent,
     ViewSnodeComponent,
     SearchFormComponent,
-    SearchFormErrorComponent,
+    ErrorComponent,
     PageNotFoundComponent
   ],
   imports: [
@@ -66,7 +66,7 @@ import { SearchFormErrorComponent } from './search-form-error/search-form-error.
       { path: 'xcloud-services/:name/:NodePubKey', component: ViewXrServiceComponent },
       { path: 'xrouter-snodes/:nodePubKey', component: ViewSnodeComponent},
       { path: 'xrouter-snodes/:nodePubKey/:service', component: ViewSnodeComponent},
-      { path: 'search-not-found', component: SearchFormErrorComponent},
+      { path: 'error', component: ErrorComponent},
       { path: '**', component: PageNotFoundComponent }
       
     ], { useHash: true })

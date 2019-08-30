@@ -125,7 +125,7 @@ namespace BitcoinLib.RPC.Connector
 
                 #region RPC Time-Out
 
-                if (webException.Message == "The operation has timed out")
+                if (webException.Message == "The operation has timed out.")
                 {
                     throw new RpcRequestTimeoutException(webException.Message);
                 }

@@ -6,9 +6,7 @@
                 <th>NodePubKey</th>
                 <!-- <th>Address</th> -->
                 <th>Spv Wallets</th>
-                <th></th>
                 <th>XCloud Services</th>
-                <th></th>
           </tr> 
         </thead>
         <tbody>
@@ -26,7 +24,6 @@
                                         </select>   
                                 </div> 
                         </td>
-                        <td><a href="javascript:void(0)" (click)="onSpvWalletClick(i)">View</a></td>
                         <td>
                                 <div *ngIf = "sn.xCloudServices.length > 0">
                                         <div class="form-group">
@@ -38,7 +35,6 @@
                                 </div>
                                 
                         </td>
-                        <td><a href="javascript:void(0)" (click)="onXCloudServiceClick(i)">View</a></td>
                 </tr>
         </tbody>
 </table>

@@ -1,75 +1,79 @@
-<div *ngIf="isLoaded">
-    <h1>SPV Wallet</h1>
-    <h2>{{spvWalletName}}</h2>
-    <table class="table">
-      <tbody>
-        <tr>
-          <td>Usage Instructions</td>
-          <td>xrService {{spvWalletName}}</td>
-      </tr>
-      </tbody>
-    </table>
+<div *ngIf="loading else loaded">
+    Loading page...
+  </div>
 
-    <h2>Commands</h2>
-    <table class="table">
-      <thead>
-          <tr>
-              <th>Command</th>
-              <th>Fee (BLOCK)</th>
-              <th>Request Limit</th>
-              <th>Payment Address</th>
-              <th>Disabled</th>
-          </tr>
-      </thead>
-      <tbody>
-          <tr *ngFor="let c of result.spvConfig.commands">
-              <td>{{c.command}}</td>
-              <td>{{c.fee}}</td>
-              <td>{{c.requestLimit}}</td>
-              <td>{{c.paymentAddress}}</td>
-              <td>{{c.disabled}}</td>
-          </tr>
-      </tbody>
+<ng-template #loaded>
+  <h1>SPV Wallet</h1>
+  <h2>{{spvWalletName}}</h2>
+  <table class="table">
+    <tbody>
+      <tr>
+        <td>Usage Instructions</td>
+        <td>xrService {{spvWalletName}}</td>
+    </tr>
+    </tbody>
   </table>
-    
-    <h3>Offered By</h3>
-    <table class="table">
-      <tbody>
+
+  <h2>Commands</h2>
+  <table class="table">
+    <thead>
         <tr>
-          <td>NodePubKey</td>
-          <td><a [routerLink]="['/xrouter-snode', result.node.nodePubKey]">{{result.node.nodePubKey}}</a></td>
+            <th>Command</th>
+            <th>Fee (BLOCK)</th>
+            <th>Request Limit</th>
+            <th>Payment Address</th>
+            <th>Disabled</th>
         </tr>
-        <tr>
-          <td>Score</td>
-          <td>{{result.node.score}}</td>
+    </thead>
+    <tbody>
+        <tr *ngFor="let c of result.spvConfig.commands">
+            <td>{{c.command}}</td>
+            <td>{{c.fee}}</td>
+            <td>{{c.requestLimit}}</td>
+            <td>{{c.paymentAddress}}</td>
+            <td>{{c.disabled}}</td>
         </tr>
-        <tr>
-          <td>Banned</td>
-          <td>{{result.node.banned}}</td>
-        </tr>
-        <tr>
-          <td>Default Fee</td>
-          <td>{{result.node.feeDefault}} BLOCK</td>
-        </tr>
-    
-      </tbody>
-    </table>
-    
-    <h3>Other Service Nodes that offer this service</h3>
-    <table class="table">
-      <thead>
-        <tr>
-          <th>Address</th>
-          <th>Score</th>
-          <th>Banned</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let s of result.otherNodes">
-          <td><a [routerLink]="['/xrouter-snode', s.nodePubKey]">{{s.nodePubKey}}</a></td>
-          <td>{{s.score}}</td>
-          <td>{{s.banned}}</td>
-        </tr>
-      </tbody>
-    </table>
-</div>
+    </tbody>
+</table>
+  
+  <h3>Offered By</h3>
+  <table class="table">
+    <tbody>
+      <tr>
+        <td>NodePubKey</td>
+        <td><a [routerLink]="['/xrouter-snodes', result.node.nodePubKey]">{{result.node.nodePubKey}}</a></td>
+      </tr>
+      <tr>
+        <td>Score</td>
+        <td>{{result.node.score}}</td>
+      </tr>
+      <tr>
+        <td>Banned</td>
+        <td>{{result.node.banned}}</td>
+      </tr>
+      <tr>
+        <td>Default Fee</td>
+        <td>{{result.node.feeDefault}} BLOCK</td>
+      </tr>
+  
+    </tbody>
+  </table>
+  
+  <h3>Other Service Nodes that offer this service</h3>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Address</th>
+        <th>Score</th>
+        <th>Banned</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let s of result.otherNodes">
+        <td><a [routerLink]="['/xrouter-snodes', s.nodePubKey]">{{s.nodePubKey}}</a></td>
+        <td>{{s.score}}</td>
+        <td>{{s.banned}}</td>
+      </tr>
+    </tbody>
+  </table>
+</ng-template>  

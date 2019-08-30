@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
 import { XrouterApiService } from '../shared/services/xrouter.service';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { isNullOrUndefined } from 'util';
 
 @Component({
@@ -10,7 +10,8 @@ import { isNullOrUndefined } from 'util';
   styleUrls: ['./view-spv-wallet.component.css']
 })
 export class ViewSpvWalletComponent implements OnInit {
-  isLoaded:boolean = false;
+  navigationSubscription; 
+  loading:boolean;
   spvWalletName:string;
   nodePubKey:string;
   result:XrouterServiceInfo;
@@ -29,21 +30,26 @@ export class ViewSpvWalletComponent implements OnInit {
           router.navigate(['']);
           return; 
         }
-        
+        this.initializeData();
+        this.loading = true;
       });
     }
 
-  ngOnInit() {
+  private initializeData(){
     this.xrouterApiService.GetSpvWalletInfo(this.spvWalletName, this.nodePubKey)
-      .subscribe(result => {
-        this.result = result;
-        this.location.replaceState("/spv-wallets/" + this.spvWalletName + "/" + this.result.node.nodePubKey);
-        this.spvWalletName = this.spvWalletName.replace("xr::", "");
-        this.isLoaded = true;
-      });
-      
+        .subscribe(result => {
+          this.result = result;
+          this.location.replaceState("/spv-wallets/" + this.spvWalletName + "/" + this.result.node.nodePubKey);
+          this.spvWalletName = this.spvWalletName.replace("xr::", "");
+          this.loading = false;
+        },
+        error => {
+          this.router.navigate(['/error'], {queryParams: error});
+        }
+        );
   }
 
+  ngOnInit() {}
 }
 
 

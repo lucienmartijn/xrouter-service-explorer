@@ -62,10 +62,8 @@ export class SearchFormComponent implements OnInit {
     let serviceName = event.option.value as string;
 
     if(serviceName.includes("xrs::")){
-      console.log("xcloud");
       this.navigatorService.xCloudServiceDetails(serviceName);
     } else{
-      console.log("spv");
       this.navigatorService.spvWalletDetails(serviceName);
     }
   }

@@ -56,20 +56,19 @@ export class ServiceNodeListComponent implements OnInit {
     this.selectedXCloudServices[index] = event.target.value;    
   }
 
-  onSpvWalletClick(index:number){
-    if(this.selectedSpvWallets[index].includes('x'))
-    this.router.navigate(['/spv-wallets', this.selectedSpvWallets[index], this.serviceNodes[index].nodePubKey]);
-  }
+  // onSpvWalletClick(index:number){
+  //   if(this.selectedSpvWallets[index].includes('x'))
+  //   this.router.navigate(['/spv-wallets', this.selectedSpvWallets[index], this.serviceNodes[index].nodePubKey]);
+  // }
 
-  onXCloudServiceClick(index:number){
-    if(this.selectedXCloudServices[index].includes('x'))
-    this.router.navigate(['/xcloud-services', this.selectedXCloudServices[index], this.serviceNodes[index].nodePubKey]);
-  }
+  // onXCloudServiceClick(index:number){
+  //   if(this.selectedXCloudServices[index].includes('x'))
+  //   this.router.navigate(['/xcloud-services', this.selectedXCloudServices[index], this.serviceNodes[index].nodePubKey]);
+  // }
 
   onNodeClick(index:number){
     let node = this.serviceNodes[index];
-    let service = "xr::" + node.xWallets[0];
-    this.router.navigate(['/xrouter-snodes', node.nodePubKey, "xr::" + service]);
+    this.router.navigate(['/xrouter-snodes', node.nodePubKey]);
   }
 
 

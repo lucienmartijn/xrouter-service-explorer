@@ -65,20 +65,25 @@
           </tr>
       </tbody>
   </table>
-  <h3>Services offered by this Service Node</h3>
-  <div>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Service</th>
+  <h3>XCloud Services offered by this Service Node</h3>
+
+  <div *ngIf="result?.services.length == 0 else notEmpty">
+      This service node doesn't offer XCloud Services yet :(
+    </div>
+    
+  <ng-template #notEmpty>
+      <table class="table">
+          <thead>
+              <tr>
+                  <th>Service</th>
+              </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let s of result?.services | paginate: config">
+              <td><a [routerLink]="['/xcloud-services', 'xrs::' + s]">{{s}}</a></td>
             </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let s of result?.services | paginate: config">
-            <td><a [routerLink]="['/xcloud-services', 'xrs::' + s]">{{s}}</a></td>
-          </tr>
-        </tbody>
-    </table>
-    <pagination-controls (pageChange)="pageChanged($event)"></pagination-controls>
-  </div>
+          </tbody>
+      </table>
+      <pagination-controls (pageChange)="pageChanged($event)"></pagination-controls>
+    </ng-template>  
 </div>  

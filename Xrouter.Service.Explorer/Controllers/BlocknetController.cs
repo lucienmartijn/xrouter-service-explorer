@@ -3,19 +3,21 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using BitcoinLib.ExceptionHandling.Rpc;
 using BitcoinLib.RPC.RequestResponse;
 using BitcoinLib.Services.Coins.Base;
 using BitcoinLib.Services.Coins.Bitcoin;
 using BitcoinLib.Services.Coins.Blocknet;
 using BitcoinLib.Services.Coins.Blocknet.Xrouter;
 using blocknet_xrouter.Controllers.ViewModels;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
 namespace blocknet_xrouter.Controllers
 {
     [Route("api/[controller]")]
-    public class BlocknetController : Controller
+    public class BlocknetController : ControllerBase 
     {
         private readonly IBlocknetService _blocknetService;
         public BlocknetController(IBlocknetService blocknetService){
@@ -50,7 +52,27 @@ namespace blocknet_xrouter.Controllers
             ConnectedNodeResponse serviceNode;
             List<ConnectedNodeResponse> otherNodes;
 
-            var connectReply = this._blocknetService.xrConnect(service, node_count).Reply;
+            ConnectResponse connectResponse;
+            try
+            {
+                connectResponse = this._blocknetService.xrConnect(service, node_count);    
+            }
+            catch (RpcRequestTimeoutException e)
+            {
+                return StatusCode(StatusCodes.Status408RequestTimeout, new JsonRpcXrError{
+                    Error = e.Message
+                });                
+            }
+            
+
+            if(connectResponse.Error != null){
+                return StatusCode(StatusCodes.Status500InternalServerError, new JsonRpcXrError{
+                    Error = connectResponse.Error,
+                    Code = connectResponse.Code
+                });
+            }
+
+            var connectReply = connectResponse.Reply;
 
             if(connectReply == null)
                 return BadRequest();
@@ -63,7 +85,7 @@ namespace blocknet_xrouter.Controllers
                 var index = r.Next(connectReply.Count);
                 serviceNode = connectReply[index];
                 // split node list
-                otherNodes = connectReply.Where(s => s.NodePubKey != nodePubKey).ToList();
+                otherNodes = connectReply.Where(s => s.NodePubKey != serviceNode.NodePubKey).ToList();
             }
             else{
                 serviceNode = connectReply.Find(s => s.NodePubKey == nodePubKey);
@@ -114,7 +136,26 @@ namespace blocknet_xrouter.Controllers
             ConnectedNodeResponse serviceNode;
             List<ConnectedNodeResponse> otherNodes;
 
-            var connectReply = this._blocknetService.xrConnect(service, node_count).Reply;
+            ConnectResponse connectResponse;
+            try
+            {
+                connectResponse = this._blocknetService.xrConnect(service, node_count);    
+            }
+            catch (RpcRequestTimeoutException e)
+            {
+                 return StatusCode(StatusCodes.Status408RequestTimeout, new JsonRpcXrError{
+                    Error = e.Message
+                });                
+            }
+
+            if(connectResponse.Error != null){
+                return StatusCode(StatusCodes.Status500InternalServerError, new JsonRpcXrError{
+                    Error = connectResponse.Error,
+                    Code = connectResponse.Code
+                });
+            }
+
+            var connectReply = connectResponse.Reply;
             var configReply = this._blocknetService.xrShowConfigs();
 
             if(connectReply == null || configReply == null )
@@ -127,7 +168,7 @@ namespace blocknet_xrouter.Controllers
                 serviceNode = connectReply[index];
                 // split node list
                 //otherNodes = connectReply.Skip(index + 1).ToList();
-                otherNodes = connectReply.Where(s => s.NodePubKey != nodePubKey).ToList();
+                otherNodes = connectReply.Where(s => s.NodePubKey != serviceNode.NodePubKey).ToList();
             }
             else{
                 serviceNode = connectReply.Find(s => s.NodePubKey == nodePubKey);

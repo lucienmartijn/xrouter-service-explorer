@@ -1,4 +1,8 @@
-<div *ngIf="isLoaded">
+<div *ngIf="loading else loaded">
+  Loading page...
+</div>
+
+<ng-template #loaded>
     <h1>XCloud Service</h1>
     <h2>{{serviceName}}</h2>
     <table class="table">
@@ -26,7 +30,7 @@
       <tbody>
         <tr>
           <td>NodePubKey</td>
-          <td><a [routerLink]="['/xrouter-snode', result.node.nodePubKey]">{{result.node.nodePubKey}}</a></td>
+          <td><a [routerLink]="['/xrouter-snodes', result.node.nodePubKey]">{{result.node.nodePubKey}}</a></td>
         </tr>
         <tr>
           <td>Score</td>
@@ -60,10 +64,10 @@
       </thead>
       <tbody>
         <tr *ngFor="let s of result.otherNodes">
-          <td><a [routerLink]="['/xrouter-snode', s.nodePubKey]">{{s.nodePubKey}}</a></td>
+          <td><a [routerLink]="['/xrouter-snodes', s.nodePubKey]">{{s.nodePubKey}}</a></td>
           <td>{{s.score}}</td>
           <td>{{s.banned}}</td>
         </tr>
       </tbody>
-    </table>
-</div>
+    </table>  
+</ng-template>  
