@@ -16,7 +16,7 @@ using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace CodeProject.AngularCore.Portal
+namespace Xrouter.Service.Explorer
 {
     public class Startup
     {

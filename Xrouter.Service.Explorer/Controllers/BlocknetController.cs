@@ -64,7 +64,6 @@ namespace blocknet_xrouter.Controllers
                 });                
             }
             
-
             if(connectResponse.Error != null){
                 return StatusCode(StatusCodes.Status500InternalServerError, new JsonRpcXrError{
                     Error = connectResponse.Error,
@@ -72,11 +71,7 @@ namespace blocknet_xrouter.Controllers
                 });
             }
 
-            var connectReply = connectResponse.Reply;
-
-            if(connectReply == null)
-                return BadRequest();
-                
+            var connectReply = connectResponse.Reply;                
             var configReply = this._blocknetService.xrShowConfigs();
 
             if(string.IsNullOrWhiteSpace(nodePubKey)){
@@ -157,9 +152,6 @@ namespace blocknet_xrouter.Controllers
 
             var connectReply = connectResponse.Reply;
             var configReply = this._blocknetService.xrShowConfigs();
-
-            if(connectReply == null || configReply == null )
-                return BadRequest();
                 
             if(string.IsNullOrWhiteSpace(nodePubKey)){
                 // Randomly choose a service node from the list if no nodePubKey is given
@@ -167,12 +159,10 @@ namespace blocknet_xrouter.Controllers
                 var index = r.Next(connectReply.Count);
                 serviceNode = connectReply[index];
                 // split node list
-                //otherNodes = connectReply.Skip(index + 1).ToList();
                 otherNodes = connectReply.Where(s => s.NodePubKey != serviceNode.NodePubKey).ToList();
             }
             else{
                 serviceNode = connectReply.Find(s => s.NodePubKey == nodePubKey);
-                //otherNodes = connectReply.Skip(connectReply.IndexOf(serviceNode)+1).ToList();
                 otherNodes = connectReply.Where(s => s.NodePubKey != nodePubKey).ToList();
             }
 
@@ -194,7 +184,7 @@ namespace blocknet_xrouter.Controllers
                 xcloudConfig = serviceNodeConfig.Plugins[serviceName];
             }
 
-            //TODO: Add AutoMapper to replace this.        
+            //TODO: Add AutoMapper to replace this.     
             var viewModel = new XCloudServiceResultViewModel
             {
                 Service = new XCloudServiceViewModel
@@ -204,6 +194,7 @@ namespace blocknet_xrouter.Controllers
                     Fee = serv.Fee,
                     FetchLimit = serv.FetchLimit,
                     Parameters = serv.Parameters,
+                    ParametersList = serv.Parameters != string.Empty ? serv.Parameters.Split(',').ToList() : null,
                     PaymentAddress = serv.PaymentAddress,
                     RequestLimit = serv.RequestLimit,
                     Config = xcloudConfig
@@ -231,16 +222,51 @@ namespace blocknet_xrouter.Controllers
             if (string.IsNullOrWhiteSpace(nodePubKey))
                 return BadRequest("NodePubKey was not supplied");
 
-            var connectReply = this._blocknetService.xrConnectedNodes().Reply;
+            GetConnectedNodesResponse getConnectedResponse;
+            try
+            {
+                getConnectedResponse = this._blocknetService.xrConnectedNodes();    
+            }
+            catch (RpcInternalServerErrorException e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new JsonRpcXrError{
+                    Error = e.Message + Environment.NewLine + "Node Public Key: " + nodePubKey,
+                    Code = (int) e.RpcErrorCode.Value
+                });
+            }
+            catch (RpcRequestTimeoutException e)
+            {
+                 return StatusCode(StatusCodes.Status408RequestTimeout, new JsonRpcXrError{
+                    Error = e.Message + Environment.NewLine + "Node Public Key: " + nodePubKey,
+                });                
+            }
 
+            var connectReply = getConnectedResponse.Reply;
+
+            ConnectResponse connectResponse;
             var serviceNode = connectReply.Find(s => s.NodePubKey == nodePubKey);
             if (serviceNode == null)
             {
-                connectReply = this._blocknetService.xrConnect(service, node_count).Reply;
-                if(connectReply != null)
-                    serviceNode = connectReply.Find(s => s.NodePubKey == nodePubKey);
-                else
-                    return BadRequest("Servicenode is not properly configured. Servicenode info cannot be retrieved.");
+                try
+                {
+                    connectResponse = this._blocknetService.xrConnect(service, node_count);    
+                }
+                catch (RpcInternalServerErrorException e)
+                {
+                    return StatusCode(StatusCodes.Status500InternalServerError, new JsonRpcXrError{
+                        Error = e.Message + Environment.NewLine + "Node Public Key: " + nodePubKey,
+                        Code = (int) e.RpcErrorCode.Value
+                    });
+                }
+                catch (RpcRequestTimeoutException e)
+                {
+                    return StatusCode(StatusCodes.Status408RequestTimeout, new JsonRpcXrError{
+                        Error = e.Message + Environment.NewLine + "Node Public Key: " + nodePubKey,
+                    });                
+                }
+                
+                
+                serviceNode = connectReply.Find(s => s.NodePubKey == nodePubKey);
             }
                
             var configReply = this._blocknetService.xrShowConfigs();            
@@ -368,10 +394,9 @@ namespace blocknet_xrouter.Controllers
 
         #endregion
         #region XCloud
-        [HttpGet("Xrouter/[action]")]
-        public ServiceResponse Service(string service){
-            //TODO: Check if service is already connected
-            return this._blocknetService.xrService(service);
+        [HttpPost("Xrouter/[action]")]
+        public IActionResult Service([FromBody]ServiceRequest request){
+            return Ok(this._blocknetService.xrService(request.Service, request.Parameters));
         }
         #endregion
 

@@ -10,7 +10,7 @@ import { isNullOrUndefined } from 'util';
   styleUrls: ['./view-snode.component.css']
 })
 export class ViewSnodeComponent implements OnInit {
-  isLoaded:boolean = false;
+  loading:boolean;
   config:any;
   nodePubKey:string;
   service:string;
@@ -32,6 +32,7 @@ export class ViewSnodeComponent implements OnInit {
         router.navigate(['']);
         return; 
       }
+      this.loading = true;
     });
   }
 
@@ -41,13 +42,16 @@ export class ViewSnodeComponent implements OnInit {
         this.result = result;
         this.selectedWalletName = this.result.spvConfigs[0].spvWallet;
         this.onWalletChange();
-        this.isLoaded = true;
 
         this.config = {
           itemsPerPage: 10,
           currentPage: 1,
           totalItems: this.result.services.length
         };
+        this.loading = false;
+      },
+      error => {
+        this.router.navigate(['/error'], {queryParams: error});
       });
   }
 

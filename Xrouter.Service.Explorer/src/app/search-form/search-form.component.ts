@@ -9,6 +9,8 @@ import { XrouterApiService } from '../shared/services/xrouter.service';
 
 import { debounceTime, tap, switchMap, finalize } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
+import { BaseService } from '../shared/services/base.service';
+import { SessionService } from '../shared/services/session.service';
 
 // const NODEPUBKEY_REGEX = '^[0][a-zA-Z0-9]{65}$'; 
 // const ADDRESS_REGEX = '^[B][a-zA-Z0-9]{33}$';
@@ -19,7 +21,10 @@ import { HttpClient } from '@angular/common/http';
   templateUrl: './search-form.component.html',
   styleUrls: ['./search-form.component.css']
 })
-export class SearchFormComponent implements OnInit {
+export class SearchFormComponent extends BaseService implements OnInit {
+  private readonly apiEndpoint = 'blocknet/xrouter';
+  private baseEndpoint = ''; // http://localhost
+
   searchServicesCtrl = new FormControl();
   filteredServices: any;
   isLoading = false;
@@ -27,8 +32,12 @@ export class SearchFormComponent implements OnInit {
 
   constructor(
     private http: HttpClient,
-    private navigatorService: NavigatorService
-  ) { }
+    private navigatorService: NavigatorService,
+    private sessionService:SessionService
+  ) {
+    super();
+    this.baseEndpoint = sessionService.getApiURI();
+  }
 
   ngOnInit() {
     this.searchServicesCtrl.valueChanges
@@ -39,7 +48,7 @@ export class SearchFormComponent implements OnInit {
           this.filteredServices = [];
           this.isLoading = true;
         }),
-        switchMap(value => this.http.get("https://localhost:44305/api/Blocknet/Xrouter/?searchString=" + value)
+        switchMap(value => this.http.get(this.baseEndpoint + this.apiEndpoint + "/?searchString=" + value)
           .pipe(
             finalize(() => {
               this.isLoading = false

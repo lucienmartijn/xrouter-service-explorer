@@ -2,7 +2,7 @@
  
   <mat-form-field>
     <input matInput placeholder="Search" aria-label="State" [matAutocomplete]="auto" [formControl]="searchServicesCtrl">
-    <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn" (optionSelected)="onSelectionChanged($event)">
+    <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onSelectionChanged($event)">
       <mat-option *ngIf="isLoading" class="is-loading">Loading...</mat-option>
       <ng-container *ngIf="!isLoading">
         <mat-option *ngFor="let service of filteredServices" [value]="service.name">

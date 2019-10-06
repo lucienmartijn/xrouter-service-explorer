@@ -27,6 +27,7 @@ import { ServiceNodeListComponent } from './service-node-list/service-node-list.
 import { SearchFormComponent } from './search-form/search-form.component';
 import { NavigatorService } from './shared/services/navigator.service.';
 import { ErrorComponent } from './error/error.component';
+import { RpcConsoleComponent } from './rpc-console/rpc-console.component';
 
 @NgModule({
   declarations: [
@@ -42,6 +43,7 @@ import { ErrorComponent } from './error/error.component';
     ViewSpvWalletComponent,
     ViewSnodeComponent,
     SearchFormComponent,
+    RpcConsoleComponent,
     ErrorComponent,
     PageNotFoundComponent
   ],
@@ -59,17 +61,21 @@ import { ErrorComponent } from './error/error.component';
       { path: '', component: HomeComponent, pathMatch: 'full' },
       { path: 'xrouter-snodes', component: ServiceNodeListComponent },
       { path: 'spv-wallets', component: SpvWalletsComponent },
-      { path: 'spv-wallets/:name', component: ViewSpvWalletComponent },
-      { path: 'spv-wallets/:name/:nodePubKey', component: ViewSpvWalletComponent },
+      { path: 'spv-wallets/:name', component: ViewSpvWalletComponent, runGuardsAndResolvers: 'always' },
+      { path: 'spv-wallets/:name/:nodePubKey', component: ViewSpvWalletComponent, runGuardsAndResolvers: 'always' },
       { path: 'xcloud-services', component: XrServicesComponent },
-      { path: 'xcloud-services/:name', component: ViewXrServiceComponent },
-      { path: 'xcloud-services/:name/:NodePubKey', component: ViewXrServiceComponent },
+      { path: 'xcloud-services/:name', component: ViewXrServiceComponent, runGuardsAndResolvers: 'always' },
+      { path: 'xcloud-services/:name/:NodePubKey', component: ViewXrServiceComponent, runGuardsAndResolvers: 'always' },
       { path: 'xrouter-snodes/:nodePubKey', component: ViewSnodeComponent},
       { path: 'xrouter-snodes/:nodePubKey/:service', component: ViewSnodeComponent},
+      { path: 'rpc-console', component: RpcConsoleComponent},
       { path: 'error', component: ErrorComponent},
       { path: '**', component: PageNotFoundComponent }
       
-    ], { useHash: true })
+    ], { 
+      useHash: true,
+      onSameUrlNavigation: 'reload'
+    })
   ],
   providers: [
     XrouterApiService, 

@@ -4,10 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using CodeProject.AngularCore.Models.Models;
 using Microsoft.Extensions.Options;
 
-namespace CodeProject.AngularCore.Portal.Pages
+namespace Xrouter.Service.Explorer.Pages
 {
     public class IndexModel : PageModel
     {

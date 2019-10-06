@@ -1,4 +1,8 @@
-<div *ngIf="isLoaded">
+<div *ngIf="loading else loaded">
+    Loading page...
+  </div>
+
+<ng-template #loaded>
     <h1>Service Node</h1>
     <table class="table">
       <tbody>
@@ -86,4 +90,4 @@
       </table>
       <pagination-controls (pageChange)="pageChanged($event)"></pagination-controls>
     </ng-template>  
-</div>  
+</ng-template>

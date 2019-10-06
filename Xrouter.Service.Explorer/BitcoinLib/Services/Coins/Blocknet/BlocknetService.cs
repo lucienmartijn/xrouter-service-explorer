@@ -131,9 +131,12 @@ namespace BitcoinLib.Services.Coins.Blocknet
             return _rpcConnector.MakeRequest<UpdateConfigsResponse>(RpcMethods.xrUpdateConfigs, force_check);
         }
 
-        public ServiceResponse xrService(string service)
+        public ServiceResponse xrService(string service, object[] parameters)
         {
-            return _rpcConnector.MakeRequest<ServiceResponse>(RpcMethods.xrService, service);
+            if(parameters == null)
+                return _rpcConnector.MakeRequest<ServiceResponse>(RpcMethods.xrService, service);
+
+            return _rpcConnector.MakeRequest<ServiceResponse>(RpcMethods.xrService, service, parameters);
         }
 
         public ServiceConsensusResponse xrServiceConsensus(string service, List<string> parameters)

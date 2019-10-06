@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Location } from '@angular/common';
 import { XrouterApiService } from '../shared/services/xrouter.service';
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
@@ -9,8 +9,8 @@ import { isNullOrUndefined } from 'util';
   templateUrl: './view-spv-wallet.component.html',
   styleUrls: ['./view-spv-wallet.component.css']
 })
-export class ViewSpvWalletComponent implements OnInit {
-  navigationSubscription; 
+export class ViewSpvWalletComponent implements OnInit, OnDestroy {
+  navigationSubscription;
   loading:boolean;
   spvWalletName:string;
   nodePubKey:string;
@@ -30,8 +30,14 @@ export class ViewSpvWalletComponent implements OnInit {
           router.navigate(['']);
           return; 
         }
-        this.initializeData();
         this.loading = true;
+      });
+
+      this.navigationSubscription = this.router.events.subscribe((e:any) => {
+        if(e instanceof NavigationEnd){
+          console.log('reload');
+          this.initializeData();
+        }
       });
     }
 
@@ -45,11 +51,15 @@ export class ViewSpvWalletComponent implements OnInit {
         },
         error => {
           this.router.navigate(['/error'], {queryParams: error});
-        }
-        );
+        });
   }
 
   ngOnInit() {}
+  ngOnDestroy(){
+    if (this.navigationSubscription) {
+      this.navigationSubscription.unsubscribe();
+    }
+  }
 }
 
 

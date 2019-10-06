@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
-namespace CodeProject.AngularCore.Portal
+namespace Xrouter.Service.Explorer
 {
     public class Program
     {

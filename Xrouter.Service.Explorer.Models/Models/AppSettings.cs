@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace CodeProject.AngularCore.Models.Models
+namespace Xrouter.Service.Models.Models
 {
     public class AppSettings
     {

@@ -10,7 +10,7 @@ public interface IBlocknetService : ICoinService, IBlocknetConstants{
     List<ServiceNodeResponse> serviceNodeList();
     #endregion
     #region XCloud
-    ServiceResponse xrService(string service);
+    ServiceResponse xrService(string service, object[] parameters);
     ServiceConsensusResponse xrServiceConsensus(string service, List<string> parameters);
     
     #endregion

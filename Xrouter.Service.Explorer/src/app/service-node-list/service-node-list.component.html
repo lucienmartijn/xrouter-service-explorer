@@ -5,8 +5,8 @@
                 <th>Rank</th>
                 <th>NodePubKey</th>
                 <!-- <th>Address</th> -->
-                <th>Spv Wallets</th>
-                <th>XCloud Services</th>
+                <!-- <th>Spv Wallets</th>
+                <th>XCloud Services</th> -->
           </tr> 
         </thead>
         <tbody>
@@ -16,15 +16,15 @@
                                 <a href="javascript:void(0)" (click)="onNodeClick(i)"> {{sn.nodePubKey}}</a>
                         </td>
                         <!-- <td><a href="https://chainz.cryptoid.info/block/address.dws?{{sn.addr}}">{{sn.addr}}</a></td> -->
-                        <td>
+                        <!-- <td>
                                 <div class="form-group">
                                         <label for="spvWallets"></label>
                                         <select id="spvWallets" class="form-control" (change)="onSpvWalletChange(i, $event)">
                                                 <option *ngFor="let w of sn.spvWallets" [value]="w">{{ w }} </option>
                                         </select>   
                                 </div> 
-                        </td>
-                        <td>
+                        </td> -->
+                        <!-- <td>
                                 <div *ngIf = "sn.xCloudServices.length > 0">
                                         <div class="form-group">
                                                 <label for="xcloudServices"></label>
@@ -34,7 +34,7 @@
                                         </div> 
                                 </div>
                                 
-                        </td>
+                        </td> -->
                 </tr>
         </tbody>
 </table>

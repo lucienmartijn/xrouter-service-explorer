@@ -2,6 +2,8 @@
 // See the accompanying file LICENSE for the Software License Aggrement
 
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -30,6 +32,21 @@ namespace BitcoinLib.RPC.Connector
 
         public T MakeRequest<T>(RpcMethods rpcMethod, params object[] parameters)
         {
+            var parameterList = new List<object>();
+            foreach (var param in parameters)
+            {
+                if(param != null)
+                {
+                    if(!param.GetType().IsArray)
+                        parameterList.Add(param);
+                    else
+                        foreach (var p in (IEnumerable) param) parameterList.Add(p);
+                        
+                }
+            }
+
+            parameters = parameterList.ToArray();
+
             var jsonRpcRequest = new JsonRpcRequest(1, rpcMethod.ToString(), parameters);
             var webRequest = (HttpWebRequest) WebRequest.Create(_coinService.Parameters.SelectedDaemonUrl);
             SetBasicAuthHeader(webRequest, _coinService.Parameters.RpcUsername, _coinService.Parameters.RpcPassword);
