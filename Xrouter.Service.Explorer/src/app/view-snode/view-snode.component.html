@@ -42,33 +42,20 @@
       </tbody>
     </table>
 
-    <div class="form-group">
-      <h3>SPV Wallets</h3>
-        <label for="spvWallets"></label>
-        <select id="spvWallets" class="form-control" [(ngModel)]="selectedWalletName" (change)="onWalletChange()">
-            <option *ngFor="let wallet of result.spvWallets" [value]="wallet">{{ wallet }}</option>
-        </select>  
-    </div>
     <table class="table">
-      <thead>
-          <tr>
-              <th>Command</th>
-              <th>Fee (BLOCK)</th>
-              <th>Request Limit</th>
-              <th>Payment Address</th>
-              <th>Disabled</th>
+        <thead>
+            <tr>
+                <th>Spv Wallet</th>
+            </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let s of result?.spvWallets | paginate: config">
+            <td><a [routerLink]="['/spv-wallets', 'xr::' + s, nodePubKey]">{{s}}</a></td>
           </tr>
-      </thead>
-      <tbody>
-          <tr *ngFor="let c of selectedWallet.commands">
-              <td>{{c.command}}</td>
-              <td>{{c.fee}}</td>
-              <td>{{c.requestLimit}}</td>
-              <td>{{c.paymentAddress}}</td>
-              <td>{{c.disabled}}</td>
-          </tr>
-      </tbody>
-  </table>
+        </tbody>
+    </table>
+    <!-- <pagination-controls (pageChange)="pageChanged($event)"></pagination-controls> -->
+    
   <h3>XCloud Services offered by this Service Node</h3>
 
   <div *ngIf="result?.services.length == 0 else notEmpty">
