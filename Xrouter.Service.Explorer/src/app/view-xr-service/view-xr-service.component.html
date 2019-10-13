@@ -26,14 +26,15 @@
     </table>
 
     <h3>Try it out</h3>
-    <div class="form-group" *ngFor="let p of result.service.parametersList; let i = index">
-      <label for="param-{{i}}">Param-{{i}} [{{p}}] </label>
-      <input type="text" class="form-control" id="param-{{i}}" [(ngModel)]="parametervalues[i]">
-    </div>
+    <form (ngSubmit)="onSubmit()" #serviceForm="ngForm">
+      <div class="form-group" *ngFor="let p of result.service.parametersList; let i = index">
+        <label for="param-{{i}}">Param-{{i}} [{{p}}] </label>
+        <input type="text" class="form-control" id="param-{{i}}" [(ngModel)]="parametervalues[i]" name="param-{{i}}">
+      </div>
+      <button type="submit" class="btn btn-success">Submit</button>
+    </form> 
+    
     <div class="overflow-auto">
-        <form (ngSubmit)="onSubmit()" #serviceForm="ngForm">
-          <button type="submit" class="btn btn-success" (click)="serviceForm.reset()">Submit</button>
-      </form>
       <pre style="max-height:50vh;">
           {{ serviceResult | json }}
       </pre>

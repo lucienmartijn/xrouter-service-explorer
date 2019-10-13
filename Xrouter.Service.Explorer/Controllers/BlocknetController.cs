@@ -31,7 +31,7 @@ namespace blocknet_xrouter.Controllers
 
         #region XRouter
         [HttpGet("Xrouter/[action]")]
-        public GetBlockCountResponse GetBlockCount(string blockchain, int node_count = 1){
+        public GetBlockCountResponse GetBlockCount([FromQuery(Name = "blockchain")]string blockchain,[FromQuery(Name = "node_count")] int node_count = 1){
             return this._blocknetService.xrGetBlockCount(blockchain, node_count);
         }
 
@@ -98,7 +98,7 @@ namespace blocknet_xrouter.Controllers
                 SpvConfig = new SpvConfigViewModel
                 {
                     SpvWallet = spvConfig.SpvWallet,
-                    Commands = spvConfig.Commands.Select(c => new SpvCommandViewModel{
+                    Commands = spvConfig.Commands.Where(c => c.Command != "xrGetConfig").Select(c => new SpvCommandViewModel{
                         Command = c.Command,
                         Disabled = c.Disabled,
                         Fee = c.Fee,
@@ -264,8 +264,7 @@ namespace blocknet_xrouter.Controllers
                         Error = e.Message + Environment.NewLine + "Node Public Key: " + nodePubKey,
                     });                
                 }
-                
-                
+                 
                 serviceNode = connectReply.Find(s => s.NodePubKey == nodePubKey);
             }
                
@@ -314,9 +313,9 @@ namespace blocknet_xrouter.Controllers
         }
 
         [HttpGet("Xrouter/[action]")]
-        public GetBlocksResponse GetBlocks(string blockchain, [FromQuery] List<string> block_hashes, int node_count = 1){
-
-            return this._blocknetService.xrGetBlocks(blockchain, string.Join(",", block_hashes), node_count);
+        public GetBlocksResponse GetBlocks([FromQuery(Name = "blockchain")]string blockchain, [FromQuery(Name = "block_hashes")] string block_hashes, int node_count = 1){
+            var result = JsonConvert.DeserializeObject<List<string>>(block_hashes);
+            return this._blocknetService.xrGetBlocks(blockchain, string.Join(",", result), node_count);
         }
 
         [HttpGet("Xrouter/[action]")]
@@ -330,9 +329,9 @@ namespace blocknet_xrouter.Controllers
         }
 
         [HttpGet("Xrouter/[action]")]
-        public GetTransactionsResponse GetTransactions(string blockchain, List<string> txids, int node_count = 1){
-            
-            return this._blocknetService.xrGetTransactions(blockchain, string.Join(",",txids), node_count);
+        public GetTransactionsResponse GetTransactions([FromQuery(Name = "blockchain")]string blockchain, [FromQuery(Name = "txids")] string txids, int node_count = 1){  
+            var result = JsonConvert.DeserializeObject<List<string>>(txids);        
+            return this._blocknetService.xrGetTransactions(blockchain, string.Join(",",result), node_count);
         }
 
         [HttpPost("Xrouter/[action]")]

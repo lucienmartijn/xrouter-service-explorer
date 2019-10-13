@@ -1,8 +1,9 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { Location } from '@angular/common';
 import { XrouterApiService } from '../shared/services/xrouter.service';
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { isNullOrUndefined } from 'util';
+import { NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-view-xr-service',
@@ -13,9 +14,10 @@ export class ViewXrServiceComponent implements OnInit, OnDestroy {
   navigationSubscription;
   loading:boolean = true;
   serviceName:string;
-  result:XrouterServiceInfo;
+  result:any;
   parametervalues:string[];
 
+  @ViewChild('serviceForm') serviceForm: NgForm;
   serviceResult:any;
 
   constructor(
@@ -46,8 +48,8 @@ export class ViewXrServiceComponent implements OnInit, OnDestroy {
         this.result = result;
         this.location.replaceState("/xcloud-services/" + this.serviceName + "/" + this.result.node.nodePubKey);
         this.serviceName = this.serviceName.replace("xrs::","");
-        if(result.service.parametersList)
-          this.parametervalues = new Array<string>(result.service.parametersList.length);
+        if(this.result.service.parametersList)
+          this.parametervalues = new Array<string>(this.result.service.parametersList.length);
 
         this.loading = false;
       },
@@ -57,8 +59,7 @@ export class ViewXrServiceComponent implements OnInit, OnDestroy {
   }
   ngOnInit() {}
 
-  onSubmit() { 
-    
+  onSubmit() {   
     this.xrouterApiService.Service(new ServiceRequest('xrs::' + this.serviceName, this.parametervalues, 1))
       .subscribe(result => {
         this.serviceResult = result;
