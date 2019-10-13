@@ -211,17 +211,20 @@ var AppModule = /** @class */ (function () {
                     { path: '', component: _home_home_component__WEBPACK_IMPORTED_MODULE_12__["HomeComponent"], pathMatch: 'full' },
                     { path: 'xrouter-snodes', component: _service_node_list_service_node_list_component__WEBPACK_IMPORTED_MODULE_24__["ServiceNodeListComponent"] },
                     { path: 'spv-wallets', component: _spv_wallets_spv_wallets_component__WEBPACK_IMPORTED_MODULE_16__["SpvWalletsComponent"] },
-                    { path: 'spv-wallets/:name', component: _view_spv_wallet_view_spv_wallet_component__WEBPACK_IMPORTED_MODULE_23__["ViewSpvWalletComponent"] },
-                    { path: 'spv-wallets/:name/:nodePubKey', component: _view_spv_wallet_view_spv_wallet_component__WEBPACK_IMPORTED_MODULE_23__["ViewSpvWalletComponent"] },
+                    { path: 'spv-wallets/:name', component: _view_spv_wallet_view_spv_wallet_component__WEBPACK_IMPORTED_MODULE_23__["ViewSpvWalletComponent"], runGuardsAndResolvers: 'always' },
+                    { path: 'spv-wallets/:name/:nodePubKey', component: _view_spv_wallet_view_spv_wallet_component__WEBPACK_IMPORTED_MODULE_23__["ViewSpvWalletComponent"], runGuardsAndResolvers: 'always' },
                     { path: 'xcloud-services', component: _xr_services_xr_services_component__WEBPACK_IMPORTED_MODULE_15__["XrServicesComponent"] },
-                    { path: 'xcloud-services/:name', component: _view_xr_service_view_xr_service_component__WEBPACK_IMPORTED_MODULE_18__["ViewXrServiceComponent"] },
-                    { path: 'xcloud-services/:name/:NodePubKey', component: _view_xr_service_view_xr_service_component__WEBPACK_IMPORTED_MODULE_18__["ViewXrServiceComponent"] },
+                    { path: 'xcloud-services/:name', component: _view_xr_service_view_xr_service_component__WEBPACK_IMPORTED_MODULE_18__["ViewXrServiceComponent"], runGuardsAndResolvers: 'always' },
+                    { path: 'xcloud-services/:name/:NodePubKey', component: _view_xr_service_view_xr_service_component__WEBPACK_IMPORTED_MODULE_18__["ViewXrServiceComponent"], runGuardsAndResolvers: 'always' },
                     { path: 'xrouter-snodes/:nodePubKey', component: _view_snode_view_snode_component__WEBPACK_IMPORTED_MODULE_19__["ViewSnodeComponent"] },
                     { path: 'xrouter-snodes/:nodePubKey/:service', component: _view_snode_view_snode_component__WEBPACK_IMPORTED_MODULE_19__["ViewSnodeComponent"] },
                     { path: 'rpc-console', component: _rpc_console_rpc_console_component__WEBPACK_IMPORTED_MODULE_28__["RpcConsoleComponent"] },
                     { path: 'error', component: _error_error_component__WEBPACK_IMPORTED_MODULE_27__["ErrorComponent"] },
                     { path: '**', component: _page_not_found_page_not_found_component__WEBPACK_IMPORTED_MODULE_20__["PageNotFoundComponent"] }
-                ], { useHash: true })
+                ], {
+                    useHash: true,
+                    onSameUrlNavigation: 'reload'
+                })
             ],
             providers: [
                 _shared_services_xrouter_service__WEBPACK_IMPORTED_MODULE_17__["XrouterApiService"],
@@ -375,7 +378,7 @@ module.exports = "li .glyphicon {\r\n    margin-right: 10px;\r\n}\r\n\r\n/* High
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class='main-nav'>\r\n    <div class='navbar navbar-inverse'>\r\n        <div class='navbar-header'>\r\n            <button type='button' class='navbar-toggle' data-toggle='collapse' data-target='.navbar-collapse' [attr.aria-expanded]='isExpanded' (click)='toggle()'>\r\n                <span class='sr-only'>Toggle navigation</span>\r\n                <span class='icon-bar'></span>\r\n                <span class='icon-bar'></span>\r\n                <span class='icon-bar'></span>\r\n            </button>\r\n            <a class='navbar-brand' [routerLink]='[\"/\"]'>XRouter Service Explorer</a>\r\n            <search-form></search-form>\r\n        </div>\r\n        <div class='clearfix'></div>\r\n        <div class='navbar-collapse collapse' [ngClass]='{ \"in\": isExpanded }'>\r\n            <ul class='nav navbar-nav'>\r\n                <li [routerLinkActive]='[\"link-active\"]' [routerLinkActiveOptions]='{ exact: true }'>\r\n                    <a [routerLink]='[\"/\"]' (click)='collapse()'>\r\n                        <span class='glyphicon glyphicon-home'></span> Home\r\n                    </a>\r\n                </li>\r\n                <li [routerLinkActive]='[\"link-active\"]'>\r\n                    <a [routerLink]='[\"/xrouter-snodes\"]' (click)='collapse()'>\r\n                        <span class='glyphicon glyphicon-th-list'></span> XRouter Service Nodes\r\n                    </a>\r\n                </li>\r\n                <li [routerLinkActive]='[\"link-active\"]'>\r\n                    <a [routerLink]='[\"/spv-wallets\"]' (click)='collapse()'>\r\n                        <span class='glyphicon glyphicon-th-list'></span> SPV Wallets\r\n                    </a>\r\n                </li>\r\n                <li [routerLinkActive]='[\"link-active\"]'>\r\n                    <a [routerLink]='[\"/xcloud-services\"]' (click)='collapse()'>\r\n                        <span class='glyphicon glyphicon-th-list'></span> XCloud Services\r\n                    </a>\r\n                </li>\r\n                <li [routerLinkActive]='[\"link-active\"]'>\r\n                    <a [routerLink]='[\"/rpc-console\"]' (click)='collapse()'>\r\n                        <span class='glyphicon glyphicon-th-list'></span> Rpc Console Sandbox\r\n                    </a>\r\n                </li>\r\n            </ul>\r\n        </div>\r\n    </div>\r\n</div>\r\n"
+module.exports = "<div class='main-nav'>\r\n    <div class='navbar navbar-inverse'>\r\n        <div class='navbar-header'>\r\n            <button type='button' class='navbar-toggle' data-toggle='collapse' data-target='.navbar-collapse' [attr.aria-expanded]='isExpanded' (click)='toggle()'>\r\n                <span class='sr-only'>Toggle navigation</span>\r\n                <span class='icon-bar'></span>\r\n                <span class='icon-bar'></span>\r\n                <span class='icon-bar'></span>\r\n            </button>\r\n            <a class='navbar-brand' [routerLink]='[\"/\"]'>XRouter Service Explorer</a>\r\n            <search-form></search-form>\r\n        </div>\r\n        <div class='clearfix'></div>\r\n        <div class='navbar-collapse collapse' [ngClass]='{ \"in\": isExpanded }'>\r\n            <ul class='nav navbar-nav'>\r\n                <li [routerLinkActive]='[\"link-active\"]' [routerLinkActiveOptions]='{ exact: true }'>\r\n                    <a [routerLink]='[\"/\"]' (click)='collapse()'>\r\n                        <span class='glyphicon glyphicon-home'></span> Home\r\n                    </a>\r\n                </li>\r\n                <li [routerLinkActive]='[\"link-active\"]'>\r\n                    <a [routerLink]='[\"/xrouter-snodes\"]' (click)='collapse()'>\r\n                        <span class='glyphicon glyphicon-th-list'></span> XRouter Service Nodes\r\n                    </a>\r\n                </li>\r\n                <li [routerLinkActive]='[\"link-active\"]'>\r\n                    <a [routerLink]='[\"/spv-wallets\"]' (click)='collapse()'>\r\n                        <span class='glyphicon glyphicon-th-list'></span> SPV Wallets\r\n                    </a>\r\n                </li>\r\n                <li [routerLinkActive]='[\"link-active\"]'>\r\n                    <a [routerLink]='[\"/xcloud-services\"]' (click)='collapse()'>\r\n                        <span class='glyphicon glyphicon-th-list'></span> XCloud Services\r\n                    </a>\r\n                </li>\r\n                <!-- <li [routerLinkActive]='[\"link-active\"]'>\r\n                    <a [routerLink]='[\"/rpc-console\"]' (click)='collapse()'>\r\n                        <span class='glyphicon glyphicon-th-list'></span> Rpc Console Sandbox\r\n                    </a>\r\n                </li> -->\r\n            </ul>\r\n        </div>\r\n    </div>\r\n</div>\r\n"
 
 /***/ }),
 
@@ -793,7 +796,7 @@ module.exports = ""
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<h2>Service Node List</h2>\n<table class=\"table\">\n        <thead>\n          <tr>\n                <th>Rank</th>\n                <th>NodePubKey</th>\n                <!-- <th>Address</th> -->\n                <th>Spv Wallets</th>\n                <th>XCloud Services</th>\n          </tr> \n        </thead>\n        <tbody>\n                <tr *ngFor=\"let sn of serviceNodes; let i = index\">\n                        <td>{{sn.rank}}</td>\n                        <td>                                \n                                <a href=\"javascript:void(0)\" (click)=\"onNodeClick(i)\"> {{sn.nodePubKey}}</a>\n                        </td>\n                        <!-- <td><a href=\"https://chainz.cryptoid.info/block/address.dws?{{sn.addr}}\">{{sn.addr}}</a></td> -->\n                        <td>\n                                <div class=\"form-group\">\n                                        <label for=\"spvWallets\"></label>\n                                        <select id=\"spvWallets\" class=\"form-control\" (change)=\"onSpvWalletChange(i, $event)\">\n                                                <option *ngFor=\"let w of sn.spvWallets\" [value]=\"w\">{{ w }} </option>\n                                        </select>   \n                                </div> \n                        </td>\n                        <td>\n                                <div *ngIf = \"sn.xCloudServices.length > 0\">\n                                        <div class=\"form-group\">\n                                                <label for=\"xcloudServices\"></label>\n                                                <select id=\"xcloudServices\" class=\"form-control\" (change)=\"onXCloudServiceChange(i, $event)\">\n                                                        <option *ngFor=\"let s of sn.xCloudServices\" [value]=\"s\">{{ s }} </option>\n                                                </select>   \n                                        </div> \n                                </div>\n                                \n                        </td>\n                </tr>\n        </tbody>\n</table>"
+module.exports = "<h2>Service Node List</h2>\n<table class=\"table\">\n        <thead>\n          <tr>\n                <th>Rank</th>\n                <th>NodePubKey</th>\n                <!-- <th>Address</th> -->\n                <!-- <th>Spv Wallets</th>\n                <th>XCloud Services</th> -->\n          </tr> \n        </thead>\n        <tbody>\n                <tr *ngFor=\"let sn of serviceNodes; let i = index\">\n                        <td>{{sn.rank}}</td>\n                        <td>                                \n                                <a href=\"javascript:void(0)\" (click)=\"onNodeClick(i)\"> {{sn.nodePubKey}}</a>\n                        </td>\n                        <!-- <td><a href=\"https://chainz.cryptoid.info/block/address.dws?{{sn.addr}}\">{{sn.addr}}</a></td> -->\n                        <!-- <td>\n                                <div class=\"form-group\">\n                                        <label for=\"spvWallets\"></label>\n                                        <select id=\"spvWallets\" class=\"form-control\" (change)=\"onSpvWalletChange(i, $event)\">\n                                                <option *ngFor=\"let w of sn.spvWallets\" [value]=\"w\">{{ w }} </option>\n                                        </select>   \n                                </div> \n                        </td> -->\n                        <!-- <td>\n                                <div *ngIf = \"sn.xCloudServices.length > 0\">\n                                        <div class=\"form-group\">\n                                                <label for=\"xcloudServices\"></label>\n                                                <select id=\"xcloudServices\" class=\"form-control\" (change)=\"onXCloudServiceChange(i, $event)\">\n                                                        <option *ngFor=\"let s of sn.xCloudServices\" [value]=\"s\">{{ s }} </option>\n                                                </select>   \n                                        </div> \n                                </div>\n                                \n                        </td> -->\n                </tr>\n        </tbody>\n</table>"
 
 /***/ }),
 
@@ -1246,6 +1249,67 @@ var XrouterApiService = /** @class */ (function (_super) {
         var url = this.baseEndpoint + this.apiEndpoint + '/GetServiceNodeList';
         return this.http.get(url);
     };
+    XrouterApiService.prototype.Service = function (request) {
+        var url = this.baseEndpoint + this.apiEndpoint + '/Service';
+        return this.http.post(url, request);
+    };
+    XrouterApiService.prototype.GetBlockCount = function (blockchain, node_count) {
+        if (node_count === void 0) { node_count = 1; }
+        var url = this.baseEndpoint + this.apiEndpoint + '/GetBlockCount?blockchain=' + blockchain;
+        url += '&node_count=' + node_count;
+        return this.http.get(url);
+    };
+    XrouterApiService.prototype.GetBlockHash = function (blockchain, blockNumber, node_count) {
+        if (node_count === void 0) { node_count = 1; }
+        var url = this.baseEndpoint + this.apiEndpoint + '/GetBlockHash?blockchain=' + blockchain;
+        url += '&block_number=' + blockNumber;
+        url += '&node_count=' + node_count;
+        return this.http.get(url);
+    };
+    XrouterApiService.prototype.GetBlock = function (blockchain, blockHash, node_count) {
+        if (node_count === void 0) { node_count = 1; }
+        var url = this.baseEndpoint + this.apiEndpoint + '/GetBlock?blockchain=' + blockchain;
+        url += '&block_hash=' + blockHash;
+        url += '&node_count=' + node_count;
+        return this.http.get(url);
+    };
+    XrouterApiService.prototype.GetBlocks = function (blockchain, blockHashes, node_count) {
+        if (node_count === void 0) { node_count = 1; }
+        var url = this.baseEndpoint + this.apiEndpoint + '/GetBlocks';
+        var params = new _angular_common_http__WEBPACK_IMPORTED_MODULE_1__["HttpParams"]();
+        params = params.append('blockchain', blockchain);
+        params = params.append('block_hashes', JSON.stringify(blockHashes));
+        params = params.append('node_count', node_count.toString());
+        return this.http.get(url, { params: params });
+    };
+    XrouterApiService.prototype.GetTransaction = function (blockchain, txid, node_count) {
+        if (node_count === void 0) { node_count = 1; }
+        var url = this.baseEndpoint + this.apiEndpoint + '/GetTransaction?/blockchain=' + blockchain;
+        url += '&txid=' + txid;
+        url += '&node_count=' + node_count;
+        return this.http.get(url);
+    };
+    XrouterApiService.prototype.GetTransactions = function (blockchain, txids, node_count) {
+        if (node_count === void 0) { node_count = 1; }
+        var url = this.baseEndpoint + this.apiEndpoint + '/GetTransactions';
+        var params = new _angular_common_http__WEBPACK_IMPORTED_MODULE_1__["HttpParams"]();
+        params = params.append('blockchain', blockchain);
+        params = params.append('txids', JSON.stringify(txids));
+        params = params.append('node_count', node_count.toString());
+        return this.http.get(url, { params: params });
+    };
+    XrouterApiService.prototype.DecodeRawTransaction = function (blockchain, txHex, node_count) {
+        if (node_count === void 0) { node_count = 1; }
+        var url = this.baseEndpoint + this.apiEndpoint + '/DecodeRawTransaction?/blockchain=' + blockchain;
+        url += '&txHex=' + txHex;
+        url += '&node_count=' + node_count;
+        return this.http.get(url);
+    };
+    XrouterApiService.prototype.SendTransaction = function (blockchain, signedTx) {
+        var url = this.baseEndpoint + this.apiEndpoint + '/SendTransaction?/blockchain=' + blockchain;
+        url += '&signedTx=' + signedTx;
+        return this.http.get(url);
+    };
     XrouterApiService = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Injectable"])(),
         __metadata("design:paramtypes", [_angular_common_http__WEBPACK_IMPORTED_MODULE_1__["HttpClient"], _session_service__WEBPACK_IMPORTED_MODULE_4__["SessionService"]])
@@ -1362,7 +1426,7 @@ module.exports = ""
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div *ngIf=\"loading else loaded\">\n    Loading page...\n  </div>\n\n<ng-template #loaded>\n    <h1>Service Node</h1>\n    <table class=\"table\">\n      <tbody>\n        <tr>\n          <td>NodePubKey</td>\n          <td>{{nodePubKey}}</td>\n        </tr>\n        <tr>\n          <td>Score</td>\n          <td>{{result?.score}}</td>\n        </tr>\n        <tr>\n          <td>Banned</td>\n          <td>{{result?.banned}}</td>\n        </tr>\n        <tr>\n          <td>Payment Address</td>\n          <td><a href=\"https://chainz.cryptoid.info/block/address.dws?{{result.paymentAddress}}\">{{result?.paymentAddress}}</a></td>\n        </tr>\n        <tr>\n          <td>Fee Default</td>\n          <td>{{result?.feeDefault}} BLOCK</td>\n        </tr>\n      </tbody>\n    </table>\n    <h3>Config</h3>\n    <div class=\"well\" style=\"white-space: pre-line\">\n      <code>{{result?.config}}</code>\n    </div>\n    <h3>Fees</h3>\n    <table class=\"table\">\n      <tbody>\n        <tr *ngFor=\"let fee of result.fees | keyvalue\">\n          <td>{{fee.key}}</td>\n          <td>{{fee.value}} BLOCK</td>\n        </tr>\n      </tbody>\n    </table>\n\n    <div class=\"form-group\">\n      <h3>SPV Wallets</h3>\n        <label for=\"spvWallets\"></label>\n        <select id=\"spvWallets\" class=\"form-control\" [(ngModel)]=\"selectedWalletName\" (change)=\"onWalletChange()\">\n            <option *ngFor=\"let wallet of result.spvWallets\" [value]=\"wallet\">{{ wallet }}</option>\n        </select>  \n    </div>\n    <table class=\"table\">\n      <thead>\n          <tr>\n              <th>Command</th>\n              <th>Fee (BLOCK)</th>\n              <th>Request Limit</th>\n              <th>Payment Address</th>\n              <th>Disabled</th>\n          </tr>\n      </thead>\n      <tbody>\n          <tr *ngFor=\"let c of selectedWallet.commands\">\n              <td>{{c.command}}</td>\n              <td>{{c.fee}}</td>\n              <td>{{c.requestLimit}}</td>\n              <td>{{c.paymentAddress}}</td>\n              <td>{{c.disabled}}</td>\n          </tr>\n      </tbody>\n  </table>\n  <h3>XCloud Services offered by this Service Node</h3>\n\n  <div *ngIf=\"result?.services.length == 0 else notEmpty\">\n      This service node doesn't offer XCloud Services yet :(\n    </div>\n    \n  <ng-template #notEmpty>\n      <table class=\"table\">\n          <thead>\n              <tr>\n                  <th>Service</th>\n              </tr>\n          </thead>\n          <tbody>\n            <tr *ngFor=\"let s of result?.services | paginate: config\">\n              <td><a [routerLink]=\"['/xcloud-services', 'xrs::' + s]\">{{s}}</a></td>\n            </tr>\n          </tbody>\n      </table>\n      <pagination-controls (pageChange)=\"pageChanged($event)\"></pagination-controls>\n    </ng-template>  \n</ng-template>\n"
+module.exports = "<div *ngIf=\"loading else loaded\">\n    Loading page...\n  </div>\n\n<ng-template #loaded>\n    <h1>Service Node</h1>\n    <table class=\"table\">\n      <tbody>\n        <tr>\n          <td>NodePubKey</td>\n          <td>{{nodePubKey}}</td>\n        </tr>\n        <tr>\n          <td>Score</td>\n          <td>{{result?.score}}</td>\n        </tr>\n        <tr>\n          <td>Banned</td>\n          <td>{{result?.banned}}</td>\n        </tr>\n        <tr>\n          <td>Payment Address</td>\n          <td><a href=\"https://chainz.cryptoid.info/block/address.dws?{{result.paymentAddress}}\">{{result?.paymentAddress}}</a></td>\n        </tr>\n        <tr>\n          <td>Fee Default</td>\n          <td>{{result?.feeDefault}} BLOCK</td>\n        </tr>\n      </tbody>\n    </table>\n    <h3>Config</h3>\n    <div class=\"well\" style=\"white-space: pre-line\">\n      <code>{{result?.config}}</code>\n    </div>\n    <h3>Fees</h3>\n    <table class=\"table\">\n      <tbody>\n        <tr *ngFor=\"let fee of result.fees | keyvalue\">\n          <td>{{fee.key}}</td>\n          <td>{{fee.value}} BLOCK</td>\n        </tr>\n      </tbody>\n    </table>\n\n    <table class=\"table\">\n        <thead>\n            <tr>\n                <th>Spv Wallet</th>\n            </tr>\n        </thead>\n        <tbody>\n          <tr *ngFor=\"let s of result?.spvWallets | paginate: config\">\n            <td><a [routerLink]=\"['/spv-wallets', 'xr::' + s, nodePubKey]\">{{s}}</a></td>\n          </tr>\n        </tbody>\n    </table>\n    <!-- <pagination-controls (pageChange)=\"pageChanged($event)\"></pagination-controls> -->\n    \n  <h3>XCloud Services offered by this Service Node</h3>\n\n  <div *ngIf=\"result?.services.length == 0 else notEmpty\">\n      This service node doesn't offer XCloud Services yet :(\n    </div>\n    \n  <ng-template #notEmpty>\n      <table class=\"table\">\n          <thead>\n              <tr>\n                  <th>Service</th>\n              </tr>\n          </thead>\n          <tbody>\n            <tr *ngFor=\"let s of result?.services | paginate: config\">\n              <td><a [routerLink]=\"['/xcloud-services', 'xrs::' + s]\">{{s}}</a></td>\n            </tr>\n          </tbody>\n      </table>\n      <pagination-controls (pageChange)=\"pageChanged($event)\"></pagination-controls>\n    </ng-template>  \n</ng-template>\n"
 
 /***/ }),
 
@@ -1473,7 +1537,7 @@ module.exports = ""
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div *ngIf=\"loading else loaded\">\n    Loading page...\n  </div>\n\n<ng-template #loaded>\n  <h1>SPV Wallet</h1>\n  <h2>{{spvWalletName}}</h2>\n  <table class=\"table\">\n    <tbody>\n      <tr>\n        <td>Usage Instructions</td>\n        <td>xrService {{spvWalletName}}</td>\n    </tr>\n    </tbody>\n  </table>\n\n  <h2>Commands</h2>\n  <table class=\"table\">\n    <thead>\n        <tr>\n            <th>Command</th>\n            <th>Fee (BLOCK)</th>\n            <th>Request Limit</th>\n            <th>Payment Address</th>\n            <th>Disabled</th>\n        </tr>\n    </thead>\n    <tbody>\n        <tr *ngFor=\"let c of result.spvConfig.commands\">\n            <td>{{c.command}}</td>\n            <td>{{c.fee}}</td>\n            <td>{{c.requestLimit}}</td>\n            <td>{{c.paymentAddress}}</td>\n            <td>{{c.disabled}}</td>\n        </tr>\n    </tbody>\n</table>\n  \n  <h3>Offered By</h3>\n  <table class=\"table\">\n    <tbody>\n      <tr>\n        <td>NodePubKey</td>\n        <td><a [routerLink]=\"['/xrouter-snodes', result.node.nodePubKey]\">{{result.node.nodePubKey}}</a></td>\n      </tr>\n      <tr>\n        <td>Score</td>\n        <td>{{result.node.score}}</td>\n      </tr>\n      <tr>\n        <td>Banned</td>\n        <td>{{result.node.banned}}</td>\n      </tr>\n      <tr>\n        <td>Default Fee</td>\n        <td>{{result.node.feeDefault}} BLOCK</td>\n      </tr>\n  \n    </tbody>\n  </table>\n  \n  <h3>Other Service Nodes that offer this service</h3>\n  <table class=\"table\">\n    <thead>\n      <tr>\n        <th>Address</th>\n        <th>Score</th>\n        <th>Banned</th>\n      </tr>\n    </thead>\n    <tbody>\n      <tr *ngFor=\"let s of result.otherNodes\">\n        <td><a [routerLink]=\"['/xrouter-snodes', s.nodePubKey]\">{{s.nodePubKey}}</a></td>\n        <td>{{s.score}}</td>\n        <td>{{s.banned}}</td>\n      </tr>\n    </tbody>\n  </table>\n</ng-template>  "
+module.exports = "<div *ngIf=\"loading else loaded\">\n    Loading page...\n  </div>\n\n<ng-template #loaded>\n  <h1>SPV Wallet</h1>\n  <h2>{{spvWalletName}}</h2>\n  \n  <h3>Commands</h3>\n  <table class=\"table\">\n    <thead>\n        <tr>\n            <th>Command</th>\n            <th>Fee (BLOCK)</th>\n            <th>Request Limit</th>\n            <th>Payment Address</th>\n            <th>Disabled</th>\n        </tr>\n    </thead>\n    <tbody>\n        <tr *ngFor=\"let c of result.spvConfig.commands\">\n            <td>{{c.command}}</td>\n            <td>{{c.fee}}</td>\n            <td>{{c.requestLimit}}</td>\n            <td>{{c.paymentAddress}}</td>\n            <td>{{c.disabled}}</td>\n        </tr>\n    </tbody>\n  </table>\n  <hr>\n  <h3>Try out a {{ spvWalletName }} command</h3>\n    <form (ngSubmit)=\"onSubmit()\" #spvWalletForm=\"ngForm\">\n      <label for=\"spvCommand\">Spv Command</label>\n      <select class=\"form-control\" [(ngModel)]=\"selectedSpvCommand\" name=\"selectedSpvCommand\">\n          <option *ngFor=\"let c of result.spvConfig.commands\" [value]=\"c.command\">{{c.command}}</option>\n      </select>\n      <div [ngSwitch]=\"selectedSpvCommand\">\n        <div *ngSwitchCase=\"'xrGetBlockCount'\">\n          \n        </div>\n        <div *ngSwitchCase=\"'xrGetBlockHash'\">\n            <label for=\"blockNumber\">Block Number</label>\n            <input type=\"number\" class=\"form-control\" id=\"blockNumber\" ngModel name=\"blockNumber\">\n        </div>\n        <div *ngSwitchCase=\"'xrGetBlock'\">\n            <label for=\"blockHash\">Block Hash</label>\n            <input type=\"text\" class=\"form-control\" id=\"blockHash\" ngModel name=\"blockHash\">\n        </div>\n        <div *ngSwitchCase=\"'xrGetBlocks'\">\n          <h4>Block hash inputs</h4>\n          <button type=\"button\" (click)=\"addBlockHash()\" class=\"btn btn-primary btn-sm\">Add</button> \n          <hr>\n          <div *ngFor=\"let bh of blockHashes; let i = index;\">\n              <label for=\"blockHash-{{i}}\">Blockhash-{{i}}</label>\n              <input type=\"text\" class=\"form-control\" id=\"blockHash-{{i}}\" [(ngModel)]=\"blockHashes[i]\" name=\"blockHash-{{i}}\">\n              <button type=\"button\" class=\"btn btn-danger btn-sm\" (click)=\"removeBlockHash(i)\">Remove</button>\n          </div>\n          <hr>\n        </div>\n        <div *ngSwitchCase=\"'xrGetTransaction'\">\n            <label for=\"txid\">Txid</label>\n            <input type=\"text\" class=\"form-control\" id=\"txid\" ngModel name=\"txid\">\n        </div>\n        <div *ngSwitchCase=\"'xrGetTransactions'\">\n          <h4>TxId inputs</h4>\n          <button type=\"button\" (click)=\"addTxId()\" class=\"btn btn-primary btn-sm\">Add</button> \n          <hr>\n            <div *ngFor=\"let txid of txIds; let i = index;\">\n                <label for=\"txid-{{i}}\">txid-{{i}}</label>\n                <input type=\"text\" class=\"form-control\" id=\"txid-{{i}}\" [(ngModel)]=\"txIds[i]\" name=\"txid-{{i}}\">\n                <button type=\"button\" class=\"btn btn-danger btn-sm\" (click)=\"removeTxId(i)\">Remove</button>\n            </div>\n          <hr>\n        </div>\n        <div *ngSwitchCase=\"'xrDecodeRawTransaction'\">\n            <label for=\"txHex\">Tx Hex</label>\n            <input type=\"text\" class=\"form-control\" id=\"txHex\" ngModel name=\"txHex\">\n        </div>\n        <div *ngSwitchCase=\"'xrSendTransaction'\">\n            <label for=\"signedTx\">Signed Tx</label>\n            <input type=\"text\" class=\"form-control\" id=\"signedTx\" ngModel name=\"signedTx\">\n        </div>\n      </div>\n\n      <label for=\"nodeCount\">Node count</label>\n      <input type=\"number\" class=\"form-control\" id=\"nodeCount\"  [(ngModel)]=\"nodeCount\" name=\"nodeCount\">\n      <button type=\"submit\" class=\"btn btn-success\">Submit</button>\n    </form>\n\n    <div class=\"overflow-auto\">\n        <pre style=\"max-height:50vh;\">\n            {{ spvWalletCommandResult | json }}\n        </pre>\n      </div>\n  <hr>\n\n  <h3>Offered By</h3>\n  <table class=\"table\">\n    <tbody>\n      <tr>\n        <td>NodePubKey</td>\n        <td><a [routerLink]=\"['/xrouter-snodes', result.node.nodePubKey]\">{{result.node.nodePubKey}}</a></td>\n      </tr>\n      <tr>\n        <td>Score</td>\n        <td>{{result.node.score}}</td>\n      </tr>\n      <tr>\n        <td>Banned</td>\n        <td>{{result.node.banned}}</td>\n      </tr>\n      <tr>\n        <td>Default Fee</td>\n        <td>{{result.node.feeDefault}} BLOCK</td>\n      </tr>\n  \n    </tbody>\n  </table>\n  \n  <h3>Other Service Nodes that offer this service</h3>\n  <table class=\"table\">\n    <thead>\n      <tr>\n        <th>Address</th>\n        <th>Score</th>\n        <th>Banned</th>\n      </tr>\n    </thead>\n    <tbody>\n      <tr *ngFor=\"let s of result.otherNodes\">\n        <td><a [routerLink]=\"['/xrouter-snodes', s.nodePubKey]\">{{s.nodePubKey}}</a></td>\n        <td>{{s.score}}</td>\n        <td>{{s.banned}}</td>\n      </tr>\n    </tbody>\n  </table>\n</ng-template>  "
 
 /***/ }),
 
@@ -1488,11 +1552,12 @@ module.exports = "<div *ngIf=\"loading else loaded\">\n    Loading page...\n  </
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ViewSpvWalletComponent", function() { return ViewSpvWalletComponent; });
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
-/* harmony import */ var _angular_common__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/common */ "./node_modules/@angular/common/fesm5/common.js");
-/* harmony import */ var _shared_services_xrouter_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../shared/services/xrouter.service */ "./src/app/shared/services/xrouter.service.ts");
-/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm5/router.js");
-/* harmony import */ var util__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! util */ "./node_modules/util/util.js");
-/* harmony import */ var util__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(util__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/forms */ "./node_modules/@angular/forms/fesm5/forms.js");
+/* harmony import */ var _angular_common__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/common */ "./node_modules/@angular/common/fesm5/common.js");
+/* harmony import */ var _shared_services_xrouter_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../shared/services/xrouter.service */ "./src/app/shared/services/xrouter.service.ts");
+/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm5/router.js");
+/* harmony import */ var util__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! util */ "./node_modules/util/util.js");
+/* harmony import */ var util__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(util__WEBPACK_IMPORTED_MODULE_5__);
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -1507,6 +1572,7 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 
 
 
+
 var ViewSpvWalletComponent = /** @class */ (function () {
     function ViewSpvWalletComponent(xrouterApiService, router, route, location) {
         var _this = this;
@@ -1514,15 +1580,21 @@ var ViewSpvWalletComponent = /** @class */ (function () {
         this.router = router;
         this.route = route;
         this.location = location;
+        this.blockHashes = [""];
+        this.txIds = [""];
         route.params.subscribe(function (p) {
             _this.spvWalletName = p['name'];
             _this.nodePubKey = p['nodePubKey'];
-            if (Object(util__WEBPACK_IMPORTED_MODULE_4__["isNullOrUndefined"])(_this.spvWalletName)) {
+            if (Object(util__WEBPACK_IMPORTED_MODULE_5__["isNullOrUndefined"])(_this.spvWalletName)) {
                 router.navigate(['']);
                 return;
             }
-            _this.initializeData();
             _this.loading = true;
+        });
+        this.navigationSubscription = this.router.events.subscribe(function (e) {
+            if (e instanceof _angular_router__WEBPACK_IMPORTED_MODULE_4__["NavigationEnd"]) {
+                _this.initializeData();
+            }
         });
     }
     ViewSpvWalletComponent.prototype.initializeData = function () {
@@ -1533,21 +1605,114 @@ var ViewSpvWalletComponent = /** @class */ (function () {
             _this.location.replaceState("/spv-wallets/" + _this.spvWalletName + "/" + _this.result.node.nodePubKey);
             _this.spvWalletName = _this.spvWalletName.replace("xr::", "");
             _this.loading = false;
+            _this.selectedSpvCommand = _this.result.spvConfig.commands[0].command;
+            _this.nodeCount = 1;
         }, function (error) {
             _this.router.navigate(['/error'], { queryParams: error });
         });
     };
+    ViewSpvWalletComponent.prototype.onSubmit = function () {
+        var _this = this;
+        var nodecount = this.spvWalletForm.value.nodeCount;
+        switch (this.spvWalletForm.value.selectedSpvCommand) {
+            case "xrGetBlockCount": {
+                this.xrouterApiService.GetBlockCount(this.spvWalletName, nodecount).subscribe(function (result) {
+                    _this.spvWalletCommandResult = result;
+                }, function (error) {
+                    _this.spvWalletCommandResult = error;
+                });
+                break;
+            }
+            case "xrGetBlockHash": {
+                this.xrouterApiService.GetBlockHash(this.spvWalletName, this.spvWalletForm.value.blockNumber, nodecount).subscribe(function (result) {
+                    _this.spvWalletCommandResult = result;
+                }, function (error) {
+                    _this.spvWalletCommandResult = error;
+                });
+                break;
+            }
+            case "xrGetBlock": {
+                this.xrouterApiService.GetBlock(this.spvWalletName, this.spvWalletForm.value.blockHash, nodecount).subscribe(function (result) {
+                    _this.spvWalletCommandResult = result;
+                }, function (error) {
+                    _this.spvWalletCommandResult = error;
+                });
+                break;
+            }
+            case "xrGetBlocks": {
+                this.xrouterApiService.GetBlocks(this.spvWalletName, this.blockHashes, nodecount).subscribe(function (result) {
+                    _this.spvWalletCommandResult = result;
+                }, function (error) {
+                    _this.spvWalletCommandResult = error;
+                });
+                break;
+            }
+            case "xrGetTransaction": {
+                this.xrouterApiService.GetTransaction(this.spvWalletName, this.spvWalletForm.value.txid, nodecount).subscribe(function (result) {
+                    _this.spvWalletCommandResult = result;
+                }, function (error) {
+                    _this.spvWalletCommandResult = error;
+                });
+                break;
+            }
+            case "xrGetTransactions": {
+                this.xrouterApiService.GetTransactions(this.spvWalletName, this.txIds, nodecount).subscribe(function (result) {
+                    _this.spvWalletCommandResult = result;
+                }, function (error) {
+                    _this.spvWalletCommandResult = error;
+                });
+                break;
+            }
+            case "xrDecodeRawTransaction": {
+                this.xrouterApiService.DecodeRawTransaction(this.spvWalletName, this.spvWalletForm.value.txHex, nodecount).subscribe(function (result) {
+                    _this.spvWalletCommandResult = result;
+                }, function (error) {
+                    _this.spvWalletCommandResult = error;
+                });
+                break;
+            }
+            case "xrSendTransaction": {
+                this.xrouterApiService.SendTransaction(this.spvWalletName, this.spvWalletForm.value.signedTx).subscribe(function (result) {
+                    _this.spvWalletCommandResult = result;
+                }, function (error) {
+                    _this.spvWalletCommandResult = error;
+                });
+                break;
+            }
+        }
+    };
+    ViewSpvWalletComponent.prototype.addTxId = function () {
+        this.txIds.push("");
+    };
+    ViewSpvWalletComponent.prototype.removeTxId = function (index) {
+        this.txIds.splice(index, 1);
+    };
+    ViewSpvWalletComponent.prototype.addBlockHash = function () {
+        this.blockHashes.push("");
+    };
+    ViewSpvWalletComponent.prototype.removeBlockHash = function (index) {
+        this.blockHashes.splice(index, 1);
+    };
     ViewSpvWalletComponent.prototype.ngOnInit = function () { };
+    ViewSpvWalletComponent.prototype.ngOnDestroy = function () {
+        if (this.navigationSubscription) {
+            this.navigationSubscription.unsubscribe();
+        }
+    };
+    __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["ViewChild"])('spvWalletForm'),
+        __metadata("design:type", _angular_forms__WEBPACK_IMPORTED_MODULE_1__["NgForm"])
+    ], ViewSpvWalletComponent.prototype, "spvWalletForm", void 0);
     ViewSpvWalletComponent = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
             selector: 'app-view-spv-wallet',
             template: __webpack_require__(/*! ./view-spv-wallet.component.html */ "./src/app/view-spv-wallet/view-spv-wallet.component.html"),
             styles: [__webpack_require__(/*! ./view-spv-wallet.component.css */ "./src/app/view-spv-wallet/view-spv-wallet.component.css")]
         }),
-        __metadata("design:paramtypes", [_shared_services_xrouter_service__WEBPACK_IMPORTED_MODULE_2__["XrouterApiService"],
-            _angular_router__WEBPACK_IMPORTED_MODULE_3__["Router"],
-            _angular_router__WEBPACK_IMPORTED_MODULE_3__["ActivatedRoute"],
-            _angular_common__WEBPACK_IMPORTED_MODULE_1__["Location"]])
+        __metadata("design:paramtypes", [_shared_services_xrouter_service__WEBPACK_IMPORTED_MODULE_3__["XrouterApiService"],
+            _angular_router__WEBPACK_IMPORTED_MODULE_4__["Router"],
+            _angular_router__WEBPACK_IMPORTED_MODULE_4__["ActivatedRoute"],
+            _angular_common__WEBPACK_IMPORTED_MODULE_2__["Location"]])
     ], ViewSpvWalletComponent);
     return ViewSpvWalletComponent;
 }());
@@ -1574,7 +1739,7 @@ module.exports = ""
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div *ngIf=\"loading else loaded\">\n  Loading page...\n</div>\n\n<ng-template #loaded>\n    <h1>XCloud Service</h1>\n    <h2>{{serviceName}}</h2>\n    <table class=\"table\">\n      <tbody>\n      <tr>\n        <td>Fee</td>\n        <td>{{result.service.fee}} BLOCK</td>\n      <tr>\n          <td>Parameter Types</td>\n          <td>{{result.service.parameters}}</td>\n      </tr>\n      <tr>\n        <td>Description</td>\n        <td>{{result.service.helpDescription}}</td>\n      </tr>\n      <tr>\n          <td>Usage Instructions</td>\n          <td>xrService {{serviceName}} [{{result.service.parameters}}]</td>\n      </tr>\n      </tbody>\n    </table>\n    \n    <h3>Offered By</h3>\n    <table class=\"table\">\n      <tbody>\n        <tr>\n          <td>NodePubKey</td>\n          <td><a [routerLink]=\"['/xrouter-snodes', result.node.nodePubKey]\">{{result.node.nodePubKey}}</a></td>\n        </tr>\n        <tr>\n          <td>Score</td>\n          <td>{{result.node.score}}</td>\n        </tr>\n        <tr>\n          <td>Banned</td>\n          <td>{{result.node.banned}}</td>\n        </tr>\n        <tr>\n          <td>Default Fee</td>\n          <td>{{result.node.feeDefault}} BLOCK</td>\n        </tr>\n    \n      </tbody>\n    </table>\n    \n    <h3>Configuration {{serviceName}}.conf</h3>\n    <div class=\"well\" style=\"white-space: pre-line\">\n      <code>{{result.service.config}}</code>\n    </div>\n    \n    <h3>Other Service Nodes that offer this service</h3>\n    <table class=\"table\">\n      <thead>\n        <tr>\n          <th>Address</th>\n          <th>Score</th>\n          <th>Banned</th>\n        </tr>\n      </thead>\n      <tbody>\n        <tr *ngFor=\"let s of result.otherNodes\">\n          <td><a [routerLink]=\"['/xrouter-snodes', s.nodePubKey]\">{{s.nodePubKey}}</a></td>\n          <td>{{s.score}}</td>\n          <td>{{s.banned}}</td>\n        </tr>\n      </tbody>\n    </table>  \n</ng-template>  "
+module.exports = "<div *ngIf=\"loading else loaded\">\n  Loading page...\n</div>\n\n<ng-template #loaded>\n    <h1>XCloud Service</h1>\n    <h2>{{serviceName}}</h2>\n    <table class=\"table\">\n      <tbody>\n      <tr>\n        <td>Fee</td>\n        <td>{{result.service.fee}} BLOCK</td>\n      <tr>\n          <td>Parameter Types</td>\n          <td>{{result.service.parameters}}</td>\n      </tr>\n      <tr>\n        <td>Description</td>\n        <td>{{result.service.helpDescription}}</td>\n      </tr>\n      <tr>\n          <td>Usage Instructions</td>\n          <td>xrService {{serviceName}} [{{result.service.parameters}}]</td>\n      </tr>\n      </tbody>\n    </table>\n\n    <h3>Try it out</h3>\n    <form (ngSubmit)=\"onSubmit()\" #serviceForm=\"ngForm\">\n      <div class=\"form-group\" *ngFor=\"let p of result.service.parametersList; let i = index\">\n        <label for=\"param-{{i}}\">Param-{{i}} [{{p}}] </label>\n        <input type=\"text\" class=\"form-control\" id=\"param-{{i}}\" [(ngModel)]=\"parametervalues[i]\" name=\"param-{{i}}\">\n      </div>\n      <button type=\"submit\" class=\"btn btn-success\">Submit</button>\n    </form> \n    \n    <div class=\"overflow-auto\">\n      <pre style=\"max-height:50vh;\">\n          {{ serviceResult | json }}\n      </pre>\n    </div>\n    \n    <h3>Offered By</h3>\n    <table class=\"table\">\n      <tbody>\n        <tr>\n          <td>NodePubKey</td>\n          <td><a [routerLink]=\"['/xrouter-snodes', result.node.nodePubKey]\">{{result.node.nodePubKey}}</a></td>\n        </tr>\n        <tr>\n          <td>Score</td>\n          <td>{{result.node.score}}</td>\n        </tr>\n        <tr>\n          <td>Banned</td>\n          <td>{{result.node.banned}}</td>\n        </tr>\n        <tr>\n          <td>Default Fee</td>\n          <td>{{result.node.feeDefault}} BLOCK</td>\n        </tr>\n    \n      </tbody>\n    </table>\n    \n    <h3>Configuration {{serviceName}}.conf</h3>\n    <div class=\"well\" style=\"white-space: pre-line\">\n      <code>{{result.service.config}}</code>\n    </div>\n    \n    <!-- <h3>Other Service Nodes that offer this service</h3>\n    <table class=\"table\">\n      <thead>\n        <tr>\n          <th>Address</th>\n          <th>Score</th>\n          <th>Banned</th>\n        </tr>\n      </thead>\n      <tbody>\n        <tr *ngFor=\"let s of result.otherNodes\">\n          <td><a [routerLink]=\"['/xrouter-snodes', s.nodePubKey]\">{{s.nodePubKey}}</a></td>\n          <td>{{s.score}}</td>\n          <td>{{s.banned}}</td>\n        </tr>\n      </tbody>\n    </table>   -->\n</ng-template>  "
 
 /***/ }),
 
@@ -1594,6 +1759,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm5/router.js");
 /* harmony import */ var util__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! util */ "./node_modules/util/util.js");
 /* harmony import */ var util__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(util__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @angular/forms */ "./node_modules/@angular/forms/fesm5/forms.js");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -1603,6 +1769,7 @@ var __decorate = (undefined && undefined.__decorate) || function (decorators, ta
 var __metadata = (undefined && undefined.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+
 
 
 
@@ -1623,19 +1790,45 @@ var ViewXrServiceComponent = /** @class */ (function () {
                 return;
             }
         });
+        this.navigationSubscription = this.router.events.subscribe(function (e) {
+            if (e instanceof _angular_router__WEBPACK_IMPORTED_MODULE_3__["NavigationEnd"]) {
+                _this.initializeData();
+            }
+        });
     }
-    ViewXrServiceComponent.prototype.ngOnInit = function () {
+    ViewXrServiceComponent.prototype.initializeData = function () {
         var _this = this;
         this.xrouterApiService.GetServiceInfo(this.serviceName)
             .subscribe(function (result) {
             _this.result = result;
             _this.location.replaceState("/xcloud-services/" + _this.serviceName + "/" + _this.result.node.nodePubKey);
             _this.serviceName = _this.serviceName.replace("xrs::", "");
+            if (_this.result.service.parametersList)
+                _this.parametervalues = new Array(_this.result.service.parametersList.length);
             _this.loading = false;
         }, function (error) {
             _this.router.navigate(['/error'], { queryParams: error });
         });
     };
+    ViewXrServiceComponent.prototype.ngOnInit = function () { };
+    ViewXrServiceComponent.prototype.onSubmit = function () {
+        var _this = this;
+        this.xrouterApiService.Service(new ServiceRequest('xrs::' + this.serviceName, this.parametervalues, 1))
+            .subscribe(function (result) {
+            _this.serviceResult = result;
+        }, function (error) {
+            _this.router.navigate(['/error'], { queryParams: error });
+        });
+    };
+    ViewXrServiceComponent.prototype.ngOnDestroy = function () {
+        if (this.navigationSubscription) {
+            this.navigationSubscription.unsubscribe();
+        }
+    };
+    __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["ViewChild"])('serviceForm'),
+        __metadata("design:type", _angular_forms__WEBPACK_IMPORTED_MODULE_5__["NgForm"])
+    ], ViewXrServiceComponent.prototype, "serviceForm", void 0);
     ViewXrServiceComponent = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
             selector: 'app-view-xr-service',
@@ -1650,6 +1843,14 @@ var ViewXrServiceComponent = /** @class */ (function () {
     return ViewXrServiceComponent;
 }());
 
+var ServiceRequest = /** @class */ (function () {
+    function ServiceRequest(service, parameters, nodecount) {
+        this.service = service;
+        this.parameters = parameters;
+        this.nodecount = nodecount;
+    }
+    return ServiceRequest;
+}());
 
 
 /***/ }),

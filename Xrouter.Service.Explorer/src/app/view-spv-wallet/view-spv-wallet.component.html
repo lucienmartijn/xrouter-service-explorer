@@ -48,7 +48,7 @@
         </div>
         <div *ngSwitchCase="'xrGetBlocks'">
           <h4>Block hash inputs</h4>
-          <button type="button" (click)="addBlockHash()">Add Block Hash input</button> 
+          <button type="button" (click)="addBlockHash()" class="btn btn-primary btn-sm">Add</button> 
           <hr>
           <div *ngFor="let bh of blockHashes; let i = index;">
               <label for="blockHash-{{i}}">Blockhash-{{i}}</label>
@@ -63,7 +63,7 @@
         </div>
         <div *ngSwitchCase="'xrGetTransactions'">
           <h4>TxId inputs</h4>
-          <button type="button" (click)="addTxId()">Add TxId input</button> 
+          <button type="button" (click)="addTxId()" class="btn btn-primary btn-sm">Add</button> 
           <hr>
             <div *ngFor="let txid of txIds; let i = index;">
                 <label for="txid-{{i}}">txid-{{i}}</label>
