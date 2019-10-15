@@ -88,10 +88,15 @@
     </form>
 
     <div class="overflow-auto">
-        <pre style="max-height:50vh;">
-            {{ spvWalletCommandResult | json }}
-        </pre>
-      </div>
+      <pre style="max-height:50vh;">
+        <div *ngIf="resultLoading else resultLoaded">
+          Executing...
+        </div>
+      <ng-template #resultLoaded> {{ spvWalletCommandResult | json }}</ng-template>
+          
+      </pre>
+    </div>
+     
   <hr>
 
   <h3>Offered By</h3>

@@ -4,6 +4,7 @@ import { Location } from '@angular/common';
 import { XrouterApiService } from '../shared/services/xrouter.service';
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { isNullOrUndefined } from 'util';
+import { finalize } from 'rxjs/operators';
 
 @Component({
   selector: 'app-view-spv-wallet',
@@ -22,6 +23,7 @@ export class ViewSpvWalletComponent implements OnInit, OnDestroy {
   selectedSpvCommand:string;
   blockHashes:string[] = [""];
   txIds:string[] = [""];
+  resultLoading:boolean;
   spvWalletCommandResult:any;
 
   constructor(
@@ -58,6 +60,7 @@ export class ViewSpvWalletComponent implements OnInit, OnDestroy {
           
           this.selectedSpvCommand = this.result.spvConfig.commands[0].command;
           this.nodeCount = 1;
+          this.resultLoading = false;
         },
         error => {
           this.router.navigate(['/error'], {queryParams: error});
@@ -65,10 +68,16 @@ export class ViewSpvWalletComponent implements OnInit, OnDestroy {
   }
 
   onSubmit() {
+    this.resultLoading = true;
     let nodecount = this.spvWalletForm.value.nodeCount;
     switch(this.spvWalletForm.value.selectedSpvCommand){
       case "xrGetBlockCount":{
-        this.xrouterApiService.GetBlockCount(this.spvWalletName, nodecount).subscribe(result => {
+        this.xrouterApiService.GetBlockCount(this.spvWalletName, nodecount)
+        .pipe(
+          finalize(() => {
+            this.resultLoading = false;
+        }))
+        .subscribe(result => {
           this.spvWalletCommandResult = result;
         },
         error => {
@@ -77,7 +86,12 @@ export class ViewSpvWalletComponent implements OnInit, OnDestroy {
         break;
       }
       case "xrGetBlockHash":{
-        this.xrouterApiService.GetBlockHash(this.spvWalletName, this.spvWalletForm.value.blockNumber, nodecount).subscribe(result => {
+        this.xrouterApiService.GetBlockHash(this.spvWalletName, this.spvWalletForm.value.blockNumber, nodecount)
+        .pipe(
+          finalize(() => {
+            this.resultLoading = false;
+        }))
+        .subscribe(result => {
           this.spvWalletCommandResult = result;
         },
         error => {
@@ -86,7 +100,11 @@ export class ViewSpvWalletComponent implements OnInit, OnDestroy {
         break;
       }
       case "xrGetBlock":{
-        this.xrouterApiService.GetBlock(this.spvWalletName, this.spvWalletForm.value.blockHash, nodecount).subscribe(result => {
+        this.xrouterApiService.GetBlock(this.spvWalletName, this.spvWalletForm.value.blockHash, nodecount)
+        .pipe(
+          finalize(() => {
+            this.resultLoading = false;
+        })).subscribe(result => {
           this.spvWalletCommandResult = result;
         },
         error => {
@@ -95,7 +113,11 @@ export class ViewSpvWalletComponent implements OnInit, OnDestroy {
         break;
       }
       case "xrGetBlocks":{
-        this.xrouterApiService.GetBlocks(this.spvWalletName, this.blockHashes, nodecount).subscribe(result => {
+        this.xrouterApiService.GetBlocks(this.spvWalletName, this.blockHashes, nodecount)
+        .pipe(
+          finalize(() => {
+            this.resultLoading = false;
+        })).subscribe(result => {
           this.spvWalletCommandResult = result;
         },
         error => {
@@ -104,7 +126,11 @@ export class ViewSpvWalletComponent implements OnInit, OnDestroy {
         break;
       }
       case "xrGetTransaction":{
-        this.xrouterApiService.GetTransaction(this.spvWalletName, this.spvWalletForm.value.txid, nodecount).subscribe(result => {
+        this.xrouterApiService.GetTransaction(this.spvWalletName, this.spvWalletForm.value.txid, nodecount)
+        .pipe(
+          finalize(() => {
+            this.resultLoading = false;
+        })).subscribe(result => {
           this.spvWalletCommandResult = result;
         },
         error => {
@@ -113,7 +139,11 @@ export class ViewSpvWalletComponent implements OnInit, OnDestroy {
         break;
       }
       case "xrGetTransactions":{
-        this.xrouterApiService.GetTransactions(this.spvWalletName, this.txIds, nodecount).subscribe(result => {
+        this.xrouterApiService.GetTransactions(this.spvWalletName, this.txIds, nodecount)
+        .pipe(
+          finalize(() => {
+            this.resultLoading = false;
+        })).subscribe(result => {
           this.spvWalletCommandResult = result;
         },
         error => {
@@ -122,7 +152,11 @@ export class ViewSpvWalletComponent implements OnInit, OnDestroy {
         break;
       }
       case "xrDecodeRawTransaction":{
-        this.xrouterApiService.DecodeRawTransaction(this.spvWalletName, this.spvWalletForm.value.txHex, nodecount).subscribe(result => {
+        this.xrouterApiService.DecodeRawTransaction(this.spvWalletName, this.spvWalletForm.value.txHex, nodecount)
+        .pipe(
+          finalize(() => {
+            this.resultLoading = false;
+        })).subscribe(result => {
           this.spvWalletCommandResult = result;
         },
         error => {
@@ -131,7 +165,11 @@ export class ViewSpvWalletComponent implements OnInit, OnDestroy {
         break;
       }
       case "xrSendTransaction":{
-        this.xrouterApiService.SendTransaction(this.spvWalletName, this.spvWalletForm.value.signedTx).subscribe(result => {
+        this.xrouterApiService.SendTransaction(this.spvWalletName, this.spvWalletForm.value.signedTx)
+        .pipe(
+          finalize(() => {
+            this.resultLoading = false;
+        })).subscribe(result => {
           this.spvWalletCommandResult = result;
         },
         error => {

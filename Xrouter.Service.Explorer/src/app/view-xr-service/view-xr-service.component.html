@@ -36,7 +36,10 @@
     
     <div class="overflow-auto">
       <pre style="max-height:50vh;">
-          {{ serviceResult | json }}
+        <div *ngIf="resultLoading else resultLoaded">
+          Executing...
+        </div>
+        <ng-template #resultLoaded> {{ serviceResult | json }}</ng-template>
       </pre>
     </div>
     

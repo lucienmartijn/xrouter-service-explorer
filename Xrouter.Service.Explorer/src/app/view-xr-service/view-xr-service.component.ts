@@ -4,6 +4,7 @@ import { XrouterApiService } from '../shared/services/xrouter.service';
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { isNullOrUndefined } from 'util';
 import { NgForm } from '@angular/forms';
+import { finalize } from 'rxjs/operators';
 
 @Component({
   selector: 'app-view-xr-service',
@@ -19,6 +20,7 @@ export class ViewXrServiceComponent implements OnInit, OnDestroy {
 
   @ViewChild('serviceForm') serviceForm: NgForm;
   serviceResult:any;
+  resultLoading:boolean;
 
   constructor(
     private xrouterApiService:XrouterApiService,
@@ -52,6 +54,7 @@ export class ViewXrServiceComponent implements OnInit, OnDestroy {
           this.parametervalues = new Array<string>(this.result.service.parametersList.length);
 
         this.loading = false;
+        this.resultLoading = false;
       },
       error => {
         this.router.navigate(['/error'], {queryParams: error});
@@ -59,9 +62,14 @@ export class ViewXrServiceComponent implements OnInit, OnDestroy {
   }
   ngOnInit() {}
 
-  onSubmit() {   
+  onSubmit() {  
+    this.resultLoading = true; 
     this.xrouterApiService.Service(new ServiceRequest('xrs::' + this.serviceName, this.parametervalues, 1))
-      .subscribe(result => {
+    .pipe(
+      finalize(() => {
+        this.resultLoading = false;
+    }))  
+    .subscribe(result => {
         this.serviceResult = result;
       },
       error => {
