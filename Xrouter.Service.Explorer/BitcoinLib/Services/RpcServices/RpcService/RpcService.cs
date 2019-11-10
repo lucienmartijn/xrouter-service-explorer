@@ -1,4 +1,4 @@
-﻿// Copyright (c) 2014 - 2016 George Kimionis
+// Copyright (c) 2014 - 2016 George Kimionis
 // See the accompanying file LICENSE for the Software License Aggrement
 
 using System;
@@ -13,6 +13,7 @@ using BitcoinLib.RPC.Connector;
 using BitcoinLib.RPC.Specifications;
 using BitcoinLib.Services.Coins.Base;
 using Newtonsoft.Json.Linq;
+using Xrouter.Service.Explorer.BitcoinLib.Services;
 
 namespace BitcoinLib.Services
 {

@@ -1,6 +1,7 @@
-﻿// Copyright (c) 2014 - 2016 George Kimionis
+// Copyright (c) 2014 - 2016 George Kimionis
 // See the accompanying file LICENSE for the Software License Aggrement
 
+using System;
 using Newtonsoft.Json;
 
 namespace BitcoinLib.RPC.RequestResponse
@@ -15,5 +16,6 @@ namespace BitcoinLib.RPC.RequestResponse
 
         [JsonProperty(PropertyName = "error", Order = 2)]
         public JsonRpcError Error { get; set; }
+
     }
 }

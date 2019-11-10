@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 
 namespace blocknet_xrouter.Controllers.ViewModels
 {
-    public class ServiceNodeResponseViewModel
+    public class ServiceNodeViewModel
     {
         public int Rank { get; set; }
 		public string NodePubKey { get; set; }
@@ -19,8 +19,7 @@ namespace blocknet_xrouter.Controllers.ViewModels
 		public DateTime LastSeen { get; set; }
 		public DateTime ActiveTime { get; set; }
 		public DateTime LastPaid { get; set; }
-		public List<string> SpvWallets { get; set; }
-		public List<string> XCloudServices { get; set; }
+        public List<string> SpvWallets { get; set; }
+        public List<string> XCloudServices { get; set; }
     }
-    
 }

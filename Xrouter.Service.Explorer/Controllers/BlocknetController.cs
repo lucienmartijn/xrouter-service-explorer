@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using AutoMapper;
 using BitcoinLib.ExceptionHandling.Rpc;
@@ -13,6 +14,9 @@ using blocknet_xrouter.Controllers.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using Xrouter.Service.Explorer.Controllers.ViewModels;
+using Xrouter.Service.Explorer.Extensions;
+using Xrouter.Service.Explorer.Models;
 
 namespace blocknet_xrouter.Controllers
 {
@@ -64,10 +68,7 @@ namespace blocknet_xrouter.Controllers
             var configReply = this._blocknetService.xrShowConfigs();
 
             if(string.IsNullOrWhiteSpace(nodePubKey)){
-                // Randomly choose a service node from the list if no nodePubKey is given
-                var r = new Random();
-                var index = r.Next(connectReply.Count);
-                serviceNode = connectReply[index];
+                serviceNode = connectReply.OrderByDescending(n => n.Score).FirstOrDefault();
                 // split node list
                 otherNodes = connectReply.Where(s => s.NodePubKey != serviceNode.NodePubKey).ToList();
             }
@@ -142,11 +143,8 @@ namespace blocknet_xrouter.Controllers
             var connectReply = connectResponse.Reply;
             var configReply = this._blocknetService.xrShowConfigs();
                 
-            if(string.IsNullOrWhiteSpace(nodePubKey)){
-                // Randomly choose a service node from the list if no nodePubKey is given
-                var r = new Random();
-                var index = r.Next(connectReply.Count);
-                serviceNode = connectReply[index];
+            if(string.IsNullOrWhiteSpace(nodePubKey)){  
+                serviceNode = serviceNode = connectReply.OrderByDescending(n => n.Score).FirstOrDefault();
                 // split node list
                 otherNodes = connectReply.Where(s => s.NodePubKey != serviceNode.NodePubKey).ToList();
             }
@@ -164,12 +162,26 @@ namespace blocknet_xrouter.Controllers
             string xcloudConfig = string.Empty;
             if(serviceNodeConfig.Plugins.Count > 0){
                 // Try get help key from config string
-                var dictConfig = serviceNodeConfig.Plugins[serviceName]
-                        .Split(new string[] {"\n", "\r\n"}, StringSplitOptions.RemoveEmptyEntries)
-                        .Select(value => value.Split('='))
-                        .ToDictionary(pair => pair[0], pair => pair[1]);
-                
-                dictConfig.TryGetValue("help", out help);
+                var listConfig = serviceNodeConfig.Plugins[serviceName]
+                        .Split(new string[] { "\n", "\r\n" }, StringSplitOptions.RemoveEmptyEntries)
+                        .Select(value => value.Split('=')).ToList();
+
+                int i = 0;
+                foreach (var config in listConfig)
+                {
+                    if (config[0] == "help")
+                        break;
+                    i++;
+                }
+
+                help = listConfig[i][1];
+                if(i < listConfig.Count())
+                {
+                    foreach (var config in listConfig.Skip(i))
+                    {
+                        help += '\n' + config[0];
+                    }
+                }
                 xcloudConfig = serviceNodeConfig.Plugins[serviceName];
             }
 
@@ -563,29 +575,49 @@ namespace blocknet_xrouter.Controllers
         #endregion
 
         [HttpGet("Xrouter/[action]")]
-        public IActionResult GetServiceNodeList()
+        public IActionResult GetServiceNodeList(ServiceNodeQueryViewModel filterViewModel)
         {
-            var result = this._blocknetService.serviceNodeList();
+            var result = new QueryResult<ServiceNodeResponse>();
+            var query = this._blocknetService.serviceNodeList().AsQueryable();
+            var queryObj = new ServiceNodeQuery
+            {
+                Page = filterViewModel.Page,
+                OnlyXWallets = filterViewModel.OnlyXWallets,
+                PageSize = filterViewModel.PageSize,
+                SpvWallet = filterViewModel.SpvWallet,
+                XCloudService = filterViewModel.XCloudService
+            };
+            query = query.ApplyServiceNodeFiltering(queryObj);
+
+            result.TotalItems = query.Count();
+
+            query = query.ApplyPaging(queryObj);
+
+            result.Items = query.ToList();
 
             //TODO: Add an automapper module
-            var viewModel = result.Select(sn => new ServiceNodeResponseViewModel
+            var viewModel = new QueryResultViewModel<ServiceNodeViewModel>
             {
-              ActiveTime = DateTimeOffset.FromUnixTimeSeconds(sn.ActiveTime).UtcDateTime,
-              LastPaid = DateTimeOffset.FromUnixTimeSeconds(sn.LastPaid).UtcDateTime,
-              LastSeen = DateTimeOffset.FromUnixTimeSeconds(sn.LastSeen).UtcDateTime,
-              Addr = sn.Addr,
-              NodePubKey = sn.NodePubKey,
-              OutIdx = sn.OutIdx,
-              Rank = sn.Rank,
-              Status = sn.Status,
-              TxHash = sn.TxHash,
-              Version = sn.Version,
-              XBridgeVersion = sn.XBridgeVersion,
-              XRouterVersion = sn.XRouterVersion,
-              SpvWallets = sn.XWallets.Split(',').Where(s => s.Split(':')[0].Equals("xr")).Where(s => !s.Equals("xr")).ToList(),
-              XCloudServices = sn.XWallets.Split(',').Where(s => s.Split(':')[0].Equals("xrs")).Where(s => !s.Equals("xr")).ToList()
-              
-            }).Where(vm => vm.SpvWallets.Count > 0 || vm.XCloudServices.Count > 0).ToList();
+                Items = result.Items.Select(sn => new ServiceNodeViewModel
+                {
+                    ActiveTime = DateTimeOffset.FromUnixTimeSeconds(sn.ActiveTime).UtcDateTime,
+                    LastPaid = DateTimeOffset.FromUnixTimeSeconds(sn.LastPaid).UtcDateTime,
+                    LastSeen = DateTimeOffset.FromUnixTimeSeconds(sn.LastSeen).UtcDateTime,
+                    Addr = sn.Addr,
+                    NodePubKey = sn.NodePubKey,
+                    OutIdx = sn.OutIdx,
+                    Rank = sn.Rank,
+                    Status = sn.Status,
+                    TxHash = sn.TxHash,
+                    Version = sn.Version,
+                    XBridgeVersion = sn.XBridgeVersion,
+                    XRouterVersion = sn.XRouterVersion,
+                    SpvWallets = sn.SpvWallets,
+                    XCloudServices = sn.XCloudServices
+
+                }).ToList(),
+                TotalItems = result.TotalItems
+            };
 
             return Ok(viewModel);
         }

@@ -1,4 +1,4 @@
-﻿using BitcoinLib.CoinParameters.Mogwaicoin;
+using BitcoinLib.CoinParameters.Mogwaicoin;
 using BitcoinLib.Responses;
 using BitcoinLib.RPC.Specifications;
 using System.Collections.Generic;

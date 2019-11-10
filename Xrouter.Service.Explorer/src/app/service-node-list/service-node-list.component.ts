@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { XrouterApiService } from '../shared/services/xrouter.service';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-service-node-list',
@@ -8,68 +9,76 @@ import { XrouterApiService } from '../shared/services/xrouter.service';
   styleUrls: ['./service-node-list.component.css']
 })
 export class ServiceNodeListComponent implements OnInit {
+  private readonly PAGE_SIZE = 6; 
 
-  private readonly PAGE_SIZE = 3; 
-
-  serviceNodes:any[];
-  selectedSpvWallets:string[];
-  selectedXCloudServices:string[];
+  @Output('query-changed') queryChanged = new EventEmitter();
+  
+  serviceNodes:any;
+  spvWallets:any;
+  xCloudServices:any;
 
   query:any = {
     pageSize: this.PAGE_SIZE,
+    onlyXWallets: true
   };
-  queryPastCourses:any = {
-    pageSize: this.PAGE_SIZE,
-  }; 
+
+  columns:any=[
+    {title: 'Rank', key: 'rank'},
+    {title: 'Node Public Key', key: 'nodePubKey'},
+    {title: 'Spv Wallets', key: 'spvWallets'},
+    {title: 'XCloud Services', key: 'xCloudServices'},
+  ];
+
+  loading:boolean;
 
   constructor(private router: Router, private xrouterService: XrouterApiService) { }
 
   ngOnInit() {
+    var sources = [
+      this.xrouterService.GetNetworkServices(),
+      this.xrouterService.GetNetworkSpvWallets(),
+    ];
+  
+    forkJoin(sources).subscribe(data =>{
+      this.xCloudServices = data[0];
+      this.spvWallets = data[1];
+    }, err => {
+      if(err.status == 404)
+        this.router.navigate(['']);
+    });
     this.populateServiceNodes();
   }
 
   private populateServiceNodes(){
-    this.xrouterService.GetServiceNodeList()
+    this.xrouterService.GetServiceNodeList(this.query)
       .subscribe(result => {
+        console.log(result);
         this.serviceNodes = result;
-
-        this.selectedXCloudServices = new Array<string>(result.length);
-        this.selectedSpvWallets = new Array<string>(result.length);
-        
-        this.serviceNodes.forEach((sn, index) =>{  
-          this.selectedSpvWallets[index] = sn.spvWallets[0];          
-          this.selectedXCloudServices[index] = sn.xCloudServices[0];
-        });
+        this.loading = false;
       });
   }
 
-  onQueryChange(query){
-    this.query = query;
+  ngOnChanges(){
+    this.initializeQuery();
+	}
+
+  onFilterChange() {
+    this.query.page = 1; 
     this.populateServiceNodes();
   }
 
-  onSpvWalletChange(index:number, event:any){
-    this.selectedSpvWallets[index] = event.target.value;    
+  private initializeQuery(){}
+
+  resetFilter() {
+    this.query = {
+      page: 1,
+      pageSize: this.PAGE_SIZE,
+    };
+    this.populateServiceNodes();
   }
 
-  onXCloudServiceChange(index:number, event:any){
-    this.selectedXCloudServices[index] = event.target.value;    
+  onPageChange(page) {
+    this.query.page = page;
+    this.populateServiceNodes();
   }
-
-  // onSpvWalletClick(index:number){
-  //   if(this.selectedSpvWallets[index].includes('x'))
-  //   this.router.navigate(['/spv-wallets', this.selectedSpvWallets[index], this.serviceNodes[index].nodePubKey]);
-  // }
-
-  // onXCloudServiceClick(index:number){
-  //   if(this.selectedXCloudServices[index].includes('x'))
-  //   this.router.navigate(['/xcloud-services', this.selectedXCloudServices[index], this.serviceNodes[index].nodePubKey]);
-  // }
-
-  onNodeClick(index:number){
-    let node = this.serviceNodes[index];
-    this.router.navigate(['/xrouter-snodes', node.nodePubKey]);
-  }
-
-
 }

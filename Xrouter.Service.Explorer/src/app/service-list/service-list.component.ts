@@ -37,8 +37,6 @@ export class ServiceListComponent implements OnInit {
   @Input('services') services:any = {};
 
   @Input('query-init') queryInit = {
-    isCurrent:false,
-    clientId:0
   };
 
   @Output('query-changed') queryChanged = new EventEmitter();

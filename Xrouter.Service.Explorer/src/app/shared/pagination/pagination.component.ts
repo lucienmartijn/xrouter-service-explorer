@@ -32,19 +32,44 @@ export class PaginationComponent implements OnChanges {
 	@Input('page-size') pageSize = 10;
 	@Output('page-changed') pageChanged = new EventEmitter();
 	pages: any[];
-	currentPage = 1; 
+	pagesCount:number; 
+	currentPage:number;
 
 	ngOnChanges(){
-    this.currentPage = 1;
-        
-		var pagesCount = Math.ceil(this.totalItems / this.pageSize); 
+		this.currentPage = 1;
+		this.changePageRange(this.currentPage);
+	}
+
+	changePageRange(page:number){
+		let startPage:number; 
+		let endPage:number;
+		this.pagesCount = Math.ceil(this.totalItems / this.pageSize); 
+		if (this.pagesCount <= 5) {
+            startPage = 1;
+            endPage = this.pagesCount;
+        } else {
+            if (page <= 3) {
+             	startPage = 1;
+            	endPage = 5;
+            } else if (page + 1 >= this.pagesCount) {
+                startPage = this.pagesCount - 4;
+                endPage = this.pagesCount;
+            } else {
+                startPage = page - 2;
+                endPage = page + 2;
+            }
+		}
+
 		this.pages = [];
-		for (var i = 1; i <= pagesCount; i++)
+		for (var i = startPage; i <= endPage; i++)
 			this.pages.push(i);
+		
 	}
 
 	changePage(page){
-		this.currentPage = page; 
+
+		this.currentPage = page;
+		this.changePageRange(this.currentPage);
 		this.pageChanged.emit(page);
 	}
 
@@ -53,6 +78,7 @@ export class PaginationComponent implements OnChanges {
 			return;
 
 		this.currentPage--;
+		this.changePageRange(this.currentPage);
 		this.pageChanged.emit(this.currentPage);
 	}
 
@@ -61,6 +87,7 @@ export class PaginationComponent implements OnChanges {
 			return; 
 		
 		this.currentPage++;
+		this.changePageRange(this.currentPage);
 		this.pageChanged.emit(this.currentPage);
 	}
 }

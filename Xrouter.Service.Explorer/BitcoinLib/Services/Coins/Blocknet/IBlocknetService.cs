@@ -4,6 +4,7 @@ using BitcoinLib.Services.Coins.Base;
 using BitcoinLib.Services.Coins.Blocknet;
 using BitcoinLib.Services.Coins.Blocknet.Xrouter;
 using Microsoft.AspNetCore.Mvc;
+using Xrouter.Service.Explorer.BitcoinLib.Services.Coins.Blocknet.XRouter;
 
 public interface IBlocknetService : ICoinService, IBlocknetConstants{
     #region Blocknetdx

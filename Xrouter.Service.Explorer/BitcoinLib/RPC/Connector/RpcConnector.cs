@@ -1,4 +1,4 @@
-﻿// Copyright (c) 2014 - 2016 George Kimionis
+// Copyright (c) 2014 - 2016 George Kimionis
 // See the accompanying file LICENSE for the Software License Aggrement
 
 using System;
@@ -9,6 +9,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Diagnostics;
 using BitcoinLib.Auxiliary;
 using BitcoinLib.ExceptionHandling.Rpc;
 using BitcoinLib.ExtensionMethods;
@@ -40,7 +41,8 @@ namespace BitcoinLib.RPC.Connector
                     if(!param.GetType().IsArray)
                         parameterList.Add(param);
                     else
-                        foreach (var p in (IEnumerable) param) parameterList.Add(p);
+                        foreach (var p in (IEnumerable) param) 
+                            parameterList.Add(p);
                         
                 }
             }
@@ -86,7 +88,8 @@ namespace BitcoinLib.RPC.Connector
                             json = result;
                         }
                     }
-                }
+                }        
+
                 var rpcResponse = JsonConvert.DeserializeObject<JsonRpcResponse<T>>(json);
                 return rpcResponse.Result;
             }

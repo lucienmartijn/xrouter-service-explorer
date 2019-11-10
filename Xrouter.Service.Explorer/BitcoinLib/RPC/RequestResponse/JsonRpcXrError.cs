@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 
 namespace BitcoinLib.RPC.RequestResponse
 {
-    public class JsonRpcXrError
+    public class JsonRpcXrError : JsonRpcTimeResponse
     {
         [JsonProperty(PropertyName = "error", Order = 0)]
         public object Error { get; set; }

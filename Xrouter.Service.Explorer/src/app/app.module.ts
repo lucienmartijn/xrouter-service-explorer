@@ -10,6 +10,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 
 import { AppComponent } from './app.component';
+import { interceptorProviders } from './interceptors';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { HomeComponent } from './home/home.component';
 import { PaginationComponent } from './shared/pagination/pagination.component';
@@ -28,6 +29,8 @@ import { SearchFormComponent } from './search-form/search-form.component';
 import { NavigatorService } from './shared/services/navigator.service.';
 import { ErrorComponent } from './error/error.component';
 import { RpcConsoleComponent } from './rpc-console/rpc-console.component';
+import { ResponseTimeService } from './shared/services/responsetime.service';
+import {SearchService} from './shared/services/search.service';
 
 @NgModule({
   declarations: [
@@ -42,7 +45,7 @@ import { RpcConsoleComponent } from './rpc-console/rpc-console.component';
     ViewXrServiceComponent,
     ViewSpvWalletComponent,
     ViewSnodeComponent,
-    SearchFormComponent,
+    SearchFormComponent,    
     RpcConsoleComponent,
     ErrorComponent,
     PageNotFoundComponent
@@ -79,13 +82,16 @@ import { RpcConsoleComponent } from './rpc-console/rpc-console.component';
   ],
   providers: [
     XrouterApiService, 
+    SearchService,
     SessionService,
     NavigatorService,
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: HttpErrorInterceptor,
-      multi: true
-    }
+    ResponseTimeService,
+    // {
+    //   provide: HTTP_INTERCEPTORS,
+    //   useClass: HttpErrorInterceptor,
+    //   multi: true
+    // },
+    interceptorProviders
   ],
   bootstrap: [AppComponent]
 })

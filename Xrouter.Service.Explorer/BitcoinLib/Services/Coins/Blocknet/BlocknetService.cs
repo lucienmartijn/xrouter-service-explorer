@@ -1,11 +1,14 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
 using BitcoinLib.CoinParameters.Blocknet;
 using BitcoinLib.RPC.Specifications;
 using BitcoinLib.Services.Coins.Blocknet.Xrouter;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Xrouter.Service.Explorer.BitcoinLib.Services.Coins.Blocknet.XRouter;
 
 namespace BitcoinLib.Services.Coins.Blocknet
 {
@@ -60,12 +63,16 @@ namespace BitcoinLib.Services.Coins.Blocknet
 
 		public BlocknetConstants.Constants Constants => BlocknetConstants.Constants.Instance;
 
+        //public GetBlockCountResponse xrGetBlockCount(GetBlockCountRequest request)
+        //{
+        //    return HandleRequest(request, xrGetBlockCountImpl);            
+        //}
         public GetBlockCountResponse xrGetBlockCount(string blockchain, int node_count)
         {
-            return _rpcConnector.MakeRequest<GetBlockCountResponse>(RpcMethods.xrGetBlockCount, blockchain.ToUpper(), node_count);
+            return _rpcConnector.MakeRequest<GetBlockCountResponse>(RpcMethods.xrGetBlockCount, blockchain, node_count);
         }
 
-        public ConnectResponse xrConnect(string service, int node_count = 1)
+    public ConnectResponse xrConnect(string service, int node_count = 1)
         {
             return _rpcConnector.MakeRequest<ConnectResponse>(RpcMethods.xrConnect, service, node_count);
         }
@@ -151,9 +158,24 @@ namespace BitcoinLib.Services.Coins.Blocknet
 
         public List<ServiceNodeResponse> serviceNodeList()
         {
-            var result = _rpcConnector.MakeRequest<List<ServiceNodeResponse>>(RpcMethods.servicenodelist);
-			
-			return result;
+            var query = _rpcConnector.MakeRequest<List<ServiceNode>>(RpcMethods.servicenodelist);
+            return query.Select(sn => new ServiceNodeResponse
+            {
+                ActiveTime = sn.ActiveTime,
+                LastPaid = sn.LastPaid,
+                LastSeen = sn.LastSeen,
+                Addr = sn.Addr,
+                NodePubKey = sn.NodePubKey,
+                OutIdx = sn.OutIdx,
+                Rank = sn.Rank,
+                Status = sn.Status,
+                TxHash = sn.TxHash,
+                Version = sn.Version,
+                XBridgeVersion = sn.XBridgeVersion,
+                XRouterVersion = sn.XRouterVersion,
+                SpvWallets = sn.XWallets.Split(',').ToList().Where(xw => xw.Split(':')[0].Equals("xr")).Where(xw => !xw.Equals("xr")).ToList(),
+                XCloudServices = sn.XWallets.Split(',').ToList().Where(xw => xw.Split(':')[0].Equals("xrs")).ToList(),
+            }).Where(sn => sn.SpvWallets.Count() > 0).ToList();
         }
     }
 }

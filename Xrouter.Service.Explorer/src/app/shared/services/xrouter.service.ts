@@ -51,9 +51,20 @@ export class XrouterApiService extends BaseService{
     return this.http.get(url);
   }
 
-  GetServiceNodeList(){
-    let url = this.baseEndpoint + this.apiEndpoint + '/GetServiceNodeList'
+  GetServiceNodeList(filter){
+    let url = this.baseEndpoint + this.apiEndpoint + '/GetServiceNodeList' + '?' + this.toQueryString(filter);
     return this.http.get<any[]>(url);
+  }
+
+  private toQueryString(obj) {  
+    var parts = [];
+    for (var property in obj) {
+      var value = obj[property];
+      if (value != null && value != undefined) 
+        parts.push(encodeURIComponent(property) + '=' + encodeURIComponent(value));
+    }
+
+    return parts.join('&');
   }
 
   Service(request:any){

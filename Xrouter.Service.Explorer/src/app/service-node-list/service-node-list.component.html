@@ -1,40 +1,60 @@
-<h2>Service Node List</h2>
-<table class="table">
-        <thead>
-          <tr>
-                <th>Rank</th>
-                <th>NodePubKey</th>
-                <!-- <th>Address</th> -->
-                <!-- <th>Spv Wallets</th>
-                <th>XCloud Services</th> -->
-          </tr> 
-        </thead>
-        <tbody>
-                <tr *ngFor="let sn of serviceNodes; let i = index">
-                        <td>{{sn.rank}}</td>
-                        <td>                                
-                                <a href="javascript:void(0)" (click)="onNodeClick(i)"> {{sn.nodePubKey}}</a>
-                        </td>
-                        <!-- <td><a href="https://chainz.cryptoid.info/block/address.dws?{{sn.addr}}">{{sn.addr}}</a></td> -->
-                        <!-- <td>
-                                <div class="form-group">
-                                        <label for="spvWallets"></label>
-                                        <select id="spvWallets" class="form-control" (change)="onSpvWalletChange(i, $event)">
-                                                <option *ngFor="let w of sn.spvWallets" [value]="w">{{ w }} </option>
-                                        </select>   
-                                </div> 
-                        </td> -->
-                        <!-- <td>
-                                <div *ngIf = "sn.xCloudServices.length > 0">
-                                        <div class="form-group">
-                                                <label for="xcloudServices"></label>
-                                                <select id="xcloudServices" class="form-control" (change)="onXCloudServiceChange(i, $event)">
-                                                        <option *ngFor="let s of sn.xCloudServices" [value]="s">{{ s }} </option>
-                                                </select>   
-                                        </div> 
-                                </div>
-                                
-                        </td> -->
-                </tr>
-        </tbody>
-</table>
+<div *ngIf="loading else loaded">
+        Loading page...
+</div>
+            
+<ng-template #loaded>
+                <h2>Service Node List</h2>
+                          <div class="well">
+                            <div class="form-group">
+                              <h3>Filter</h3>
+                                <label for="spvWallet">Spv Wallet</label>
+                                <select id="spvWallet" class="form-control" [(ngModel)]="query.spvWallet" (change)="onFilterChange()">
+                                  <option value=""></option>
+                                  <option *ngFor="let w of spvWallets?.items" value="{{ w.name }}">{{ w.name }}</option>
+                                </select>  
+                                <label for="xCloudService">XCloud Service</label>
+                                <select id="xCloudService" class="form-control" [(ngModel)]="query.xCloudService" (change)="onFilterChange()">
+                                  <option value=""></option>
+                                  <option *ngFor="let xc of xCloudServices?.items" value="{{ xc.name }}">{{ xc.name }}</option>
+                                </select>  
+                            </div>
+                            <button class="btn btn-default" (click)="resetFilter()">Reset</button>
+                        </div>
+                Count: {{ serviceNodes?.totalItems}}
+                <pagination [total-items]="serviceNodes?.totalItems" [page-size]="query.pageSize" (page-changed)="onPageChange($event)"></pagination>
+                <table class="table">
+                        <thead>
+                          <tr>
+                                <th *ngFor="let c of columns"> {{ c.title }} </th>
+                          </tr> 
+                        </thead>
+                        <tbody>
+                                <tr *ngFor="let sn of serviceNodes?.items; let i = index">
+                                        <td>{{sn.rank}}</td>
+                                        <td><a [routerLink]="[sn.nodePubKey]">{{sn.nodePubKey}}</a></td>
+                                        <td>
+                                                <div *ngIf="sn.spvWallets?.length > 0">
+                                                        <div class="form-group">
+                                                                <label for="spvWallets"></label>
+                                                                <select id="spvWallets" class="form-control">
+                                                                        <option *ngFor="let w of sn.spvWallets" [value]="w">{{ w }} </option>
+                                                                </select>   
+                                                        </div> 
+                                                </div>
+                                                
+                                        </td>
+                                        <td>
+                                                <div *ngIf = "sn.xCloudServices.length > 0">
+                                                        <div class="form-group">
+                                                                <label for="xcloudServices"></label>
+                                                                <select id="xcloudServices" class="form-control">
+                                                                        <option *ngFor="let s of sn.xCloudServices" [value]="s">{{ s }} </option>
+                                                                </select>   
+                                                        </div> 
+                                                </div>
+                                                
+                                        </td>
+                                </tr>
+                        </tbody>
+                </table>
+</ng-template>
