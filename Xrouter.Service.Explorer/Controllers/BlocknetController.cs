@@ -266,7 +266,13 @@ namespace blocknet_xrouter.Controllers
                     });                
                 }
                  
-                serviceNode = connectReply.Find(s => s.NodePubKey == nodePubKey);
+                serviceNode = connectResponse.Reply.Find(s => s.NodePubKey == nodePubKey);
+
+                if(serviceNode == null)
+                    return StatusCode(StatusCodes.Status500InternalServerError, new JsonRpcXrError
+                    {
+                        Error = "Servicenode info cannot be retrieved." + Environment.NewLine + "Node Public Key: " + nodePubKey,
+                    });
             }
                
             var configReply = this._blocknetService.xrShowConfigs();            

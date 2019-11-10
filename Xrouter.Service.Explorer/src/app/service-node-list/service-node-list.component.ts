@@ -51,8 +51,7 @@ export class ServiceNodeListComponent implements OnInit {
 
   private populateServiceNodes(){
     this.xrouterService.GetServiceNodeList(this.query)
-      .subscribe(result => {
-        console.log(result);
+      .subscribe(result => {        
         this.serviceNodes = result;
         this.loading = false;
       });

@@ -31,7 +31,7 @@
                         <tbody>
                                 <tr *ngFor="let sn of serviceNodes?.items; let i = index">
                                         <td>{{sn.rank}}</td>
-                                        <td><a [routerLink]="[sn.nodePubKey]">{{sn.nodePubKey}}</a></td>
+                                        <td><a [routerLink]="[sn.nodePubKey, sn.spvWallets[0]]">{{sn.nodePubKey}}</a></td>
                                         <td>
                                                 <div *ngIf="sn.spvWallets?.length > 0">
                                                         <div class="form-group">
