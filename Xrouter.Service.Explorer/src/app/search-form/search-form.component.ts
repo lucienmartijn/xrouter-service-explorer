@@ -25,13 +25,14 @@ export class SearchFormComponent extends BaseService implements OnInit {
   private readonly apiEndpoint = 'blocknet/xrouter';
   private baseEndpoint = ''; // http://localhost
 
-  searchServicesCtrl = new FormControl();
-  filteredServices: any;
-  isLoading = false;
-  errorMsg: string;
+  // searchServicesCtrl = new FormControl();
+  // filteredServices: any;
+  // isLoading = false;
+  // errorMsg: string;
 
   constructor(
     private http: HttpClient,
+    private xrouterService: XrouterApiService,
     private navigatorService: NavigatorService,
     private sessionService:SessionService
   ) {
@@ -39,42 +40,93 @@ export class SearchFormComponent extends BaseService implements OnInit {
     this.baseEndpoint = sessionService.getApiURI();
   }
 
-  ngOnInit() {
-    this.searchServicesCtrl.valueChanges
-      .pipe(
-        debounceTime(500),
-        tap(() => {
-          this.errorMsg = "";
-          this.filteredServices = [];
-          this.isLoading = true;
-        }),
-        switchMap(value => this.http.get(this.baseEndpoint + this.apiEndpoint + "/?searchString=" + value)
-          .pipe(
-            finalize(() => {
-              this.isLoading = false
-            }),
-          )
-        )
-      )
-      .subscribe(data => {
-        if (data['items'] == undefined) {
-          //this.errorMsg = data['Error'];
-          this.filteredServices = [];
-        } else {
-          this.errorMsg = "";
-          this.filteredServices = data['items'];
-        }
-      });
+  // ngOnInit() {
+  //   this.searchServicesCtrl.valueChanges
+  //     .pipe(
+  //       debounceTime(500),
+  //       tap(() => {
+  //         this.errorMsg = "";
+  //         this.filteredServices = [];
+  //         this.isLoading = true;
+  //       }),
+  //       switchMap(value => this.http.get(this.baseEndpoint + this.apiEndpoint + "/?searchString=" + value)
+  //         .pipe(
+  //           finalize(() => {
+  //             this.isLoading = false
+  //           }),
+  //         )
+  //       )
+  //     )
+  //     .subscribe(data => {
+  //       if (data['items'] == undefined) {
+  //         //this.errorMsg = data['Error'];
+  //         this.filteredServices = [];
+  //       } else {
+  //         this.errorMsg = "";
+  //         this.filteredServices = data['items'];
+  //       }
+  //     });
+  // }
+
+  // onSelectionChanged(event: MatAutocompleteSelectedEvent) {
+  //   let serviceName = event.option.value as string;
+
+  //   if(serviceName.includes("xrs::")){
+  //     this.navigatorService.xCloudServiceDetails(serviceName);
+  //   } else{
+  //     this.navigatorService.spvWalletDetails(serviceName);
+  //   }
+  // }
+
+  keyword = 'name';
+  services:any;
+  //services = [
+    //  {
+    //    id: 1,
+    //    name: 'Usa'
+    //  },
+    //  {
+    //    id: 2,
+    //    name: 'England'
+    //  }
+  //];
+ 
+  ngOnInit(){
+    this.xrouterService.GetNetworkServices().subscribe(
+      
+      res => {
+        console.log(res);
+        this.services = res;
+      }
+    )
   }
-
-  onSelectionChanged(event: MatAutocompleteSelectedEvent) {
-    let serviceName = event.option.value as string;
-
-    if(serviceName.includes("xrs::")){
-      this.navigatorService.xCloudServiceDetails(serviceName);
+  selectEvent(item) {
+    let service = item.name as string;
+    if(service.includes("xrs::")){
+      this.navigatorService.xCloudServiceDetails(service);
     } else{
-      this.navigatorService.spvWalletDetails(serviceName);
+      this.navigatorService.spvWalletDetails(service);
     }
+    // do something with selected item
+  }
+ 
+  onChangeSearch(val: string) {
+    console.log("on change search")
+    console.log(val);
+    this.http.get(this.baseEndpoint + this.apiEndpoint + "/?searchString=" + val).subscribe(
+      data => {
+        console.log(data);
+        this.services = data;
+            
+      }
+    );
+    // fetch remote data from here
+    // And reassign the 'data' which is binded to 'data' property.
+  }
+  
+  onFocused(e){
+    console.log(e);
+    // do something when input is focused
   }
 }
 

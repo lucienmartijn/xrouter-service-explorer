@@ -173,7 +173,7 @@ namespace blocknet_xrouter.Controllers
                         break;
                     i++;
                 }
-
+                //FIXME: i out of bounds when there is no help key in config. Check for help key
                 help = listConfig[i][1];
                 if(i < listConfig.Count())
                 {

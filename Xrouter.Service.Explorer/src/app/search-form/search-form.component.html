@@ -1,17 +1,22 @@
-<div>
- 
-  <mat-form-field>
-    <input matInput placeholder="Search" aria-label="State" [matAutocomplete]="auto" [formControl]="searchServicesCtrl">
-    <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onSelectionChanged($event)">
-      <mat-option *ngIf="isLoading" class="is-loading">Loading...</mat-option>
-      <ng-container *ngIf="!isLoading">
-        <mat-option *ngFor="let service of filteredServices" [value]="service.name">
-          <span><b>{{service.name}}</b></span>
-        </mat-option>
-      </ng-container>
-    </mat-autocomplete>
-  </mat-form-field>
- 
-  <br>
- 
-</div>
+<div class="ng-autocomplete">
+    <ng-autocomplete
+      [data]="services?.items"
+      [searchKeyword]="keyword"
+      debounceTime = "400"
+      placeHolder="Enter Xrouter Service here..."
+      (selected)='selectEvent($event)'
+      (inputChanged)='onChangeSearch($event)'
+      (inputFocused)='onFocused($event)'
+      historyIdentifier="services?.items"
+      [itemTemplate]="itemTemplate"
+      [notFoundTemplate]="notFoundTemplate">
+    </ng-autocomplete>
+  
+    <ng-template #itemTemplate let-item>
+      <a [innerHTML]="item.name"></a>
+    </ng-template>
+  
+    <ng-template #notFoundTemplate let-notFound>
+      <div [innerHTML]="notFound"></div>
+    </ng-template>
+  </div>

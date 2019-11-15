@@ -5,9 +5,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import { NgxPaginationModule } from 'ngx-pagination';
-import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
+import { AutocompleteLibModule } from 'angular-ng-autocomplete';
 
 import { AppComponent } from './app.component';
 import { interceptorProviders } from './interceptors';
@@ -57,9 +55,7 @@ import {SearchService} from './shared/services/search.service';
     BrowserAnimationsModule,
     ReactiveFormsModule,
     NgxPaginationModule,
-    MatAutocompleteModule,
-    MatFormFieldModule,
-    MatInputModule,
+    AutocompleteLibModule,
     RouterModule.forRoot([
       { path: '', component: HomeComponent, pathMatch: 'full' },
       { path: 'xrouter-snodes', component: ServiceNodeListComponent },
