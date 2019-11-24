@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
 namespace Xrouter.Service.Explorer
 {
@@ -32,6 +33,12 @@ namespace Xrouter.Service.Explorer
         {
             var rpcSettings = Configuration.GetSection("CoinConfig").Get<CoinRpcConfig>();
             
+            services.AddControllersWithViews();
+            // In production, the Angular files will be served from this directory
+            services.AddSpaStaticFiles(configuration =>
+            {
+                configuration.RootPath = "ClientApp/dist";
+            });
             services.AddCors();
 
             services.Configure<CookiePolicyOptions>(options =>
@@ -41,7 +48,7 @@ namespace Xrouter.Service.Explorer
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddMvc(option => option.EnableEndpointRouting = false).AddNewtonsoftJson().SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
             
             services.AddTransient<ICoinService, CoinService>();
             services.AddTransient<IBitcoinService, BitcoinService>();
@@ -60,7 +67,7 @@ namespace Xrouter.Service.Explorer
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
@@ -79,52 +86,34 @@ namespace Xrouter.Service.Explorer
             app.UseCors(builder => builder
                 .AllowAnyOrigin()
                 .AllowAnyMethod()
-                .AllowAnyHeader()
-                .AllowCredentials());
+                .AllowAnyHeader());
 
-            app.UseMvc(routes =>
+            if (!env.IsDevelopment())
             {
-                routes.MapRoute(
+                app.UseSpaStaticFiles();
+            }
+
+            app.UseRouting();
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllerRoute(
                     name: "default",
-                    template: "{controller}/{action=Index}/{id?}");
+                    pattern: "{controller}/{action=Index}/{id?}");
             });
 
-            app.Use(async (context, next) => {
-                var request = context.Request;
-                if (request.Path != "/")
-                {
-                    context.Response.Redirect("/" + request.Path);
-                }
-                else
-                {
-                    await next.Invoke();
-                }
-            });
-
-            /*app.UseSpa(spa =>
+            app.UseSpa(spa =>
             {
-                spa.Options.DefaultPage = "/wwwroot/index.html";
-                spa.Options.SourcePath = "src";
+                // To learn more about options for serving an Angular SPA from ASP.NET Core,
+                // see https://go.microsoft.com/fwlink/?linkid=864501
 
-                /*
-                // If you want to enable server-side rendering (SSR),
-                // [1] In AngularSpa.csproj, change the <BuildServerSideRenderer> property
-                //     value to 'true', so that the SSR bundle is built during publish
-                // [2] Uncomment this code block
-                spa.UseSpaPrerendering(options =>
-                {
-                    options.BootModulePath = $"{spa.Options.SourcePath}/dist-server/main.bundle.js";
-                    options.BootModuleBuilder = env.IsDevelopment() ? new AngularCliBuilder(npmScript: "build:ssr") : null;
-                    options.ExcludeUrls = new[] { "/sockjs-node" };
-                });
-                
+                spa.Options.SourcePath = "ClientApp";
 
                 if (env.IsDevelopment())
                 {
-                    spa.UseAngularCliServer(npmScript: "ng serve");
+                    spa.UseAngularCliServer(npmScript: "start");
                 }
-
-            });*/
+            }); 
 
         }
     }

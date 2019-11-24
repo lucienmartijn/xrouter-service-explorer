@@ -1,0 +1,117 @@
+<div *ngIf="loading else loaded">
+  Loading page...
+</div>
+
+<ng-template #loaded>
+    <h1>XCloud Service</h1>
+    <h2>{{serviceName}}</h2>
+    <table class="table">
+      <tbody>
+      <tr>
+        <td>Fee</td>
+        <td>{{result.service.fee}} BLOCK</td>
+      <tr>
+          <td>Parameter Types</td>
+          <td>{{result.service.parameters}}</td>
+      </tr>
+      <tr>
+        <td>Description</td>
+        <td>{{result.service.helpDescription}}</td>
+      </tr>
+      <tr>
+          <td>Usage Instructions Blocknet CLI</td>
+          <td>xrService {{serviceName}} [{{result.service.parameters}}]</td>
+      </tr>
+      </tbody>
+    </table>
+
+    <ngb-tabset>     
+        <ngb-tab title="Try it out">
+            <ng-template ngbTabContent>
+                <h3>Try it out</h3>
+                <div class="row">
+                  <div class="col-3">
+                    <h4>Request</h4>
+                    <form (ngSubmit)="onSubmit()" #serviceForm="ngForm">
+                      <div class="form-group" *ngFor="let p of result.service.parametersList; let i = index">
+                        <label for="param-{{i}}">Param-{{i}} [{{p}}] </label>
+                        <input type="text" class="form-control" id="param-{{i}}" [(ngModel)]="parametervalues[i]" name="param-{{i}}">
+                      </div>
+                      <br>
+                      <button type="submit" class="btn btn-outline-primary">Submit</button>
+                    </form> 
+                  </div>
+                  <div class="col-9">
+                    <h4>Response</h4>
+                      <pre>
+                        <code>
+                          <div *ngIf="resultLoading else resultLoaded">
+                            Executing...
+                          </div>
+                          <ng-template #resultLoaded>
+                            {{ serviceResult | json }}
+                          </ng-template>
+                        </code>
+                      </pre>
+                  </div>
+                </div>
+          
+            </ng-template>
+          </ngb-tab>
+          <ngb-tab title="Service Node Info">
+              <ng-template ngbTabContent>
+                  <h3>Offered By</h3>
+                  <table class="table">
+                    <tbody>
+                      <tr>
+                        <td>NodePubKey</td>
+                        <td><a [routerLink]="['/xrouter-snodes', result.node.nodePubKey]">{{result.node.nodePubKey}}</a></td>
+                      </tr>
+                      <tr>
+                        <td>Score</td>
+                        <td>{{result.node.score}}</td>
+                      </tr>
+                      <tr>
+                        <td>Banned</td>
+                        <td>{{result.node.banned}}</td>
+                      </tr>
+                      <tr>
+                        <td>Default Fee</td>
+                        <td>{{result.node.feeDefault}} BLOCK</td>
+                      </tr>
+                  
+                    </tbody>
+                  </table>
+              </ng-template>
+            </ngb-tab>
+            <ngb-tab title="Configuration">
+                <ng-template ngbTabContent>
+                  <h3>Configuration {{serviceName}}.conf</h3>
+                  <pre>
+                    <code>{{result.service.config}}</code>
+                  </pre>
+                </ng-template>
+              </ngb-tab>
+          </ngb-tabset> 
+          
+    
+    
+    
+    <!-- <h3>Other Service Nodes that offer this service</h3>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Address</th>
+          <th>Score</th>
+          <th>Banned</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let s of result.otherNodes">
+          <td><a [routerLink]="['/xrouter-snodes', s.nodePubKey]">{{s.nodePubKey}}</a></td>
+          <td>{{s.score}}</td>
+          <td>{{s.banned}}</td>
+        </tr>
+      </tbody>
+    </table>   -->
+</ng-template>  

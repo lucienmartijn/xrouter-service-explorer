@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-using AutoMapper;
 using BitcoinLib.ExceptionHandling.Rpc;
 using BitcoinLib.RPC.RequestResponse;
 using BitcoinLib.Services.Coins.Base;
@@ -166,23 +165,26 @@ namespace blocknet_xrouter.Controllers
                         .Split(new string[] { "\n", "\r\n" }, StringSplitOptions.RemoveEmptyEntries)
                         .Select(value => value.Split('=')).ToList();
 
-                int i = 0;
-                foreach (var config in listConfig)
+                if(listConfig.Any(lc => lc[0] == "help"))
                 {
-                    if (config[0] == "help")
-                        break;
-                    i++;
-                }
-                //FIXME: i out of bounds when there is no help key in config. Check for help key
-                help = listConfig[i][1];
-                if(i < listConfig.Count())
-                {
-                    foreach (var config in listConfig.Skip(i))
+                    int i = 0;
+                    foreach (var config in listConfig)
                     {
-                        help += '\n' + config[0];
+                        if (config[0] == "help")
+                            break;
+                        i++;
                     }
+                    //FIXME: i out of bounds when there is no help key in config. Check for help key
+                    help = listConfig[i][1];
+                    if(i < listConfig.Count())
+                    {
+                        foreach (var config in listConfig.Skip(i))
+                        {
+                            help += '\n' + config[0];
+                        }
+                    }
+                    xcloudConfig = serviceNodeConfig.Plugins[serviceName];
                 }
-                xcloudConfig = serviceNodeConfig.Plugins[serviceName];
             }
 
             //TODO: Add AutoMapper to replace this.     
@@ -415,7 +417,7 @@ namespace blocknet_xrouter.Controllers
         }
 
         [HttpGet("Xrouter/[action]")]
-        public IActionResult GetBlocks([FromQuery(Name = "blockchain")]string blockchain, [FromQuery(Name = "block_hashes")] string block_hashes, int node_count = 1){
+        public IActionResult GetBlocks(string blockchain, [FromQuery(Name = "block_hashes")] string block_hashes, int node_count = 1){
             GetBlocksResponse response;
 
             try
@@ -441,7 +443,7 @@ namespace blocknet_xrouter.Controllers
         }
 
         [HttpGet("Xrouter/[action]")]
-        public IActionResult GetTransaction(string blockchain, string txid, int node_count = 1){
+        public IActionResult GetTransaction([FromQuery(Name = "blockchain")]string blockchain, string txid, int node_count = 1){
             GetTransactionResponse response;
             try
             {
@@ -579,6 +581,12 @@ namespace blocknet_xrouter.Controllers
             return Ok(this._blocknetService.xrService(request.Service, request.Parameters));
         }
         #endregion
+
+        [HttpGet("Xrouter/[action]")]
+        public IActionResult GetServiceNodeCount()
+        {
+            return Ok(this._blocknetService.serviceNodeList().Count());
+        }
 
         [HttpGet("Xrouter/[action]")]
         public IActionResult GetServiceNodeList(ServiceNodeQueryViewModel filterViewModel)

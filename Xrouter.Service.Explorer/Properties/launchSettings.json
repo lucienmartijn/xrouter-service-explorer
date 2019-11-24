@@ -8,34 +8,13 @@
         }
     },
     "profiles": {
-        "Development": {
+        "IIS Express": {
             "commandName": "IISExpress",
             "launchBrowser": true,
             "environmentVariables": {
-                "ASPNETCORE_ENVIRONMENT": "Development"
+              "ASPNETCORE_ENVIRONMENT": "Development"
             }
-        },
-        "QA": {
-            "commandName": "IISExpress",
-            "launchBrowser": true,
-            "environmentVariables": {
-                "ASPNETCORE_ENVIRONMENT": "QA"
-            }
-        },
-        "Staging": {
-            "commandName": "IISExpress",
-            "launchBrowser": true,
-            "environmentVariables": {
-                "ASPNETCORE_ENVIRONMENT": "Staging"
-            }
-        },
-        "Production": {
-            "commandName": "IISExpress",
-            "launchBrowser": true,
-            "environmentVariables": {
-                "ASPNETCORE_ENVIRONMENT": "Production"
-            }
-        },
+          },
         "Xrouter.Service.Explorer": {
             "commandName": "Project",
             "launchBrowser": true,

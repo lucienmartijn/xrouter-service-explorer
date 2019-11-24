@@ -7,9 +7,11 @@
             "type": "process",
             "args": [
                 "build",
-                "${workspaceFolder}/Xrouter.Service.Explorer.csproj"
+                "${workspaceFolder}/Xrouter.Service.Explorer.csproj",
+                "/property:GenerateFullPaths=true",
+                "/consoleloggerparameters:NoSummary"
             ],
-            "problemMatcher": "$tsc"
+            "problemMatcher": "$msCompile"
         },
         {
             "label": "publish",
@@ -17,9 +19,11 @@
             "type": "process",
             "args": [
                 "publish",
-                "${workspaceFolder}/Xrouter.Service.Explorer.csproj"
+                "${workspaceFolder}/Xrouter.Service.Explorer.csproj",
+                "/property:GenerateFullPaths=true",
+                "/consoleloggerparameters:NoSummary"
             ],
-            "problemMatcher": "$tsc"
+            "problemMatcher": "$msCompile"
         },
         {
             "label": "watch",
@@ -28,9 +32,11 @@
             "args": [
                 "watch",
                 "run",
-                "${workspaceFolder}/Xrouter.Service.Explorer.csproj"
+                "${workspaceFolder}/Xrouter.Service.Explorer.csproj",
+                "/property:GenerateFullPaths=true",
+                "/consoleloggerparameters:NoSummary"
             ],
-            "problemMatcher": "$tsc"
+            "problemMatcher": "$msCompile"
         }
     ]
 }
