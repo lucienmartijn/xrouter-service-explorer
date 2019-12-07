@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { NgModule, APP_INITIALIZER  } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
@@ -29,8 +29,14 @@ import { NavigatorService } from './shared/services/navigator.service.';
 import { ErrorComponent } from './error/error.component';
 import { RpcConsoleComponent } from './rpc-console/rpc-console.component';
 import { ResponseTimeService } from './shared/services/responsetime.service';
-import {SearchService} from './shared/services/search.service';
+import { SearchService } from './shared/services/search.service';
+import { ConfigurationService } from './shared/services/configuration.service';
 
+const appInitializerFn = (appConfig: ConfigurationService) => {
+  return () => {
+    return appConfig.loadConfig();
+  };
+}
 @NgModule({
   declarations: [
     AppComponent,
@@ -89,8 +95,15 @@ import {SearchService} from './shared/services/search.service';
     //   useClass: HttpErrorInterceptor,
     //   multi: true
     // },
+    ConfigurationService, 
+    {
+      provide: APP_INITIALIZER,
+      useFactory: appInitializerFn,
+      multi: true,
+      deps: [ConfigurationService]
+    },
     interceptorProviders
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {}

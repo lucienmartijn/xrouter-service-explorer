@@ -1,0 +1,8 @@
+
+docker run -d --name=snode -v=/c/Users/lucie/crypto/block/config:/opt/blockchain/config  -v=/c/Users/lucie/crypto/block/data:/opt/blockchain/data blocknetdx/servicenode:3.14.1 blocknetdxd -daemon=0 -rpcuser=blocknetdxrpc -rpcpassword=9Xfe3wx99UTXtJgLiW6WBtroMLiAkj2WXvvL8yRStQ9P
+
+
+docker build -t xrouter.service.explorer:latest .
+docker run -d -p 8090:80 --name xrouter.explorer xrouter.service.explorer
+
+docker exec -it <container> bash

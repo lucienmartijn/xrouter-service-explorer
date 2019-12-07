@@ -66,7 +66,7 @@ export class ViewXrServiceComponent implements OnInit, OnDestroy {
 
   onSubmit() {  
     this.resultLoading = true; 
-    this.xrouterApiService.Service(new ServiceRequest('xrs::' + this.serviceName, this.parametervalues, 1))
+    this.xrouterApiService.Service(new ServiceRequest(this.serviceName, this.parametervalues, 1))
     .pipe(
       finalize(() => {
         this.resultLoading = false;

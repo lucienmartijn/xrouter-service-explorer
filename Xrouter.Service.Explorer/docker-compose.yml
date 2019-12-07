@@ -1,0 +1,27 @@
+version: '3'
+services:
+  web:
+    build: .
+    ports:
+     - "8090:80"
+    networks:
+        static-network:
+            ipv4_address: 10.5.0.5
+    
+  snode:
+    build: ./Docker/snode
+    volumes: 
+        - /c/Users/lucie/crypto/block/config:/opt/blockchain/config
+        - /c/Users/lucie/crypto/block/data:/opt/blockchain/data
+    command: blocknetdxd -daemon=0 -rpcuser=blocknetdxrpc -rpcpassword=9Xfe3wx99UTXtJgLiW6WBtroMLiAkj2WXvvL8yRStQ9P
+    networks:
+        static-network:
+            ipv4_address: 10.5.0.6
+
+networks:
+    static-network:
+        ipam:
+            driver: default
+            config:
+                - subnet: 10.5.0.0/16
+                

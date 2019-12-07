@@ -4,6 +4,7 @@ import { HttpClient , HttpParams} from '@angular/common/http';
 import { BaseService } from './base.service';
 import { isNullOrUndefined } from 'util';
 import { SessionService } from './session.service';
+import { ConfigurationService } from './configuration.service';
 
 
 @Injectable()
@@ -11,9 +12,9 @@ export class XrouterApiService extends BaseService{
   private readonly apiEndpoint = 'blocknet/xrouter';
   private baseEndpoint = ''; // http://localhost
 
-  constructor(private http:HttpClient, private sessionService:SessionService) {
+  constructor(private http:HttpClient, private configurationService:ConfigurationService) {
     super();
-    this.baseEndpoint = sessionService.getApiURI();
+    this.baseEndpoint = configurationService.getWebApiUrl;
    }
 
   GetNetworkServices(){
