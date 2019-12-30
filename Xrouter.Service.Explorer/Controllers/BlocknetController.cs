@@ -658,7 +658,9 @@ namespace blocknet_xrouter.Controllers
             var allServices = services.Union(spvWallets).ToList();
 
             if (!String.IsNullOrEmpty(searchString))
-                allServices = allServices.Where(s => s.Name.Contains(searchString)).ToList();
+                allServices = allServices.Where(s => s.Name
+                    .IndexOf(searchString, StringComparison.OrdinalIgnoreCase) != -1)
+                    .ToList();
             
             var viewModel = new NetworkServicesResponseViewModel
             {

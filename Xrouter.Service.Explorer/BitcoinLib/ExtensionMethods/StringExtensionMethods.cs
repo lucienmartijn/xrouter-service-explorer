@@ -15,5 +15,10 @@ namespace BitcoinLib.ExtensionMethods
                 .Where(c => !Char.IsWhiteSpace(c))
                 .ToArray());
         }
+
+        public static bool Contains(this string source, string toCheck, StringComparison comp)
+        {
+            return source?.IndexOf(toCheck, comp) >= 0;
+        }
     }
 }

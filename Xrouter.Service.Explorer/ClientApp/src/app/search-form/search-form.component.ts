@@ -23,7 +23,7 @@ import { SessionService } from '../shared/services/session.service';
 })
 export class SearchFormComponent extends BaseService implements OnInit {
   private readonly apiEndpoint = 'blocknet/xrouter';
-  private baseEndpoint = ''; // http://localhost
+  private baseEndpoint = 'api/'; // http://localhost
 
   constructor(
     private http: HttpClient,
@@ -32,7 +32,6 @@ export class SearchFormComponent extends BaseService implements OnInit {
     private sessionService:SessionService
   ) {
     super();
-    this.baseEndpoint = sessionService.getApiURI();
   }
 
   keyword = 'name';
@@ -59,7 +58,6 @@ export class SearchFormComponent extends BaseService implements OnInit {
     this.http.get(this.baseEndpoint + this.apiEndpoint + "/?searchString=" + val).subscribe(
       data => {
         this.services = data;
-            
       }
     );
     // fetch remote data from here

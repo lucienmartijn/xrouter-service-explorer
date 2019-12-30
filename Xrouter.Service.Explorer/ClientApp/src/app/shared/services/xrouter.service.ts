@@ -10,11 +10,10 @@ import { ConfigurationService } from './configuration.service';
 @Injectable()
 export class XrouterApiService extends BaseService{
   private readonly apiEndpoint = 'blocknet/xrouter';
-  private baseEndpoint = ''; // http://localhost
+  private baseEndpoint = '/api/';
 
   constructor(private http:HttpClient, private configurationService:ConfigurationService) {
     super();
-    this.baseEndpoint = configurationService.getWebApiUrl;
    }
 
   GetNetworkServices(){

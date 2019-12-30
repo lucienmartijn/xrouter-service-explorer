@@ -5,9 +5,6 @@ import { Router } from '@angular/router';
 
 @Injectable()
 export class NavigatorService{
-  private readonly apiEndpoint = 'blocknet/xrouter';
-  private baseEndpoint = ''; // http://localhost
-
   constructor(private router: Router) {}
 
   go(path: string) {

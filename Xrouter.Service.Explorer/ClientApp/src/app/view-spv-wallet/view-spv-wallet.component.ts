@@ -20,6 +20,7 @@ export class ViewSpvWalletComponent implements OnInit, OnDestroy {
   navigationSubscription;
   loading:boolean;
   spvWalletName:string;
+  shortSpvWalletName:string;
   nodePubKey:string;
   nodeCount:number;
   result:any;
@@ -44,6 +45,7 @@ export class ViewSpvWalletComponent implements OnInit, OnDestroy {
     { 
       route.params.subscribe(p => {
         this.spvWalletName = p['name'];
+        // this.shortSpvWalletName = this.shortSpvWalletName.replace("xr::", "");
         this.nodePubKey = p['nodePubKey'];
         if (isNullOrUndefined(this.spvWalletName)) {
           router.navigate(['']);

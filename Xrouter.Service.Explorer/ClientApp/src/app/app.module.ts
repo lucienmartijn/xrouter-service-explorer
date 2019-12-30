@@ -31,6 +31,7 @@ import { RpcConsoleComponent } from './rpc-console/rpc-console.component';
 import { ResponseTimeService } from './shared/services/responsetime.service';
 import { SearchService } from './shared/services/search.service';
 import { ConfigurationService } from './shared/services/configuration.service';
+import { FooterComponent } from './footer/footer.component';
 
 const appInitializerFn = (appConfig: ConfigurationService) => {
   return () => {
@@ -42,6 +43,7 @@ const appInitializerFn = (appConfig: ConfigurationService) => {
     AppComponent,
     NavMenuComponent,
     HomeComponent,
+    FooterComponent,
     PaginationComponent,
     ServiceNodeListComponent,
     ServiceListComponent,
