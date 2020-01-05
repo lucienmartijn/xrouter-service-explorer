@@ -5,7 +5,7 @@ FROM ubuntu:bionic
 ARG cores=1
 ENV ecores=$cores
 
-RUN apt update \
+RUN apt -o Acquire::Check-Valid-Until=false update \
   && apt install -y --no-install-recommends \
      software-properties-common \
      ca-certificates \

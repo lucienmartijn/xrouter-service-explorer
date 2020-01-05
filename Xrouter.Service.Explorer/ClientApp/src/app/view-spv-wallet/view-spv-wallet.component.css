@@ -8,5 +8,12 @@ pre > code{
   display: block;
   padding: 1rem;
   word-wrap: break-word;
-  white-space: pre-line;
+  /* white-space: pre-line; */
+}
+
+.ellipsis{
+  max-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }

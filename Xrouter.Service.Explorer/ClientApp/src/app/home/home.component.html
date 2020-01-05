@@ -1,36 +1,29 @@
-<!-- <h1>Hello, world!</h1>
-<p>Welcome to your new single-page application, built with:</p>
-<ul>
-  <li><a href='https://get.asp.net/'>ASP.NET Core</a> and <a href='https://msdn.microsoft.com/en-us/library/67ef8sbd.aspx'>C#</a> for cross-platform server-side code</li>
-  <li><a href='https://angular.io/'>Angular</a> and <a href='http://www.typescriptlang.org/'>TypeScript</a> for client-side code</li>
-  <li><a href='http://getbootstrap.com/'>Bootstrap</a> for layout and styling</li>
-</ul>
-<p>To help you get started, we've also set up:</p> -->
 <h1>XRouter Service Explorer</h1>
-<div class="card-deck mb-3 text-center">
-    <div class="card mb-4 shadow-sm">
-      <div class="card-header">
-        <h4 class="my-0 font-weight-normal">Service Node Count</h4>
+<div class="container">
+  <div class="card-deck mb-3 text-center">
+      <div class="card mb-4 shadow-sm">
+        <div class="card-header">
+          <h4 class="my-0 font-weight-normal">Service Nodes</h4>
+        </div>
+        <div class="card-body">
+          {{ networkServiceCount }}
+        </div>
       </div>
-      <div class="card-body">
-        {{ networkServiceCount }}
+      <div class="card mb-4 shadow-sm">
+        <div class="card-header">
+          <h4 class="my-0 font-weight-normal">XCloud Services</h4>
+        </div>
+        <div class="card-body">
+            {{ xCloudServices?.totalItems }}
+        </div>
+      </div>
+      <div class="card mb-4 shadow-sm">
+        <div class="card-header">
+          <h4 class="my-0 font-weight-normal">SPV Wallets</h4>
+        </div>
+        <div class="card-body">
+          {{ spvWallets?.totalItems }}
+        </div>
       </div>
     </div>
-    <div class="card mb-4 shadow-sm">
-      <div class="card-header">
-        <h4 class="my-0 font-weight-normal">XCloud Service Count</h4>
-      </div>
-      <div class="card-body">
-          {{ xCloudServices?.totalItems }}
-      </div>
-    </div>
-    <div class="card mb-4 shadow-sm">
-      <div class="card-header">
-        <h4 class="my-0 font-weight-normal">SPV Wallet Count</h4>
-      </div>
-      <div class="card-body">
-        {{ spvWallets?.totalItems }}
-      </div>
-    </div>
-  </div>
-  <!-- <app-footer></app-footer> -->
+</div>

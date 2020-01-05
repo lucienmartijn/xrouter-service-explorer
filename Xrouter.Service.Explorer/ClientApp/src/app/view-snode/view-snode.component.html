@@ -1,5 +1,5 @@
 <div *ngIf="loading else loaded">
-    Loading page...
+    Fetching Data...
   </div>
 
 <ng-template #loaded>
@@ -54,14 +54,10 @@
           </ngb-tab>
         <ngb-tab title="Spv Wallets">
             <ng-template ngbTabContent>
+              <h3>Spv Wallet</h3>  
                 <table class="table">
-                    <thead>
-                        <tr>
-                            <th>Spv Wallet</th>
-                        </tr>
-                    </thead>
                     <tbody>
-                      <tr *ngFor="let s of result?.spvWallets | paginate: config">
+                      <tr *ngFor="let s of result?.spvWallets">
                         <td><a [routerLink]="['/spv-wallets', 'xr::' + s, nodePubKey]">{{s}}</a></td>
                       </tr>
                     </tbody>
@@ -84,12 +80,12 @@
                             </tr>
                         </thead>
                         <tbody>
-                          <tr *ngFor="let s of result?.services | paginate: config">
+                          <tr *ngFor="let s of result?.services">
                             <td><a [routerLink]="['/xcloud-services', 'xrs::' + s]">{{s}}</a></td>
                           </tr>
                         </tbody>
                     </table>
-                    <pagination-controls (pageChange)="pageChanged($event)"></pagination-controls>
+                    <ngb-pagination [collectionSize]="serviceNodes?.totalItems" [pageSize]="query.pageSize" [(page)]="query.page" (pageChange)="pageChange($event)"></ngb-pagination>
                   </ng-template>  
               </ng-template>
             

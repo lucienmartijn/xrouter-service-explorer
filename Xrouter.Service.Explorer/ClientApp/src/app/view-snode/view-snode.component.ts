@@ -12,14 +12,20 @@ import { Subject } from 'rxjs';
   styleUrls: ['./view-snode.component.css']
 })
 export class ViewSnodeComponent implements OnInit, OnDestroy {
+  private readonly PAGE_SIZE = 6; 
+
   protected ngUnsubscribe: Subject<void> = new Subject<void>();
   loading:boolean;
   config:any;
   nodePubKey:string;
   service:string;
-  selectedWalletName:string;
-  selectedWallet:any;
+  xCloudServices:any;
   result:any;
+
+  query:any = {
+    page: 1,
+    pageSize: this.PAGE_SIZE,
+  };
 
   constructor(
     private xrouterApiService:XrouterApiService,
@@ -44,14 +50,6 @@ export class ViewSnodeComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(result => {
         this.result = result;
-        this.selectedWalletName = this.result.spvConfigs[0].spvWallet;
-        this.onWalletChange();
-
-        this.config = {
-          itemsPerPage: 10,
-          currentPage: 1,
-          totalItems: this.result.services.length
-        };
         this.loading = false;
       },
       error => {
@@ -66,12 +64,35 @@ export class ViewSnodeComponent implements OnInit, OnDestroy {
     this.ngUnsubscribe.complete();
   }
 
-  onWalletChange(){
-    this.selectedWallet = this.result.spvConfigs.find(c => c.spvWallet === this.selectedWalletName);
+  private populateXCloudServices(){
+    this.xrouterApiService.FilterXCloudServiceServiceNode(this.query)
+      .subscribe(result => {        
+        this.xCloudServices = result;
+      });
   }
 
-  pageChanged(event){
-    this.config.currentPage = event;
+  ngOnChanges(){
+    this.initializeQuery();
+	}
+
+  onFilterChange() {
+    this.query.page = 1; 
+    this.populateXCloudServices();
+  }
+
+  private initializeQuery(){}
+
+  resetFilter() {
+    this.query = {
+      page: 1,
+      pageSize: this.PAGE_SIZE,
+    };
+    this.populateXCloudServices();
+  }
+
+  onPageChange(page) {
+    this.query.page = page;
+    this.populateXCloudServices();
   }
 
 }

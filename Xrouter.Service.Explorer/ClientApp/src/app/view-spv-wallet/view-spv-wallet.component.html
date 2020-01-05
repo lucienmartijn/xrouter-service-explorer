@@ -1,5 +1,5 @@
 <div *ngIf="loading else loaded">
-    Loading page...
+  Fetching data...
   </div>
 
 <ng-template #loaded>
@@ -19,7 +19,7 @@
           <ng-template ngbTabContent>
               <h3>Try out a {{ spvWalletName }} command</h3>
               <div class="row">
-                <div class="col-3">
+                <div class="col-md-3 col-sm-12">
                   <h4>Request</h4>
                   <form (ngSubmit)="onSubmit()" #spvWalletForm="ngForm">
                     <label for="spvCommand">Spv Command</label>
@@ -80,14 +80,14 @@
                     <button type="submit" class="btn btn-outline-primary">Submit</button>
                   </form>
                 </div>
-                <div class="col-9">
+                <div class="col-md-9 col-sm-12">
                   <h4>Response</h4>
                   <pre>
                     <code>
                       <div *ngIf="resultLoading else resultLoaded">
                         Executing...
                       </div>
-                    <ng-template #resultLoaded> {{ spvWalletCommandResult | json }}</ng-template>
+                    <ng-template #resultLoaded> {{ spvWalletCommandResult }}</ng-template>
                     </code>                    
                   </pre>
 
@@ -98,78 +98,81 @@
         <ngb-tab title="Service Node Info">
           <ng-template ngbTabContent>
               <h3>Offered By</h3>
-              <table class="table">
-                <tbody>
-                  <tr>
-                    <td>NodePubKey</td>
-                    <td><a [routerLink]="['/xrouter-snodes', result.node.nodePubKey]">{{result.node.nodePubKey}}</a></td>
-                  </tr>
-                  <tr>
-                    <td>Score</td>
-                    <td>{{result.node.score}}</td>
-                  </tr>
-                  <tr>
-                    <td>Banned</td>
-                    <td>{{result.node.banned}}</td>
-                  </tr>
-                  <tr>
-                    <td>Default Fee</td>
-                    <td>{{result.node.feeDefault}} BLOCK</td>
-                  </tr>
-              
-                </tbody>
-              </table>
+              <div class="table-responsive">
+                <table class="table">
+                  <tbody>
+                    <tr>
+                      <td>NodePubKey</td>
+                      <td class="ellipsis"><a [routerLink]="['/xrouter-snodes', result.node.nodePubKey]">{{result.node.nodePubKey}}</a></td>
+                    </tr>
+                    <tr>
+                      <td>Score</td>
+                      <td>{{result.node.score}}</td>
+                    </tr>
+                    <tr>
+                      <td>Banned</td>
+                      <td>{{result.node.banned}}</td>
+                    </tr>
+                    <tr>
+                      <td>Default Fee</td>
+                      <td>{{result.node.feeDefault}} BLOCK</td>
+                    </tr>
+                
+                  </tbody>
+                </table>
+              </div>
           </ng-template>
         </ngb-tab>
         <ngb-tab title="Commands">
             <ng-template ngbTabContent>
                 <h3>Commands</h3>
-                <table class="table">
-                  <thead>
-                      <tr>
-                          <th>Command</th>
-                          <th>Fee (BLOCK)</th>
-                          <th>Request Limit</th>
-                          <th>Payment Address</th>
-                          <th>Disabled</th>
-                          <th>Try it out</th>
-                      </tr>
-                  </thead>
-                  <tbody>
-                      <tr *ngFor="let c of result.spvConfig.commands">
-                          <td>{{c.command}}</td>
-                          <td>{{c.fee}}</td>
-                          <td>{{c.requestLimit}}</td>
-                          <td>{{c.paymentAddress}}</td>
-                          <td>{{c.disabled}}</td>
-                          <td>  
-                            <button class="btn btn-outline-primary" (click)="onSelectTryItOut(c.command)">Try it out</button>
-                          </td>
-                      </tr>
-                  </tbody>
-                </table>
+                <div class="table-responsive">
+                  <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Command</th>
+                            <th>Fee (BLOCK)</th>
+                            <th>Request Limit</th>
+                            <th>Payment Address</th>
+                            <th>Try it out</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let c of result.spvConfig.commands">
+                            <td class="ellipsis">{{c.command}}</td>
+                            <td>{{c.fee}}</td>
+                            <td>{{c.requestLimit}}</td>
+                            <td class="ellipsis">{{c.paymentAddress}}</td>
+                            <td>  
+                              <button class="btn btn-outline-primary" (click)="onSelectTryItOut(c.command)">Try me!</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                  </table>
+                </div>
             </ng-template>
           </ngb-tab> 
       <ngb-tab title="Offered by others">
         <ng-template ngbTabContent>
             <h3>Other Service Nodes that offer this service</h3>
-            <table class="table">
-              <thead>
-                <tr>
-                  <th>Address</th>
-                  <th>Score</th>
-                  <th>Banned</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr *ngFor="let s of result.otherNodes">
-                  <td><a [routerLink]="['/xrouter-snodes', s.nodePubKey]">{{s.nodePubKey}}</a></td>
-                  <td>{{s.score}}</td>
-                  <td>{{s.banned}}</td>
-                </tr>
-              </tbody>
-            </table>
-
+            <div class="table-responsive">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Address</th>
+                    <th>Score</th>
+                    <th>Banned</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let s of result.otherNodes">
+                    <td class="ellipsis"><a [routerLink]="['/xrouter-snodes', s.nodePubKey]">{{s.nodePubKey}}</a></td>
+                    <td>{{s.score}}</td>
+                    <td>{{s.banned}}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
         </ng-template>
       </ngb-tab>
     </ngb-tabset>

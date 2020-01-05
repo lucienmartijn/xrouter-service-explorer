@@ -1,5 +1,5 @@
 <div *ngIf="loading else loaded">
-        Loading page...
+        Fetching data...
 </div>
             
 <ng-template #loaded>
@@ -23,39 +23,42 @@
                 </div>
         Count: {{ serviceNodes?.totalItems}}
         <ngb-pagination [collectionSize]="serviceNodes?.totalItems" [pageSize]="query.pageSize" [(page)]="query.page" (pageChange)="onPageChange($event)"></ngb-pagination>
-        <table class="table">
-                <thead>
-                        <tr>
-                        <th *ngFor="let c of columns"> {{ c.title }} </th>
-                        </tr> 
-                </thead>
-                <tbody>
-                        <tr *ngFor="let sn of serviceNodes?.items; let i = index">
-                                <td>{{sn.rank}}</td>
-                                <td><a [routerLink]="[sn.nodePubKey, sn.spvWallets[0]]">{{sn.nodePubKey}}</a></td>
-                                <td>
-                                        <div *ngIf="sn.spvWallets?.length > 0">
-                                                <div class="form-group">
-                                                        <label for="spvWallets"></label>
-                                                        <select id="spvWallets" class="form-control">
-                                                                <option *ngFor="let w of sn.spvWallets" [value]="w">{{ w }} </option>
-                                                        </select>   
-                                                </div> 
-                                        </div>
-                                        
-                                </td>
-                                <td>
-                                        <div *ngIf = "sn.xCloudServices.length > 0">
-                                                <div class="form-group">
-                                                        <label for="xcloudServices"></label>
-                                                        <select id="xcloudServices" class="form-control">
-                                                                <option *ngFor="let s of sn.xCloudServices" [value]="s">{{ s }} </option>
-                                                        </select>   
-                                                </div> 
-                                        </div>
-                                        
-                                </td>
-                        </tr>
-                </tbody>
-        </table>
+        <div class="table-responsive">
+                <table class="table">
+                        <thead>
+                                <tr>
+                                <th *ngFor="let c of columns"> {{ c.title }} </th>
+                                </tr> 
+                        </thead>
+                        <tbody>
+                                <tr *ngFor="let sn of serviceNodes?.items; let i = index">
+                                        <td>{{sn.rank}}</td>
+                                        <td><a [routerLink]="[sn.nodePubKey, sn.spvWallets[0]]">{{sn.nodePubKey}}</a></td>
+                                        <td>
+                                                <div *ngIf="sn.spvWallets?.length > 0">
+                                                        <div class="form-group">
+                                                                <label for="spvWallets"></label>
+                                                                <select id="spvWallets" class="form-control">
+                                                                        <option *ngFor="let w of sn.spvWallets" [value]="w">{{ w }} </option>
+                                                                </select>   
+                                                        </div> 
+                                                </div>
+                                                
+                                        </td>
+                                        <td>
+                                                <div *ngIf = "sn.xCloudServices.length > 0">
+                                                        <div class="form-group">
+                                                                <label for="xcloudServices"></label>
+                                                                <select id="xcloudServices" class="form-control">
+                                                                        <option *ngFor="let s of sn.xCloudServices" [value]="s">{{ s }} </option>
+                                                                </select>   
+                                                        </div> 
+                                                </div>
+                                                
+                                        </td>
+                                </tr>
+                        </tbody>
+                </table>
+        </div>
+        
 </ng-template>

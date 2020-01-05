@@ -84,7 +84,7 @@ export class ViewSpvWalletComponent implements OnInit, OnDestroy {
             this.resultLoading = false;
         }))
         .subscribe(result => {
-          this.spvWalletCommandResult = result;          
+          this.spvWalletCommandResult = JSON.stringify(result, undefined, 2);
         },
         error => {
           this.spvWalletCommandResult = error;

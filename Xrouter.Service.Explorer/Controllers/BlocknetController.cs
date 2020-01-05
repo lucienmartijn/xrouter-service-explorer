@@ -312,6 +312,44 @@ namespace blocknet_xrouter.Controllers
         }
 
         [HttpGet("Xrouter/[action]")]
+        public IActionResult FilterXCloudServiceServiceNode(XCloudServiceQueryViewModel filterViewModel)
+        {
+            var connectedResponse = this._blocknetService.xrConnectedNodes();
+
+            var serviceNode = connectedResponse.Reply.Find(c => c.NodePubKey == filterViewModel.NodePubKey);
+
+            if(serviceNode == null){
+                return StatusCode(StatusCodes.Status500InternalServerError, new JsonRpcXrError
+                    {
+                        Error = "Servicenode info cannot be retrieved." + Environment.NewLine + "Node Public Key: " + filterViewModel.NodePubKey,
+                    });
+            }
+
+            var result = new QueryResult<string>();
+            var query = serviceNode.Services.Select(s => s.Key).AsQueryable();
+            var queryObj = new XCloudQuery
+            {
+                Page = filterViewModel.Page,
+                PageSize = filterViewModel.PageSize,
+            };
+            result.TotalItems = query.Count();
+
+            query = query.ApplyPaging(queryObj);
+
+            result.Items = query.ToList();
+
+            var viewModel = new QueryResultViewModel<string>
+            {
+                Items = result.Items,
+                TotalItems = result.TotalItems
+            };
+
+            return Ok(viewModel);
+
+
+        }
+
+        [HttpGet("Xrouter/[action]")]
         public IActionResult GetBlockCount([FromQuery(Name = "blockchain")]string blockchain,[FromQuery(Name = "node_count")] int node_count = 1){
             if(string.IsNullOrEmpty(blockchain)) 
                 return BadRequest("No blockchain parameter supplied");

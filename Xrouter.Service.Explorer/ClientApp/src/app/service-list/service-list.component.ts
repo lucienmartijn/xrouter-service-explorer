@@ -3,7 +3,7 @@ import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
 @Component({
   selector: 'service-list',
   template: `
-        <table class="table">
+        <table class="table table-striped">
             <thead>
               <tr>
                 <th *ngFor="let c of columns">
