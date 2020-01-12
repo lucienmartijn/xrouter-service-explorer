@@ -20,7 +20,6 @@ import { XrouterApiService } from './shared/services/xrouter.service';
 import { ViewXrServiceComponent } from './view-xr-service/view-xr-service.component';
 import { ViewSnodeComponent } from './view-snode/view-snode.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
-import { SessionService } from './shared/services/session.service';
 import { HttpErrorInterceptor } from './shared/error-handling/http-error.interceptor';
 import { ViewSpvWalletComponent } from './view-spv-wallet/view-spv-wallet.component';
 import { ServiceNodeListComponent } from './service-node-list/service-node-list.component';
@@ -32,6 +31,10 @@ import { ResponseTimeService } from './shared/services/responsetime.service';
 import { SearchService } from './shared/services/search.service';
 import { ConfigurationService } from './shared/services/configuration.service';
 import { FooterComponent } from './footer/footer.component';
+import { SignInComponent } from './sign-in/sign-in.component';
+import { AccountService } from './shared/services/account.service';
+import { checkIfUserIsAuthenticated } from './check-login-intializer';
+
 
 const appInitializerFn = (appConfig: ConfigurationService) => {
   return () => {
@@ -52,7 +55,8 @@ const appInitializerFn = (appConfig: ConfigurationService) => {
     ViewXrServiceComponent,
     ViewSpvWalletComponent,
     ViewSnodeComponent,
-    SearchFormComponent,    
+    SearchFormComponent,  
+    SignInComponent,  
     RpcConsoleComponent,
     ErrorComponent,
     PageNotFoundComponent
@@ -89,7 +93,7 @@ const appInitializerFn = (appConfig: ConfigurationService) => {
   providers: [
     XrouterApiService, 
     SearchService,
-    SessionService,
+    AccountService,
     NavigatorService,
     ResponseTimeService,
     // {
@@ -100,9 +104,9 @@ const appInitializerFn = (appConfig: ConfigurationService) => {
     ConfigurationService, 
     {
       provide: APP_INITIALIZER,
-      useFactory: appInitializerFn,
+      useFactory: checkIfUserIsAuthenticated,
       multi: true,
-      deps: [ConfigurationService]
+      deps: [AccountService]
     },
     interceptorProviders
   ],

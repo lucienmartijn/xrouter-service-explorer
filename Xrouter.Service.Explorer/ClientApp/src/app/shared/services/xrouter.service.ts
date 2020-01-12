@@ -3,7 +3,6 @@ import { map } from 'rxjs/operators';
 import { HttpClient , HttpParams} from '@angular/common/http';
 import { BaseService } from './base.service';
 import { isNullOrUndefined } from 'util';
-import { SessionService } from './session.service';
 import { ConfigurationService } from './configuration.service';
 
 

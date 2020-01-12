@@ -10,7 +10,6 @@ import { XrouterApiService } from '../shared/services/xrouter.service';
 import { debounceTime, tap, switchMap, finalize } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 import { BaseService } from '../shared/services/base.service';
-import { SessionService } from '../shared/services/session.service';
 
 // const NODEPUBKEY_REGEX = '^[0][a-zA-Z0-9]{65}$'; 
 // const ADDRESS_REGEX = '^[B][a-zA-Z0-9]{33}$';
@@ -29,7 +28,6 @@ export class SearchFormComponent extends BaseService implements OnInit {
     private http: HttpClient,
     private xrouterService: XrouterApiService,
     private navigatorService: NavigatorService,
-    private sessionService:SessionService
   ) {
     super();
   }
