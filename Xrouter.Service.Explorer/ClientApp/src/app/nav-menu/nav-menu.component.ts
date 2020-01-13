@@ -50,10 +50,6 @@ export class NavMenuComponent implements OnInit,OnDestroy{
     this.accountService.logout();
   }
 
-  // simulateFailedCall() {
-  //   this.httpClient.get(`${environment.apiUrl}/home/fail`).subscribe();
-  // }
-
   login() {
     this.accountService.login();
   }

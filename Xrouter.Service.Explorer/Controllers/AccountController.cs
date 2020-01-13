@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Xrouter.Service.Explorer.Extensions;
-using Xrouter.Service.Explorer.Models;
+using Xrouter.Service.Explorer.Core.Models;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -105,8 +105,14 @@ namespace Xrouter.Service.Explorer.Controllers
         {
             var claimsPrincial = (ClaimsPrincipal)User;
             var id = claimsPrincial.FindFirst(ClaimTypes.NameIdentifier).Value;
-            var avatarHash = claimsPrincial.FindFirst(DiscordAuthenticationDefaults.AvatarClaimType).Value;
-            return Ok("https://cdn.discordapp.com/avatars/" + id + "/" + avatarHash + ".png");
+            var avatarClaim = claimsPrincial.FindFirst(DiscordAuthenticationDefaults.AvatarClaimType);
+            if (avatarClaim != null)
+            {
+                var avatarHash = avatarClaim.Value;
+                return Ok("https://cdn.discordapp.com/avatars/" + id + "/" + avatarHash + ".png");
+            }
+            
+            return Ok("../../assets/discord-default-logo.png");
         }
 
     }

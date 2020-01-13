@@ -1,0 +1,59 @@
+<div *ngIf="loading else loaded">
+        Fetching data...
+</div>
+            
+<ng-template #loaded>
+        <h2>My Service Nodes</h2>
+        <div class="table-responsive">
+                <table class="table">
+                        <thead>
+                                <tr>
+                                <th *ngFor="let c of columns"> {{ c.title }} </th>
+                                </tr> 
+                        </thead>
+                        <tbody>
+                                <!-- <tr *ngFor="let sn of serviceNodes?.items; let i = index">
+                                        <td>{{sn.rank}}</td>
+                                        <td><a [routerLink]="[sn.nodePubKey, sn.spvWallets[0]]">{{sn.nodePubKey}}</a></td>
+                                        <td>
+                                                <div *ngIf="sn.spvWallets?.length > 0">
+                                                        <div class="form-group">
+                                                                <label for="spvWallets"></label>
+                                                                <select id="spvWallets" class="form-control">
+                                                                        <option *ngFor="let w of sn.spvWallets" [value]="w">{{ w }} </option>
+                                                                </select>   
+                                                        </div> 
+                                                </div>
+                                                
+                                        </td>
+                                        <td>
+                                                <div *ngIf = "sn.xCloudServices.length > 0">
+                                                        <div class="form-group">
+                                                                <label for="xcloudServices"></label>
+                                                                <select id="xcloudServices" class="form-control">
+                                                                        <option *ngFor="let s of sn.xCloudServices" [value]="s">{{ s }} </option>
+                                                                </select>   
+                                                        </div> 
+                                                </div>
+                                                
+                                        </td>
+                                </tr> -->
+                        </tbody>
+                </table>
+        </div>
+
+        <h4>Add New Servicenode</h4>
+        <form (ngSubmit)="onSubmit()" #serviceNodeForm="ngForm">
+                <div class="form-group">
+                        <label for="serviceNodeName">Servicenode Name</label>
+                        <input type="text" class="form-control" id="serviceNodeName" [(ngModel)]="serviceNodeName" name="serviceNodeName">
+                </div>
+                <div class="form-group">
+                        <label for="serviceNodePublicAddress">Servicenode Public Address</label>
+                        <input type="text" class="form-control" id="serviceNodePublicAddress" [(ngModel)]="serviceNodePublicAddress" name="serviceNodePublicAddress">
+                </div>
+                <button type="submit" class="btn btn-primary">Add Servicenode</button>
+        </form> 
+
+        
+</ng-template>

@@ -28,17 +28,16 @@
                   [routerLinkActiveOptions]="{ exact: true }"
                 >
                 <a class="nav-link text-dark" [routerLink]="['/xrouter-snodes']"
-                >Nodes</a
-            >
-                </li>
-                <li class="nav-item" [routerLinkActive]="['link-active']">
-                  <a class="nav-link text-dark" [routerLink]="['/spv-wallets']"
-                    >SPV</a
-                  >
+                >Nodes</a>
                 </li>
                 <li class="nav-item" [routerLinkActive]="['link-active']">
                   <a class="nav-link text-dark" [routerLink]="['/xcloud-services']"
                     >Services</a
+                  >
+                </li>
+                <li class="nav-item" [routerLinkActive]="['link-active']">
+                  <a class="nav-link text-dark" [routerLink]="['/spv-wallets']"
+                    >SPV</a
                   >
                 </li>
               </ul>
@@ -57,12 +56,6 @@
                   </li>
                 </div> 
                 <ng-template #loggedIn>
-                  <!-- <li>
-                    <a class="btn ml-4" style="background-color: #7289DA; color:white;" href="#" (click)="logout()">
-                    <img src="../../assets/discord-logo-white.png" width="30" alt="">
-                    <span class="mb-0 ml-1">Logout</span>
-                  </a>
-                </li> -->
                 <li class="nav-item avatar dropdown">
                   <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink-5" data-toggle="dropdown" aria-haspopup="true"
                     aria-expanded="false">
@@ -70,6 +63,7 @@
                   </a>
                   <div class="dropdown-menu dropdown-menu-right dropdown-secondary" aria-labelledby="navbarDropdownMenuLink-5">
                     <h6 class="dropdown-header">Logged in as {{ userName }}</h6>
+                    <a class="dropdown-item" [routerLink]="['/my-service-nodes']">My Service Nodes</a>
                     <a class="dropdown-item" href="#" (click)="logout()">Logout</a>
                   </div>
                 </li>

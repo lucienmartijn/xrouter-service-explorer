@@ -34,6 +34,8 @@ import { FooterComponent } from './footer/footer.component';
 import { SignInComponent } from './sign-in/sign-in.component';
 import { AccountService } from './shared/services/account.service';
 import { checkIfUserIsAuthenticated } from './check-login-intializer';
+import { MyServiceNodesComponent } from './my-service-nodes/my-service-nodes.component';
+import { MyServiceNodesService } from './shared/services/myservicenodes.service';
 
 
 const appInitializerFn = (appConfig: ConfigurationService) => {
@@ -57,6 +59,7 @@ const appInitializerFn = (appConfig: ConfigurationService) => {
     ViewSnodeComponent,
     SearchFormComponent,  
     SignInComponent,  
+    MyServiceNodesComponent,
     RpcConsoleComponent,
     ErrorComponent,
     PageNotFoundComponent
@@ -81,6 +84,7 @@ const appInitializerFn = (appConfig: ConfigurationService) => {
       { path: 'xcloud-services/:name/:NodePubKey', component: ViewXrServiceComponent, runGuardsAndResolvers: 'always' },
       { path: 'xrouter-snodes/:nodePubKey', component: ViewSnodeComponent},
       { path: 'xrouter-snodes/:nodePubKey/:service', component: ViewSnodeComponent},
+      { path: 'my-service-nodes', component: MyServiceNodesComponent},
       { path: 'rpc-console', component: RpcConsoleComponent},
       { path: 'error', component: ErrorComponent},
       { path: '**', component: PageNotFoundComponent }
@@ -92,6 +96,7 @@ const appInitializerFn = (appConfig: ConfigurationService) => {
   ],
   providers: [
     XrouterApiService, 
+    MyServiceNodesService,
     SearchService,
     AccountService,
     NavigatorService,

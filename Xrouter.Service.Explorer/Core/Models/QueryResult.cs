@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Xrouter.Service.Explorer.Models
+namespace Xrouter.Service.Explorer.Core.Models
 {
     public class QueryResult<T>
     {

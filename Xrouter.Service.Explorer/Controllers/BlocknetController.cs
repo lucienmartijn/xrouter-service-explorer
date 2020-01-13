@@ -15,7 +15,7 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Xrouter.Service.Explorer.Controllers.ViewModels;
 using Xrouter.Service.Explorer.Extensions;
-using Xrouter.Service.Explorer.Models;
+using Xrouter.Service.Explorer.Core.Models;
 
 namespace blocknet_xrouter.Controllers
 {
