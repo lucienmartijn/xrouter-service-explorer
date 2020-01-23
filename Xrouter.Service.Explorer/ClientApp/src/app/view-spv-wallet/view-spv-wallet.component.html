@@ -21,63 +21,136 @@
               <div class="row">
                 <div class="col-md-3 col-sm-12">
                   <h4>Request</h4>
-                  <form (ngSubmit)="onSubmit()" #spvWalletForm="ngForm">
+                  <form (ngSubmit)="onSubmit()" #f="ngForm">
                     <label for="spvCommand">Spv Command</label>
                     <select class="form-control" [(ngModel)]="selectedSpvCommand" name="selectedSpvCommand">
                         <option *ngFor="let c of result.spvConfig.commands" [value]="c.command">{{c.command}}</option>
                     </select>
                     <div [ngSwitch]="selectedSpvCommand">
                       <div *ngSwitchCase="'xrGetBlockCount'">
-                        
                       </div>
                       <div *ngSwitchCase="'xrGetBlockHash'">
+                        <div class="form-group">
                           <label for="blockNumber">Block Number</label>
-                          <input type="number" class="form-control" id="blockNumber" ngModel name="blockNumber">
+                          <input type="number" class="form-control" id="blockNumber" ngModel name="blockNumber" #blockNumber="ngModel" required>
+                        </div>
+                          <div class="form-group">
+                            <div *ngIf="blockNumber.invalid && (blockNumber.dirty || blockNumber.touched)"
+                                    class="alert alert-danger">
+                                    <div *ngIf="blockNumber.errors.required">
+                                            Block Number is required.
+                                    </div>
+                            </div>
+                          </div>
                       </div>
                       <div *ngSwitchCase="'xrGetBlock'">
+                        <div class="form-group">
                           <label for="blockHash">Block Hash</label>
-                          <input type="text" class="form-control" id="blockHash" ngModel name="blockHash">
+                          <input type="text" class="form-control" id="blockHash" ngModel name="blockHash" #blockHash="ngModel" required>
+                        </div>
+                          <div class="form-group">
+                            <div *ngIf="blockHash.invalid && (blockHash.dirty || blockHash.touched)"
+                                    class="alert alert-danger">
+                                    <div *ngIf="blockHash.errors.required">
+                                            Block Hash is required.
+                                    </div>
+                            </div>
+                          </div>
                       </div>
                       <div *ngSwitchCase="'xrGetBlocks'">
                         <h4>Block hash inputs</h4>
                         <button type="button" (click)="addBlockHash()" class="btn btn-primary btn-sm">Add</button> 
                         <hr>
                         <div *ngFor="let bh of blockHashes; let i = index;">
+                          <div class="form-group">
                             <label for="blockHash-{{i}}">Blockhash-{{i}}</label>
-                            <input type="text" class="form-control" id="blockHash-{{i}}" [(ngModel)]="blockHashes[i]" name="blockHash-{{i}}">
-                            <button type="button" class="btn btn-danger btn-sm" (click)="removeBlockHash(i)">Remove</button>
+                            <input type="text" class="form-control" id="blockHash-{{i}}" [(ngModel)]="blockHashes[i]" name="blockHash-{{i}}" #blockHashes="ngModel" required>
+                          </div>
+                          <div class="form-group">
+                            <div *ngIf="blockHashes.invalid && (blockHashes.dirty || blockHashes.touched)"
+                                    class="alert alert-danger">
+                                    <div *ngIf="blockHashes.errors.required">
+                                            Block Hash is required.
+                                    </div>
+                            </div>
+                          </div>
+                          <button type="button" class="btn btn-danger btn-sm" (click)="removeBlockHash(i)">Remove</button>
                         </div>
                         <hr>
                       </div>
                       <div *ngSwitchCase="'xrGetTransaction'">
+                        <div class="form-group">
                           <label for="txid">Txid</label>
-                          <input type="text" class="form-control" id="txid" ngModel name="txid">
+                          <input type="text" class="form-control" id="txid" ngModel name="txid" #txid="ngModel" required>
+                        </div>
+                        <div class="form-group">
+                          <div *ngIf="txid.invalid && (txid.dirty || txid.touched)"
+                                  class="alert alert-danger">
+                                  <div *ngIf="txid.errors.required">
+                                          TxId is required.
+                                  </div>
+                          </div>
+                        </div>
                       </div>
                       <div *ngSwitchCase="'xrGetTransactions'">
                         <h4>TxId inputs</h4>
                         <button type="button" (click)="addTxId()" class="btn btn-primary btn-sm">Add</button> 
                         <hr>
                           <div *ngFor="let txid of txIds; let i = index;">
+                            <div class="form-group">
                               <label for="txid-{{i}}">txid-{{i}}</label>
-                              <input type="text" class="form-control" id="txid-{{i}}" [(ngModel)]="txIds[i]" name="txid-{{i}}">
-                              <button type="button" class="btn btn-danger btn-sm" (click)="removeTxId(i)">Remove</button>
+                              <input type="text" class="form-control" id="txid-{{i}}" [(ngModel)]="txIds[i]" name="txid-{{i}}" #txids="ngModel" required>
+                            </div>
+                            <div class="form-group">
+                              <div *ngIf="txids.invalid && (txids.dirty || txids.touched)"
+                                      class="alert alert-danger">
+                                      <div *ngIf="txids.errors.required">
+                                              TxId is required.
+                                      </div>
+                              </div>
+                            </div>
+                            <button type="button" class="btn btn-danger btn-sm" (click)="removeTxId(i)">Remove</button>
                           </div>
                         <hr>
                       </div>
                       <div *ngSwitchCase="'xrDecodeRawTransaction'">
+                        <div class="form-group">
                           <label for="txHex">Tx Hex</label>
-                          <input type="text" class="form-control" id="txHex" ngModel name="txHex">
+                          <input type="text" class="form-control" id="txHex" ngModel name="txHex" #txHex="ngModel" required>
+                        </div>
+                        <div class="form-group">
+                          <div *ngIf="txHex.invalid && (txHex.dirty || txHex.touched)"
+                                  class="alert alert-danger">
+                                  <div *ngIf="txHex.errors.required">
+                                          Tx Hex is required.
+                                  </div>
+                          </div>
+                        </div>
                       </div>
                       <div *ngSwitchCase="'xrSendTransaction'">
+                        <div class="form-group">
                           <label for="signedTx">Signed Tx</label>
-                          <input type="text" class="form-control" id="signedTx" ngModel name="signedTx">
+                          <input type="text" class="form-control" id="signedTx" ngModel name="signedTx" #signedTx="ngModel" required>
+                        </div>
+                        <div class="form-group">
+                          <div *ngIf="signedTx.invalid && (signedTx.dirty || signedTx.touched)"
+                                  class="alert alert-danger">
+                                  <div *ngIf="signedTx.errors.required">
+                                          Signed Tx is required.
+                                  </div>
+                          </div>
+                        </div>
                       </div>
+                    </div> 
+                    <div class="form-group">
+                      <label for="nodeCount">Node count</label>
+                      <input type="number" class="form-control" id="nodeCount"  [(ngModel)]="nodeCount" name="nodeCount" [customMin]="minNodeCount" #nodecount="ngModel" required>
                     </div>
-              
-                    <label for="nodeCount">Node count</label>
-                    <input type="number" class="form-control" id="nodeCount"  [(ngModel)]="nodeCount" name="nodeCount">
+                    <div *ngIf="nodecount.errors?.customMin" class="alert alert-danger"> 
+                      Minimum node count is {{minNodeCount}}.
+                   </div>   
                     <br>
-                    <button type="submit" class="btn btn-outline-primary">Submit</button>
+                    <button type="submit" class="btn btn-outline-primary" [disabled]="f.form.invalid">Submit</button>
                   </form>
                 </div>
                 <div class="col-md-9 col-sm-12">

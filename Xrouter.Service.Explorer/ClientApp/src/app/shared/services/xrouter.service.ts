@@ -15,6 +15,10 @@ export class XrouterApiService extends BaseService{
     super();
    }
 
+  getAllServices(){
+    return this.http.get(this.baseEndpoint + this.apiEndpoint + '/getAllServices');
+  }
+
   GetNetworkServices(){
     return this.http.get(this.baseEndpoint + this.apiEndpoint + '/getNetworkServices');
   }

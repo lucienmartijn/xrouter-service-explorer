@@ -4,6 +4,7 @@ import { HttpClient , HttpParams} from '@angular/common/http';
 import { BaseService } from './base.service';
 import { isNullOrUndefined } from 'util';
 import { ConfigurationService } from './configuration.service';
+import { MyServiceNode } from '../models/myservicenode.model';
 
 
 @Injectable()
@@ -15,20 +16,24 @@ export class MyServiceNodesService extends BaseService{
     super();
    }
 
-  GetServiceNode(id: number){
-    return this.http.get(this.baseEndpoint + this.apiEndpoint + '/GetServiceNode/?id=' + id);
-  }
+  // GetServiceNode(id: number){
+  //   return this.http.get(this.baseEndpoint + this.apiEndpoint + '/GetServiceNode/?id=' + id);
+  // }
 
   GetServiceNodes(id : string){
-    return this.http.get(this.baseEndpoint + this.apiEndpoint + '/GetServiceNodes/?id=' + id);
+    return this.http.get<MyServiceNode[]>(this.baseEndpoint + this.apiEndpoint + '/GetMyServiceNodes/?id=' + id);
   }
 
   create(servicenode:any){
-    return this.http.post(this.baseEndpoint + this.apiEndpoint, servicenode);
+    return this.http.post<MyServiceNode>(this.baseEndpoint + this.apiEndpoint, servicenode);
   }
 
   delete(id:number){
     return this.http.delete(this.baseEndpoint + this.apiEndpoint + '/'+ id);
+  }
+
+  verifyMessage(address:string, signature:string, message:string){
+    return this.http.get<boolean>(this.baseEndpoint + this.apiEndpoint + '/VerifyMessage/?address=' + address + "&signature="+ signature + "&message=" + message);
   }
 
 

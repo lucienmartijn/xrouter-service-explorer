@@ -20,12 +20,12 @@ export class ServiceNodeListComponent implements OnInit {
   query:any = {
     page: 1,
     pageSize: this.PAGE_SIZE,
-    onlyXWallets: true
+    atleastOneSpvWallet: true
   };
 
   columns:any=[
-    {title: 'Rank', key: 'rank'},
-    {title: 'Node Public Key', key: 'nodePubKey'},
+    {title: 'Node Id', key: 'nodeId'},
+    {title: 'Address', key: 'addr'},
     {title: 'Spv Wallets', key: 'spvWallets'},
     {title: 'XCloud Services', key: 'xCloudServices'},
   ];

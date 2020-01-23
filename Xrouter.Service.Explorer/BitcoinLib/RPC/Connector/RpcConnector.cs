@@ -33,21 +33,25 @@ namespace BitcoinLib.RPC.Connector
 
         public T MakeRequest<T>(RpcMethods rpcMethod, params object[] parameters)
         {
-            var parameterList = new List<object>();
-            foreach (var param in parameters)
+            if(RpcMethods.xrGetTransactions == rpcMethod || RpcMethods.xrGetBlocks == rpcMethod || RpcMethods.xrService == rpcMethod)
             {
-                if(param != null)
+                var parameterList = new List<object>();
+                foreach (var param in parameters)
                 {
-                    if(!param.GetType().IsArray)
-                        parameterList.Add(param);
-                    else
-                        foreach (var p in (IEnumerable) param) 
-                            parameterList.Add(p);
-                        
+                    if(param != null)
+                    {
+                        if(!param.GetType().IsArray)
+                            parameterList.Add(param);
+                        else
+                            foreach (var p in (IEnumerable) param) 
+                                parameterList.Add(p);
+                            
+                    }
                 }
-            }
 
-            parameters = parameterList.ToArray();
+                parameters = parameterList.ToArray();
+            }
+            
 
             var jsonRpcRequest = new JsonRpcRequest(1, rpcMethod.ToString(), parameters);
             var webRequest = (HttpWebRequest) WebRequest.Create(_coinService.Parameters.SelectedDaemonUrl);

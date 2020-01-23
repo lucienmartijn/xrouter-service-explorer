@@ -32,6 +32,18 @@ namespace blocknet_xrouter.Controllers
             return this._blocknetService.GetBlockCount();
         }
 
+        //[HttpGet("[action]")]
+        //public string SignMessage(string address, string message)
+        //{
+        //    return this._blocknetService.SignMessage(address, message);
+        //}
+
+        [HttpGet("[action]")]
+        public bool VerifyMessage(string address, string signature, string message)
+        {
+            return this._blocknetService.VerifyMessage(address, signature, message);
+        }
+
         #region XRouter
         [HttpGet("Xrouter/[action]")]
         public ConnectResponse Connect(string service, int node_count = 1){
@@ -569,6 +581,20 @@ namespace blocknet_xrouter.Controllers
         }
 
         [HttpGet("Xrouter/[action]")]
+        public IActionResult GetAllServices(){
+            var response = this._blocknetService.xrGetNetworkServices();
+            var services = response.Reply.NodeCounts
+                .Select(s => new ServiceViewModel{
+                    Name = s.Key,
+                    NodeCount = s.Value
+                }).ToList();
+
+            return Ok(new NetworkServicesResponseViewModel{
+                Items = services,
+                TotalItems = services.Count
+            });
+        }
+        [HttpGet("Xrouter/[action]")]
         public IActionResult GetNetworkServices(){
             var response = this._blocknetService.xrGetNetworkServices();
             var services = response.Reply.NodeCounts
@@ -634,7 +660,7 @@ namespace blocknet_xrouter.Controllers
             var queryObj = new ServiceNodeQuery
             {
                 Page = filterViewModel.Page,
-                OnlyXWallets = filterViewModel.OnlyXWallets,
+                AtleastOneSpvWallet = filterViewModel.AtleastOneSpvWallet,
                 PageSize = filterViewModel.PageSize,
                 SpvWallet = filterViewModel.SpvWallet,
                 XCloudService = filterViewModel.XCloudService

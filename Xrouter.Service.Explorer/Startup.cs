@@ -89,6 +89,16 @@ namespace Xrouter.Service.Explorer
             {
                 options.ClientId = "663786064569303047";
                 options.ClientSecret = "awXcE0AsfxUWYySUi9VlzvUsq4st-0q2";
+                //options.SaveTokens = true;
+                options.Events = new OAuthEvents
+                {
+                    OnRemoteFailure = (RemoteFailureContext context) =>
+                    {
+                        context.Response.Redirect("/");
+                        context.HandleResponse();
+                        return Task.CompletedTask;
+                    }
+                };
             });
 
 

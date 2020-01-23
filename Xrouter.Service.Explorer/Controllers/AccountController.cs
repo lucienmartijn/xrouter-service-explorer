@@ -72,7 +72,6 @@ namespace Xrouter.Service.Explorer.Controllers
                 await _signInManager.SignInAsync(newUser, isPersistent: false);
                 await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
             }
-
             return Redirect("/");
         }
 
@@ -97,6 +96,15 @@ namespace Xrouter.Service.Explorer.Controllers
             var name = claimsPrincial.FindFirst(ClaimTypes.Name).Value;
             var discriminator = claimsPrincial.FindFirst(DiscordAuthenticationDefaults.DiscriminatorClaimType).Value;
             return Ok(name + "#" + discriminator);
+        }
+
+        [HttpGet("[action]")]
+        [Authorize]
+        public IActionResult Id()
+        {
+            var claimsPrincial = (ClaimsPrincipal)User;
+            var id = claimsPrincial.FindFirst(ClaimTypes.NameIdentifier).Value;
+            return Ok(id);
         }
 
         [HttpGet("[action]")]

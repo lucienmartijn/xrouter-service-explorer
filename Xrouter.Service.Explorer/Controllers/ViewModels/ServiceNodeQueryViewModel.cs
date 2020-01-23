@@ -8,7 +8,7 @@ namespace blocknet_xrouter.Controllers.ViewModels
     {
         public string SpvWallet{ get; set; }
         public string XCloudService{ get; set; }
-        public bool OnlyXWallets { get; set; }
+        public bool AtleastOneSpvWallet { get; set; }
     }
 
 }

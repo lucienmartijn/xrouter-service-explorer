@@ -124,12 +124,26 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _sign_in_sign_in_component__WEBPACK_IMPORTED_MODULE_31__ = __webpack_require__(/*! ./sign-in/sign-in.component */ "./src/app/sign-in/sign-in.component.ts");
 /* harmony import */ var _shared_services_account_service__WEBPACK_IMPORTED_MODULE_32__ = __webpack_require__(/*! ./shared/services/account.service */ "./src/app/shared/services/account.service.ts");
 /* harmony import */ var _check_login_intializer__WEBPACK_IMPORTED_MODULE_33__ = __webpack_require__(/*! ./check-login-intializer */ "./src/app/check-login-intializer.ts");
+/* harmony import */ var _my_service_nodes_my_service_nodes_component__WEBPACK_IMPORTED_MODULE_34__ = __webpack_require__(/*! ./my-service-nodes/my-service-nodes.component */ "./src/app/my-service-nodes/my-service-nodes.component.ts");
+/* harmony import */ var _shared_services_myservicenodes_service__WEBPACK_IMPORTED_MODULE_35__ = __webpack_require__(/*! ./shared/services/myservicenodes.service */ "./src/app/shared/services/myservicenodes.service.ts");
+/* harmony import */ var _my_service_nodes_my_service_nodes_module__WEBPACK_IMPORTED_MODULE_36__ = __webpack_require__(/*! ./my-service-nodes/my-service-nodes.module */ "./src/app/my-service-nodes/my-service-nodes.module.ts");
+/* harmony import */ var _auth_guard__WEBPACK_IMPORTED_MODULE_37__ = __webpack_require__(/*! ./auth.guard */ "./src/app/auth.guard.ts");
+/* harmony import */ var _angular_material_stepper__WEBPACK_IMPORTED_MODULE_38__ = __webpack_require__(/*! @angular/material/stepper */ "./node_modules/@angular/material/esm5/stepper.es5.js");
+/* harmony import */ var _angular_material_input__WEBPACK_IMPORTED_MODULE_39__ = __webpack_require__(/*! @angular/material/input */ "./node_modules/@angular/material/esm5/input.es5.js");
+/* harmony import */ var _angular_material_button__WEBPACK_IMPORTED_MODULE_40__ = __webpack_require__(/*! @angular/material/button */ "./node_modules/@angular/material/esm5/button.es5.js");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+
+
+
+
+
+
+
 
 
 
@@ -191,17 +205,21 @@ var AppModule = /** @class */ (function () {
                 _sign_in_sign_in_component__WEBPACK_IMPORTED_MODULE_31__["SignInComponent"],
                 _rpc_console_rpc_console_component__WEBPACK_IMPORTED_MODULE_26__["RpcConsoleComponent"],
                 _error_error_component__WEBPACK_IMPORTED_MODULE_25__["ErrorComponent"],
-                _page_not_found_page_not_found_component__WEBPACK_IMPORTED_MODULE_20__["PageNotFoundComponent"]
+                _page_not_found_page_not_found_component__WEBPACK_IMPORTED_MODULE_20__["PageNotFoundComponent"],
             ],
             imports: [
                 _angular_platform_browser__WEBPACK_IMPORTED_MODULE_0__["BrowserModule"].withServerTransition({ appId: 'ng-cli-universal' }),
                 _angular_common_http__WEBPACK_IMPORTED_MODULE_4__["HttpClientModule"],
                 _angular_forms__WEBPACK_IMPORTED_MODULE_2__["FormsModule"],
+                _my_service_nodes_my_service_nodes_module__WEBPACK_IMPORTED_MODULE_36__["NgbdModalComponentModule"],
                 _angular_platform_browser_animations__WEBPACK_IMPORTED_MODULE_3__["BrowserAnimationsModule"],
                 _angular_forms__WEBPACK_IMPORTED_MODULE_2__["ReactiveFormsModule"],
                 _ng_bootstrap_ng_bootstrap__WEBPACK_IMPORTED_MODULE_6__["NgbModule"],
                 ngx_pagination__WEBPACK_IMPORTED_MODULE_7__["NgxPaginationModule"],
                 angular_ng_autocomplete__WEBPACK_IMPORTED_MODULE_8__["AutocompleteLibModule"],
+                _angular_material_stepper__WEBPACK_IMPORTED_MODULE_38__["MatStepperModule"],
+                _angular_material_input__WEBPACK_IMPORTED_MODULE_39__["MatInputModule"],
+                _angular_material_button__WEBPACK_IMPORTED_MODULE_40__["MatButtonModule"],
                 _angular_router__WEBPACK_IMPORTED_MODULE_5__["RouterModule"].forRoot([
                     { path: '', component: _home_home_component__WEBPACK_IMPORTED_MODULE_12__["HomeComponent"], pathMatch: 'full' },
                     { path: 'xrouter-snodes', component: _service_node_list_service_node_list_component__WEBPACK_IMPORTED_MODULE_22__["ServiceNodeListComponent"] },
@@ -210,9 +228,10 @@ var AppModule = /** @class */ (function () {
                     { path: 'spv-wallets/:name/:nodePubKey', component: _view_spv_wallet_view_spv_wallet_component__WEBPACK_IMPORTED_MODULE_21__["ViewSpvWalletComponent"], runGuardsAndResolvers: 'always' },
                     { path: 'xcloud-services', component: _xr_services_xr_services_component__WEBPACK_IMPORTED_MODULE_15__["XrServicesComponent"] },
                     { path: 'xcloud-services/:name', component: _view_xr_service_view_xr_service_component__WEBPACK_IMPORTED_MODULE_18__["ViewXrServiceComponent"], runGuardsAndResolvers: 'always' },
-                    { path: 'xcloud-services/:name/:NodePubKey', component: _view_xr_service_view_xr_service_component__WEBPACK_IMPORTED_MODULE_18__["ViewXrServiceComponent"], runGuardsAndResolvers: 'always' },
+                    { path: 'xcloud-services/:name/:nodePubKey', component: _view_xr_service_view_xr_service_component__WEBPACK_IMPORTED_MODULE_18__["ViewXrServiceComponent"], runGuardsAndResolvers: 'always' },
                     { path: 'xrouter-snodes/:nodePubKey', component: _view_snode_view_snode_component__WEBPACK_IMPORTED_MODULE_19__["ViewSnodeComponent"] },
                     { path: 'xrouter-snodes/:nodePubKey/:service', component: _view_snode_view_snode_component__WEBPACK_IMPORTED_MODULE_19__["ViewSnodeComponent"] },
+                    { path: 'my-service-nodes/:id', component: _my_service_nodes_my_service_nodes_component__WEBPACK_IMPORTED_MODULE_34__["MyServiceNodesComponent"], canActivate: [_auth_guard__WEBPACK_IMPORTED_MODULE_37__["AuthGuard"]] },
                     { path: 'rpc-console', component: _rpc_console_rpc_console_component__WEBPACK_IMPORTED_MODULE_26__["RpcConsoleComponent"] },
                     { path: 'error', component: _error_error_component__WEBPACK_IMPORTED_MODULE_25__["ErrorComponent"] },
                     { path: '**', component: _page_not_found_page_not_found_component__WEBPACK_IMPORTED_MODULE_20__["PageNotFoundComponent"] }
@@ -223,6 +242,7 @@ var AppModule = /** @class */ (function () {
             ],
             providers: [
                 _shared_services_xrouter_service__WEBPACK_IMPORTED_MODULE_17__["XrouterApiService"],
+                _shared_services_myservicenodes_service__WEBPACK_IMPORTED_MODULE_35__["MyServiceNodesService"],
                 _shared_services_search_service__WEBPACK_IMPORTED_MODULE_28__["SearchService"],
                 _shared_services_account_service__WEBPACK_IMPORTED_MODULE_32__["AccountService"],
                 _shared_services_navigator_service___WEBPACK_IMPORTED_MODULE_24__["NavigatorService"],
@@ -239,12 +259,63 @@ var AppModule = /** @class */ (function () {
                     multi: true,
                     deps: [_shared_services_account_service__WEBPACK_IMPORTED_MODULE_32__["AccountService"]]
                 },
-                _interceptors__WEBPACK_IMPORTED_MODULE_10__["interceptorProviders"]
+                _interceptors__WEBPACK_IMPORTED_MODULE_10__["interceptorProviders"],
+                _auth_guard__WEBPACK_IMPORTED_MODULE_37__["AuthGuard"],
             ],
-            bootstrap: [_app_component__WEBPACK_IMPORTED_MODULE_9__["AppComponent"]]
+            bootstrap: [_app_component__WEBPACK_IMPORTED_MODULE_9__["AppComponent"]],
         })
     ], AppModule);
     return AppModule;
+}());
+
+
+
+/***/ }),
+
+/***/ "./src/app/auth.guard.ts":
+/*!*******************************!*\
+  !*** ./src/app/auth.guard.ts ***!
+  \*******************************/
+/*! exports provided: AuthGuard */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AuthGuard", function() { return AuthGuard; });
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm5/router.js");
+/* harmony import */ var _shared_services_account_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./shared/services/account.service */ "./src/app/shared/services/account.service.ts");
+var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (undefined && undefined.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+var AuthGuard = /** @class */ (function () {
+    function AuthGuard(user, router) {
+        this.user = user;
+        this.router = router;
+    }
+    AuthGuard.prototype.canActivate = function (route, state) {
+        if (!this.user.isAuthenticated()) {
+            // not logged in
+            this.router.navigate(['/'], { queryParams: { returnUrl: state.url } });
+            return false;
+        }
+        // logged in, so return true
+        return true;
+    };
+    AuthGuard = __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Injectable"])(),
+        __metadata("design:paramtypes", [_shared_services_account_service__WEBPACK_IMPORTED_MODULE_2__["AccountService"], _angular_router__WEBPACK_IMPORTED_MODULE_1__["Router"]])
+    ], AuthGuard);
+    return AuthGuard;
 }());
 
 
@@ -500,6 +571,249 @@ var interceptorProviders = [
 
 /***/ }),
 
+/***/ "./src/app/my-service-nodes/my-service-nodes.component.css":
+/*!*****************************************************************!*\
+  !*** ./src/app/my-service-nodes/my-service-nodes.component.css ***!
+  \*****************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "td{\r\n    max-width: 0;\r\n    overflow: hidden;\r\n    text-overflow: ellipsis;\r\n    white-space: nowrap;\r\n}\r\n\r\n\r\n::ng-deep .wide-modal .modal-dialog { \r\n    max-width: 60%;\r\n    width: 60%;\r\n}"
+
+/***/ }),
+
+/***/ "./src/app/my-service-nodes/my-service-nodes.component.html":
+/*!******************************************************************!*\
+  !*** ./src/app/my-service-nodes/my-service-nodes.component.html ***!
+  \******************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "<div *ngIf=\"loading else loaded\">\n        Fetching data...\n</div>\n            \n<ng-template #loaded>\n        <h2>My Service Nodes</h2>\n        <div class=\"table-responsive\">\n                <table class=\"table\">\n                        <thead>\n                                <tr>\n                                <th *ngFor=\"let c of columns\"> {{ c.title }} </th>\n                                </tr> \n                        </thead>\n                        <tbody>\n                                <tr *ngFor=\"let sn of myServiceNodes; let i = index\">\n                                        <td>{{sn.name}}</td>\n                                        <td>{{sn.address}}</td>\n                                        <td>\n                                                <div *ngIf=\"sn.ownership else verify\">Verified</div>\n                                                <!--TODO: Put in own component-->\n                                                <ng-template #verify>\n                                                        <button type=\"button\" class=\"btn btn-primary\" (click)=\"open(i)\">Verify Ownership</button>\n                                                </ng-template>\n                                        </td>\n                                        <td>\n                                                <div *ngIf=\"sn.active else inActive\">Active</div>\n                                                <ng-template #inActive>Inactive</ng-template>\n                                        </td>\n                                        <td>\n                                                <button type=\"submit\" class=\"btn btn-primary\" (click)=\"onRemove(i)\">Remove</button> \n                                         </td>\n                                </tr>\n                        </tbody>\n                </table>\n        </div>\n\n        <h4>Add New Servicenode</h4>\n        <form (ngSubmit)=\"f.form.valid && onSubmit()\" #f=\"ngForm\" novalidate>\n                <div class=\"form-group\">\n                        <label for=\"snName\">Servicenode Name</label>\n                        <input type=\"text\" class=\"form-control\" id=\"snName\" [(ngModel)]=\"model.name\" name=\"snName\" #snName=\"ngModel\" required>\n                        \n                </div>\n                <div class=\"form-group\">\n                        <div *ngIf=\"snName.invalid && (snName.dirty || snName.touched)\"\n                                class=\"alert alert-danger\">\n                                <div *ngIf=\"snName.errors.required\">\n                                        Name is required.\n                                </div>\n                        </div>\n                </div>\n                <div class=\"form-group\">\n                        <label for=\"snAddress\">Servicenode Public Address</label>\n                        <input type=\"text\" class=\"form-control\" [(ngModel)]=\"model.address\" name=\"snAddress\" #snAddress=\"ngModel\" servicenodeAddressValidator [(serviceNodes)]=\"allServiceNodes\">\n                </div>\n                <div class=\"form-group\">\n                        <div *ngIf=\"snAddress.invalid && (snAddress.dirty || snAddress.touched)\"\n                                class=\"alert alert-danger\">\n                                <div *ngIf=\"snAddress.errors.servicenodeAddressValidator\">\n                                        This address isn't an active service node\n                                </div>\n                        </div>\n                </div>\n                <button type=\"submit\" class=\"btn btn-primary\" [disabled]=\"f.form.pristine || f.form.invalid\">Add Servicenode</button>\n        </form> \n        \n        \n</ng-template>\n"
+
+/***/ }),
+
+/***/ "./src/app/my-service-nodes/my-service-nodes.component.ts":
+/*!****************************************************************!*\
+  !*** ./src/app/my-service-nodes/my-service-nodes.component.ts ***!
+  \****************************************************************/
+/*! exports provided: ValidateServicenodeModalContent, MyServiceNodesComponent */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ValidateServicenodeModalContent", function() { return ValidateServicenodeModalContent; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MyServiceNodesComponent", function() { return MyServiceNodesComponent; });
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm5/router.js");
+/* harmony import */ var _shared_services_xrouter_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../shared/services/xrouter.service */ "./src/app/shared/services/xrouter.service.ts");
+/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! rxjs */ "./node_modules/rxjs/_esm5/index.js");
+/* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/forms */ "./node_modules/@angular/forms/fesm5/forms.js");
+/* harmony import */ var _shared_services_myservicenodes_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../shared/services/myservicenodes.service */ "./src/app/shared/services/myservicenodes.service.ts");
+/* harmony import */ var util__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! util */ "./node_modules/util/util.js");
+/* harmony import */ var util__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(util__WEBPACK_IMPORTED_MODULE_6__);
+/* harmony import */ var _shared_models_myservicenode_model__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../shared/models/myservicenode.model */ "./src/app/shared/models/myservicenode.model.ts");
+/* harmony import */ var _ng_bootstrap_ng_bootstrap__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @ng-bootstrap/ng-bootstrap */ "./node_modules/@ng-bootstrap/ng-bootstrap/fesm5/ng-bootstrap.js");
+var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (undefined && undefined.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+
+
+
+
+
+
+var ValidateServicenodeModalContent = /** @class */ (function () {
+    function ValidateServicenodeModalContent(activeModal, myServiceNodesService, router, _formBuilder) {
+        this.activeModal = activeModal;
+        this.myServiceNodesService = myServiceNodesService;
+        this.router = router;
+        this._formBuilder = _formBuilder;
+        this.isLinear = false;
+        this.toBeSignedMessage = "service-explorer-verification";
+    }
+    ValidateServicenodeModalContent.prototype.ngOnInit = function () {
+        this.firstFormGroup = this._formBuilder.group({
+            firstCtrl: ['', _angular_forms__WEBPACK_IMPORTED_MODULE_4__["Validators"].required]
+        });
+        this.secondFormGroup = this._formBuilder.group({
+            secondCtrl: ['', _angular_forms__WEBPACK_IMPORTED_MODULE_4__["Validators"].required]
+        });
+    };
+    ValidateServicenodeModalContent.prototype.onVerifySubmit = function (index) {
+        // let address = this.servicenode.address;
+        // this.myServiceNodesService.verifyMessage(address, form.value, this.toBeSignedMessage).subscribe(res => {
+        //   if(res){
+        //     console.log("Service node verified!");
+        //     this.activeModal.close('Verify Message Click');
+        //   } else{
+        //     console.log("Service node not verified!");
+        //   }
+        // },
+        // err =>{
+        //   this.router.navigate(['/error'], {queryParams: err});
+        // });
+    };
+    ValidateServicenodeModalContent.prototype.next = function () {
+    };
+    __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"])(),
+        __metadata("design:type", _shared_models_myservicenode_model__WEBPACK_IMPORTED_MODULE_7__["MyServiceNode"])
+    ], ValidateServicenodeModalContent.prototype, "servicenode", void 0);
+    ValidateServicenodeModalContent = __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
+            selector: 'validate-servicenode-modal-content',
+            template: "\n  <div class=\"modal-header\">\n    <h4 class=\"modal-title\" id=\"modal-basic-title\">Verify Your Servicenode</h4>\n    <button type=\"button\" class=\"close\" aria-label=\"Close\" (click)=\"activeModal.dismiss('Cross click')\">\n    <span aria-hidden=\"true\">&times;</span>\n    </button>\n  </div>\n  <div class=\"modal-body\">\n\n      <p>Follow the steps below to sign a message which proves your ownership of this servicenode.</p>\n      <p>This is a trustless process and does not give any keys to service-explorer</p>\n      <p>Proving ownership this way grants a Verified badge next to your name</p>\n      <hr class=\"my-4\">\n      <p>Learn more about message signing here</p>\n      <a class=\"btn btn-primary\" href=\"https://coinguides.org/sign-verify-bitcoin-address/\" role=\"button\">Learn more</a>\n    {{ toBeSignedMessage + '-' + servicenode.id }}\n    <hr class=\"my-4\">\n    \n    <mat-horizontal-stepper [linear]=\"isLinear\"> \n        <mat-step [stepControl]=\"firstFormGroup\">\n          <form [formGroup]=\"firstFormGroup\">  \n            <ng-template matStepLabel>Step 1</ng-template>  \n            <button mat-button mat-raised-button color=\"primary\" matStepperNext>Solve</button>        \n          </form>\n        </mat-step>\n\n        <mat-step [stepControl]=\"secondFormGroup\">\n          <form [formGroup]=\"secondFormGroup\">\n            <ng-template matStepLabel>Step 2</ng-template>\n            <mat-form-field>\n                <input matInput placeholder=\"Any input\" formControlName=\"secondCtrl\" required>\n            </mat-form-field>\n            <button mat-button mat-raised-button color=\"primary\" matStepperNext>Next</button>          \n            <button mat-button mat-raised-button color=\"\" matStepperPrevious>Back</button>        \n          </form>\n        </mat-step>\n\n        <mat-step>\n          <ng-template matStepLabel icon>Done</ng-template>\n          You are now done.      \n          <button mat-button mat-raised-button color=\"primary\" >Done</button>      \n        </mat-step>\n    </mat-horizontal-stepper>\n\n   \n  </div>\n  <div class=\"modal-footer\">\n  \n  </div>\n  "
+        }),
+        __metadata("design:paramtypes", [_ng_bootstrap_ng_bootstrap__WEBPACK_IMPORTED_MODULE_8__["NgbActiveModal"],
+            _shared_services_myservicenodes_service__WEBPACK_IMPORTED_MODULE_5__["MyServiceNodesService"],
+            _angular_router__WEBPACK_IMPORTED_MODULE_1__["Router"],
+            _angular_forms__WEBPACK_IMPORTED_MODULE_4__["FormBuilder"]])
+    ], ValidateServicenodeModalContent);
+    return ValidateServicenodeModalContent;
+}());
+
+var MyServiceNodesComponent = /** @class */ (function () {
+    function MyServiceNodesComponent(router, route, myServiceNodesService, xrouterApiService, modalService) {
+        var _this = this;
+        this.router = router;
+        this.route = route;
+        this.myServiceNodesService = myServiceNodesService;
+        this.xrouterApiService = xrouterApiService;
+        this.modalService = modalService;
+        this.model = new _shared_models_myservicenode_model__WEBPACK_IMPORTED_MODULE_7__["MyServiceNode"]();
+        this.columns = [
+            { title: 'Servicenode Name' },
+            { title: 'Address' },
+            { title: 'Ownership' },
+            { title: 'Active' },
+            { title: 'Remove' },
+        ];
+        route.params.subscribe(function (p) {
+            _this.applicationUserId = p['id'];
+            if (Object(util__WEBPACK_IMPORTED_MODULE_6__["isNullOrUndefined"])(_this.applicationUserId)) {
+                router.navigate(['']);
+                return;
+            }
+        });
+        this.model.applicationUserId = this.applicationUserId;
+    }
+    MyServiceNodesComponent.prototype.ngOnInit = function () {
+        var _this = this;
+        var observableMyServiceNodes = this.myServiceNodesService.GetServiceNodes(this.applicationUserId);
+        var observableAllServiceNodes = this.xrouterApiService.GetServiceNodeList({});
+        Object(rxjs__WEBPACK_IMPORTED_MODULE_3__["forkJoin"])([observableMyServiceNodes, observableAllServiceNodes]).subscribe(function (_a) {
+            var mySn = _a[0], allSn = _a[1];
+            _this.allServiceNodes = allSn;
+            _this.myServiceNodes = mySn;
+        }, function (err) {
+            if (err.status == 404)
+                _this.router.navigate(['']);
+        });
+    };
+    MyServiceNodesComponent.prototype.onSubmit = function () {
+        var _this = this;
+        this.myServiceNodesService.create(this.model)
+            .subscribe(function (serviceNode) {
+            _this.myServiceNodes.push(serviceNode);
+        }, function (err) {
+            _this.router.navigate(['/error'], { queryParams: err });
+        });
+    };
+    MyServiceNodesComponent.prototype.onRemove = function (index) {
+        var _this = this;
+        var id = this.myServiceNodes[index].id;
+        if (confirm("Are you sure?")) {
+            this.myServiceNodesService.delete(id).subscribe(function (snId) {
+                _this.myServiceNodes.splice(index, 1);
+            }, function (err) {
+                _this.router.navigate(['/error'], { queryParams: err });
+            });
+        }
+    };
+    MyServiceNodesComponent.prototype.open = function (index) {
+        var modalReference = this.modalService.open(ValidateServicenodeModalContent, { size: 'lg', windowClass: 'wide-modal' });
+        modalReference.componentInstance.servicenode = this.myServiceNodes[index];
+    };
+    __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["ViewChild"])('f'),
+        __metadata("design:type", _angular_forms__WEBPACK_IMPORTED_MODULE_4__["NgForm"])
+    ], MyServiceNodesComponent.prototype, "serviceNodeForm", void 0);
+    MyServiceNodesComponent = __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
+            selector: 'app-my-service-nodes',
+            template: __webpack_require__(/*! ./my-service-nodes.component.html */ "./src/app/my-service-nodes/my-service-nodes.component.html"),
+            styles: [__webpack_require__(/*! ./my-service-nodes.component.css */ "./src/app/my-service-nodes/my-service-nodes.component.css")]
+        }),
+        __metadata("design:paramtypes", [_angular_router__WEBPACK_IMPORTED_MODULE_1__["Router"],
+            _angular_router__WEBPACK_IMPORTED_MODULE_1__["ActivatedRoute"],
+            _shared_services_myservicenodes_service__WEBPACK_IMPORTED_MODULE_5__["MyServiceNodesService"],
+            _shared_services_xrouter_service__WEBPACK_IMPORTED_MODULE_2__["XrouterApiService"],
+            _ng_bootstrap_ng_bootstrap__WEBPACK_IMPORTED_MODULE_8__["NgbModal"]])
+    ], MyServiceNodesComponent);
+    return MyServiceNodesComponent;
+}());
+
+
+
+/***/ }),
+
+/***/ "./src/app/my-service-nodes/my-service-nodes.module.ts":
+/*!*************************************************************!*\
+  !*** ./src/app/my-service-nodes/my-service-nodes.module.ts ***!
+  \*************************************************************/
+/*! exports provided: NgbdModalComponentModule */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "NgbdModalComponentModule", function() { return NgbdModalComponentModule; });
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var _angular_platform_browser__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/platform-browser */ "./node_modules/@angular/platform-browser/fesm5/platform-browser.js");
+/* harmony import */ var _ng_bootstrap_ng_bootstrap__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @ng-bootstrap/ng-bootstrap */ "./node_modules/@ng-bootstrap/ng-bootstrap/fesm5/ng-bootstrap.js");
+/* harmony import */ var _my_service_nodes_component__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./my-service-nodes.component */ "./src/app/my-service-nodes/my-service-nodes.component.ts");
+/* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/forms */ "./node_modules/@angular/forms/fesm5/forms.js");
+/* harmony import */ var _shared_directives_snode_address_validator__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../shared/directives/snode-address-validator */ "./src/app/shared/directives/snode-address-validator.ts");
+var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+
+
+
+
+
+
+var NgbdModalComponentModule = /** @class */ (function () {
+    function NgbdModalComponentModule() {
+    }
+    NgbdModalComponentModule = __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["NgModule"])({
+            imports: [_angular_platform_browser__WEBPACK_IMPORTED_MODULE_1__["BrowserModule"], _angular_forms__WEBPACK_IMPORTED_MODULE_4__["FormsModule"], _ng_bootstrap_ng_bootstrap__WEBPACK_IMPORTED_MODULE_2__["NgbModule"]],
+            declarations: [_my_service_nodes_component__WEBPACK_IMPORTED_MODULE_3__["MyServiceNodesComponent"], _my_service_nodes_component__WEBPACK_IMPORTED_MODULE_3__["ValidateServicenodeModalContent"], _shared_directives_snode_address_validator__WEBPACK_IMPORTED_MODULE_5__["ServicenodeAddressValidatorDirective"]],
+            exports: [_my_service_nodes_component__WEBPACK_IMPORTED_MODULE_3__["MyServiceNodesComponent"]],
+            bootstrap: [_my_service_nodes_component__WEBPACK_IMPORTED_MODULE_3__["MyServiceNodesComponent"]],
+            entryComponents: [_my_service_nodes_component__WEBPACK_IMPORTED_MODULE_3__["ValidateServicenodeModalContent"]]
+        })
+    ], NgbdModalComponentModule);
+    return NgbdModalComponentModule;
+}());
+
+
+
+/***/ }),
+
 /***/ "./src/app/nav-menu/nav-menu.component.css":
 /*!*************************************************!*\
   !*** ./src/app/nav-menu/nav-menu.component.css ***!
@@ -518,7 +832,7 @@ module.exports = "a.navbar-brand {\r\n    white-space: normal;\r\n    text-align
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<header>\r\n        <nav\r\n          class=\"navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3\"\r\n        >\r\n          <div class=\"container\">\r\n            <a class=\"navbar-brand\" [routerLink]=\"['/']\">\r\n              <img src=\"../../assets/xrouter.png\" width=\"135\" height=\"30\" alt=\"\">\r\n            </a>\r\n            <button\r\n              class=\"navbar-toggler\"\r\n              type=\"button\"\r\n              data-toggle=\"collapse\"\r\n              data-target=\".navbar-collapse\"\r\n              aria-label=\"Toggle navigation\"\r\n              [attr.aria-expanded]=\"isExpanded\"\r\n              (click)=\"toggle()\"\r\n            >\r\n              <span class=\"navbar-toggler-icon\"></span>\r\n            </button>\r\n            <div\r\n              class=\"navbar-collapse collapse d-sm-inline-flex\"\r\n              [ngClass]=\"{ show: isExpanded }\"\r\n            >\r\n              <ul class=\"navbar-nav flex-grow mr-auto\">\r\n                <li\r\n                  class=\"nav-item\"\r\n                  [routerLinkActive]=\"['link-active']\"\r\n                  [routerLinkActiveOptions]=\"{ exact: true }\"\r\n                >\r\n                <a class=\"nav-link text-dark\" [routerLink]=\"['/xrouter-snodes']\"\r\n                >Nodes</a\r\n            >\r\n                </li>\r\n                <li class=\"nav-item\" [routerLinkActive]=\"['link-active']\">\r\n                  <a class=\"nav-link text-dark\" [routerLink]=\"['/spv-wallets']\"\r\n                    >SPV</a\r\n                  >\r\n                </li>\r\n                <li class=\"nav-item\" [routerLinkActive]=\"['link-active']\">\r\n                  <a class=\"nav-link text-dark\" [routerLink]=\"['/xcloud-services']\"\r\n                    >Services</a\r\n                  >\r\n                </li>\r\n                <li class=\"nav-item dropdown\">\r\n                  <a class=\"nav-link dropdown-toggle\" href=\"#\" id=\"navbarDropdown\" role=\"button\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"false\">\r\n                    Dropdown\r\n                  </a>\r\n                  <div class=\"dropdown-menu\" aria-labelledby=\"navbarDropdown\">\r\n                    <a class=\"dropdown-item\" href=\"#\">Action</a>\r\n                    <a class=\"dropdown-item\" href=\"#\">Another action</a>\r\n                    <div class=\"dropdown-divider\"></div>\r\n                    <a class=\"dropdown-item\" href=\"#\">Something else here</a>\r\n                  </div>\r\n                </li>\r\n              </ul>\r\n              <ul class=\"navbar-nav ml-auto nav-flex-icons\">\r\n                <li class=\"nav-item\">\r\n                  <div class=\"ng-autocomplete\">\r\n                    <search-form></search-form>\r\n                  </div>\r\n                </li>\r\n                <div *ngIf=\"!isUserAuthenticated; else loggedIn\">\r\n                  <li class=\"nav-item\">\r\n                      <a class=\"btn ml-4\" style=\"background-color: #7289DA; color:white;\" href=\"#\" (click)=\"login()\">\r\n                        <img src=\"../../assets/discord-logo-white.png\" width=\"30\" alt=\"\">\r\n                        <span class=\"mb-0 ml-1\">Log in with Discord</span>\r\n                      </a>\r\n                  </li>\r\n                </div> \r\n                <ng-template #loggedIn>\r\n                  <!-- <li>\r\n                    <a class=\"btn ml-4\" style=\"background-color: #7289DA; color:white;\" href=\"#\" (click)=\"logout()\">\r\n                    <img src=\"../../assets/discord-logo-white.png\" width=\"30\" alt=\"\">\r\n                    <span class=\"mb-0 ml-1\">Logout</span>\r\n                  </a>\r\n                </li> -->\r\n                \r\n                </ng-template>\r\n              </ul>\r\n             \r\n                \r\n            </div>\r\n          </div>\r\n        </nav>\r\n      </header>\r\n      "
+module.exports = "<header>\r\n        <nav\r\n          class=\"navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3\"\r\n        >\r\n          <div class=\"container\">\r\n            <a class=\"navbar-brand\" [routerLink]=\"['/']\">\r\n              <img src=\"../../assets/xrouter.png\" width=\"135\" height=\"30\" alt=\"\">\r\n            </a>\r\n            <button\r\n              class=\"navbar-toggler\"\r\n              type=\"button\"\r\n              data-toggle=\"collapse\"\r\n              data-target=\".navbar-collapse\"\r\n              aria-label=\"Toggle navigation\"\r\n              [attr.aria-expanded]=\"isExpanded\"\r\n              (click)=\"toggle()\"\r\n            >\r\n              <span class=\"navbar-toggler-icon\"></span>\r\n            </button>\r\n            <div\r\n              class=\"navbar-collapse collapse d-sm-inline-flex\"\r\n              [ngClass]=\"{ show: isExpanded }\"\r\n            >\r\n              <ul class=\"navbar-nav flex-grow mr-auto\">\r\n                <li\r\n                  class=\"nav-item\"\r\n                  [routerLinkActive]=\"['link-active']\"\r\n                  [routerLinkActiveOptions]=\"{ exact: true }\"\r\n                >\r\n                <a class=\"nav-link text-dark\" [routerLink]=\"['/xrouter-snodes']\"\r\n                >Nodes</a>\r\n                </li>\r\n                <li class=\"nav-item\" [routerLinkActive]=\"['link-active']\">\r\n                  <a class=\"nav-link text-dark\" [routerLink]=\"['/xcloud-services']\"\r\n                    >Services</a\r\n                  >\r\n                </li>\r\n                <li class=\"nav-item\" [routerLinkActive]=\"['link-active']\">\r\n                  <a class=\"nav-link text-dark\" [routerLink]=\"['/spv-wallets']\"\r\n                    >SPV</a\r\n                  >\r\n                </li>\r\n              </ul>\r\n              <ul class=\"navbar-nav flex-grow ml-auto nav-flex-icons\">\r\n                <li class=\"nav-item\">\r\n                  <div class=\"ng-autocomplete\">\r\n                    <search-form></search-form>\r\n                  </div>\r\n                </li>\r\n                <div *ngIf=\"!isUserAuthenticated; else loggedIn\">\r\n                  <li class=\"nav-item\">\r\n                      <a class=\"btn ml-4\" style=\"background-color: #7289DA; color:white;\" href=\"#\" (click)=\"login()\">\r\n                        <img src=\"../../assets/discord-logo-white.png\" width=\"30\" alt=\"\">\r\n                        <span class=\"mb-0 ml-1\">Log in with Discord</span>\r\n                      </a>\r\n                  </li>\r\n                </div> \r\n                <ng-template #loggedIn>\r\n                <li class=\"nav-item avatar dropdown\">\r\n                  <a class=\"nav-link dropdown-toggle\" id=\"navbarDropdownMenuLink-5\" data-toggle=\"dropdown\" aria-haspopup=\"true\"\r\n                    aria-expanded=\"false\">\r\n                    <img src=\"{{ avatarUrl }}\" class=\"rounded-circle z-depth-0\" width=\"30\" alt=\"avatar image\">\r\n                  </a>\r\n                  <div class=\"dropdown-menu dropdown-menu-right dropdown-secondary\" aria-labelledby=\"navbarDropdownMenuLink-5\">\r\n                    <h6 class=\"dropdown-header\">Logged in as {{ userName }}</h6>\r\n                    <a class=\"dropdown-item\" [routerLink]=\"'/my-service-nodes/' + id\">My Service Nodes</a>\r\n                    <a class=\"dropdown-item\" href=\"#\" (click)=\"logout()\">Logout</a>\r\n                  </div>\r\n                </li>\r\n                </ng-template>\r\n              </ul>\r\n             \r\n                \r\n            </div>\r\n          </div>\r\n        </nav>\r\n      </header>\r\n      "
 
 /***/ }),
 
@@ -563,11 +877,17 @@ var NavMenuComponent = /** @class */ (function () {
     NavMenuComponent.prototype.ngOnInit = function () {
         var _this = this;
         this.subscription = this.accountService.isUserAuthenticated.subscribe(function (isAuthenticated) {
-            console.log(isAuthenticated);
             _this.isUserAuthenticated = isAuthenticated;
             if (_this.isUserAuthenticated) {
+                //todo: forkjoin
                 _this.httpClient.get("/api/account/name", { responseType: 'text', withCredentials: true }).subscribe(function (theName) {
                     _this.userName = theName;
+                });
+                _this.httpClient.get("/api/account/AvatarUrl", { responseType: 'text', withCredentials: true }).subscribe(function (avatarUrl) {
+                    _this.avatarUrl = avatarUrl;
+                });
+                _this.httpClient.get("/api/account/id", { responseType: 'text', withCredentials: true }).subscribe(function (id) {
+                    _this.id = id;
                 });
             }
         });
@@ -578,9 +898,6 @@ var NavMenuComponent = /** @class */ (function () {
     NavMenuComponent.prototype.logout = function () {
         this.accountService.logout();
     };
-    // simulateFailedCall() {
-    //   this.httpClient.get(`${environment.apiUrl}/home/fail`).subscribe();
-    // }
     NavMenuComponent.prototype.login = function () {
         this.accountService.login();
     };
@@ -762,6 +1079,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _shared_services_xrouter_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../shared/services/xrouter.service */ "./src/app/shared/services/xrouter.service.ts");
 /* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm5/http.js");
 /* harmony import */ var _shared_services_base_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../shared/services/base.service */ "./src/app/shared/services/base.service.ts");
+/* harmony import */ var _shared_services_search_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../shared/services/search.service */ "./src/app/shared/services/search.service.ts");
 var __extends = (undefined && undefined.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -786,24 +1104,26 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 
 
 
+
 // const NODEPUBKEY_REGEX = '^[0][a-zA-Z0-9]{65}$'; 
 // const ADDRESS_REGEX = '^[B][a-zA-Z0-9]{33}$';
 // const TXHASH_REGEX = '[a-zA-Z0-9]{64}$';
 var SearchFormComponent = /** @class */ (function (_super) {
     __extends(SearchFormComponent, _super);
-    function SearchFormComponent(http, xrouterService, navigatorService) {
+    function SearchFormComponent(http, xrouterService, navigatorService, searchService) {
         var _this = _super.call(this) || this;
         _this.http = http;
         _this.xrouterService = xrouterService;
         _this.navigatorService = navigatorService;
+        _this.searchService = searchService;
         _this.apiEndpoint = 'blocknet/xrouter';
-        _this.baseEndpoint = 'api/'; // http://localhost
+        _this.baseEndpoint = 'api/';
         _this.keyword = 'name';
         return _this;
     }
     SearchFormComponent.prototype.ngOnInit = function () {
         var _this = this;
-        this.xrouterService.GetNetworkServices().subscribe(function (res) {
+        this.xrouterService.getAllServices().subscribe(function (res) {
             _this.services = res;
         });
     };
@@ -819,7 +1139,8 @@ var SearchFormComponent = /** @class */ (function (_super) {
     };
     SearchFormComponent.prototype.onChangeSearch = function (val) {
         var _this = this;
-        this.http.get(this.baseEndpoint + this.apiEndpoint + "/?searchString=" + val).subscribe(function (data) {
+        // this.http.get(this.baseEndpoint + this.apiEndpoint + "/?searchString=" + val).subscribe(
+        this.searchService.search(val).subscribe(function (data) {
             _this.services = data;
         });
         // fetch remote data from here
@@ -836,7 +1157,8 @@ var SearchFormComponent = /** @class */ (function (_super) {
         }),
         __metadata("design:paramtypes", [_angular_common_http__WEBPACK_IMPORTED_MODULE_3__["HttpClient"],
             _shared_services_xrouter_service__WEBPACK_IMPORTED_MODULE_2__["XrouterApiService"],
-            _shared_services_navigator_service___WEBPACK_IMPORTED_MODULE_1__["NavigatorService"]])
+            _shared_services_navigator_service___WEBPACK_IMPORTED_MODULE_1__["NavigatorService"],
+            _shared_services_search_service__WEBPACK_IMPORTED_MODULE_5__["SearchService"]])
     ], SearchFormComponent);
     return SearchFormComponent;
 }(_shared_services_base_service__WEBPACK_IMPORTED_MODULE_4__["BaseService"]));
@@ -958,7 +1280,7 @@ module.exports = "td{\r\n    max-width: 0;\r\n    overflow: hidden;\r\n    text-
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div *ngIf=\"loading else loaded\">\n        Fetching data...\n</div>\n            \n<ng-template #loaded>\n        <h2>Service Node List</h2>\n                        <div class=\"well\">\n                        <div class=\"form-group\">\n                        <h3>Filter</h3>\n                        <label for=\"spvWallet\">Spv Wallet</label>\n                        <select id=\"spvWallet\" class=\"form-control\" [(ngModel)]=\"query.spvWallet\" (change)=\"onFilterChange()\">\n                                <option value=\"\"></option>\n                                <option *ngFor=\"let w of spvWallets?.items\" value=\"{{ w.name }}\">{{ w.name }}</option>\n                        </select>  \n                        <label for=\"xCloudService\">XCloud Service</label>\n                        <select id=\"xCloudService\" class=\"form-control\" [(ngModel)]=\"query.xCloudService\" (change)=\"onFilterChange()\">\n                                <option value=\"\"></option>\n                                <option *ngFor=\"let xc of xCloudServices?.items\" value=\"{{ xc.name }}\">{{ xc.name }}</option>\n                        </select>  \n                        </div>\n                        <br>\n                        <button class=\"btn btn-outline-primary\" (click)=\"resetFilter()\">Reset</button>\n                </div>\n        Count: {{ serviceNodes?.totalItems}}\n        <ngb-pagination [collectionSize]=\"serviceNodes?.totalItems\" [pageSize]=\"query.pageSize\" [(page)]=\"query.page\" (pageChange)=\"onPageChange($event)\"></ngb-pagination>\n        <div class=\"table-responsive\">\n                <table class=\"table\">\n                        <thead>\n                                <tr>\n                                <th *ngFor=\"let c of columns\"> {{ c.title }} </th>\n                                </tr> \n                        </thead>\n                        <tbody>\n                                <tr *ngFor=\"let sn of serviceNodes?.items; let i = index\">\n                                        <td>{{sn.rank}}</td>\n                                        <td><a [routerLink]=\"[sn.nodePubKey, sn.spvWallets[0]]\">{{sn.nodePubKey}}</a></td>\n                                        <td>\n                                                <div *ngIf=\"sn.spvWallets?.length > 0\">\n                                                        <div class=\"form-group\">\n                                                                <label for=\"spvWallets\"></label>\n                                                                <select id=\"spvWallets\" class=\"form-control\">\n                                                                        <option *ngFor=\"let w of sn.spvWallets\" [value]=\"w\">{{ w }} </option>\n                                                                </select>   \n                                                        </div> \n                                                </div>\n                                                \n                                        </td>\n                                        <td>\n                                                <div *ngIf = \"sn.xCloudServices.length > 0\">\n                                                        <div class=\"form-group\">\n                                                                <label for=\"xcloudServices\"></label>\n                                                                <select id=\"xcloudServices\" class=\"form-control\">\n                                                                        <option *ngFor=\"let s of sn.xCloudServices\" [value]=\"s\">{{ s }} </option>\n                                                                </select>   \n                                                        </div> \n                                                </div>\n                                                \n                                        </td>\n                                </tr>\n                        </tbody>\n                </table>\n        </div>\n        \n</ng-template>\n"
+module.exports = "<div *ngIf=\"loading else loaded\">\n        Fetching data...\n</div>\n            \n<ng-template #loaded>\n        <h2>Service Node List</h2>\n                        <div class=\"well\">\n                        <div class=\"form-group\">\n                        <h3>Filter</h3>\n                        <label for=\"spvWallet\">Spv Wallet</label>\n                        <select id=\"spvWallet\" class=\"form-control\" [(ngModel)]=\"query.spvWallet\" (change)=\"onFilterChange()\">\n                                <option value=\"\"></option>\n                                <option *ngFor=\"let w of spvWallets?.items\" value=\"{{ w.name }}\">{{ w.name }}</option>\n                        </select>  \n                        <label for=\"xCloudService\">XCloud Service</label>\n                        <select id=\"xCloudService\" class=\"form-control\" [(ngModel)]=\"query.xCloudService\" (change)=\"onFilterChange()\">\n                                <option value=\"\"></option>\n                                <option *ngFor=\"let xc of xCloudServices?.items\" value=\"{{ xc.name }}\">{{ xc.name }}</option>\n                        </select>  \n                        </div>\n                        <br>\n                        <button class=\"btn btn-outline-primary\" (click)=\"resetFilter()\">Reset</button>\n                </div>\n        Count: {{ serviceNodes?.totalItems}}\n        <ngb-pagination [collectionSize]=\"serviceNodes?.totalItems\" [maxSize]=\"5\" [pageSize]=\"query.pageSize\" [(page)]=\"query.page\" (pageChange)=\"onPageChange($event)\"></ngb-pagination>\n        <div class=\"table-responsive\">\n                <table class=\"table\">\n                        <thead>\n                                <tr>\n                                <th *ngFor=\"let c of columns\"> {{ c.title }} </th>\n                                </tr> \n                        </thead>\n                        <tbody>\n                                <tr *ngFor=\"let sn of serviceNodes?.items; let i = index\">\n                                        <td><a [routerLink]=\"[sn.nodePubKey, sn.spvWallets[0]]\">{{sn.nodePubKey}}</a></td>\n                                        <td>{{sn.addr}}</td>\n                                        <td>\n                                                <div *ngIf=\"sn.spvWallets?.length > 0\">\n                                                        <div class=\"form-group\">\n                                                                <label for=\"spvWallets\"></label>\n                                                                <select id=\"spvWallets\" class=\"form-control\">\n                                                                        <option *ngFor=\"let w of sn.spvWallets\" [value]=\"w\">{{ w }} </option>\n                                                                </select>   \n                                                        </div> \n                                                </div>\n                                                \n                                        </td>\n                                        <td>\n                                                <div *ngIf = \"sn.xCloudServices.length > 0\">\n                                                        <div class=\"form-group\">\n                                                                <label for=\"xcloudServices\"></label>\n                                                                <select id=\"xcloudServices\" class=\"form-control\">\n                                                                        <option *ngFor=\"let s of sn.xCloudServices\" [value]=\"s\">{{ s }} </option>\n                                                                </select>   \n                                                        </div> \n                                                </div>\n                                                \n                                        </td>\n                                </tr>\n                        </tbody>\n                </table>\n        </div>\n        \n</ng-template>\n"
 
 /***/ }),
 
@@ -998,11 +1320,11 @@ var ServiceNodeListComponent = /** @class */ (function () {
         this.query = {
             page: 1,
             pageSize: this.PAGE_SIZE,
-            onlyXWallets: true
+            atleastOneSpvWallet: true
         };
         this.columns = [
-            { title: 'Rank', key: 'rank' },
-            { title: 'Node Public Key', key: 'nodePubKey' },
+            { title: 'Node Id', key: 'nodeId' },
+            { title: 'Address', key: 'addr' },
             { title: 'Spv Wallets', key: 'spvWallets' },
             { title: 'XCloud Services', key: 'xCloudServices' },
         ];
@@ -1062,6 +1384,70 @@ var ServiceNodeListComponent = /** @class */ (function () {
         __metadata("design:paramtypes", [_angular_router__WEBPACK_IMPORTED_MODULE_1__["Router"], _shared_services_xrouter_service__WEBPACK_IMPORTED_MODULE_2__["XrouterApiService"]])
     ], ServiceNodeListComponent);
     return ServiceNodeListComponent;
+}());
+
+
+
+/***/ }),
+
+/***/ "./src/app/shared/directives/snode-address-validator.ts":
+/*!**************************************************************!*\
+  !*** ./src/app/shared/directives/snode-address-validator.ts ***!
+  \**************************************************************/
+/*! exports provided: ServicenodeAddressValidatorDirective */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ServicenodeAddressValidatorDirective", function() { return ServicenodeAddressValidatorDirective; });
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/forms */ "./node_modules/@angular/forms/fesm5/forms.js");
+var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (undefined && undefined.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+var ServicenodeAddressValidatorDirective = /** @class */ (function () {
+    function ServicenodeAddressValidatorDirective() {
+        this.serviceNodes = [];
+    }
+    ServicenodeAddressValidatorDirective_1 = ServicenodeAddressValidatorDirective;
+    ServicenodeAddressValidatorDirective.prototype.validate = function (control) {
+        /* validation rules */
+        var address = control.value;
+        /* check validation rules */
+        if (this.serviceNodes !== undefined) {
+            var addressToCheck = this.serviceNodes.items.find(function (sn) { return sn.addr === address; });
+            if (addressToCheck !== undefined) {
+                return null;
+            }
+            else {
+                return { servicenodeAddressValidator: true };
+            }
+        }
+        return { servicenodeAddressValidator: true };
+    };
+    __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Input"])("serviceNodes"),
+        __metadata("design:type", Object)
+    ], ServicenodeAddressValidatorDirective.prototype, "serviceNodes", void 0);
+    ServicenodeAddressValidatorDirective = ServicenodeAddressValidatorDirective_1 = __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Directive"])({
+            selector: '[servicenodeAddressValidator][ngModel]',
+            providers: [
+                { provide: _angular_forms__WEBPACK_IMPORTED_MODULE_1__["NG_VALIDATORS"], useExisting: ServicenodeAddressValidatorDirective_1, multi: true }
+            ]
+        }),
+        __metadata("design:paramtypes", [])
+    ], ServicenodeAddressValidatorDirective);
+    return ServicenodeAddressValidatorDirective;
+    var ServicenodeAddressValidatorDirective_1;
 }());
 
 
@@ -1165,6 +1551,28 @@ var HttpRequestTimeInterceptor = /** @class */ (function () {
         __metadata("design:paramtypes", [_services_responsetime_service__WEBPACK_IMPORTED_MODULE_3__["ResponseTimeService"]])
     ], HttpRequestTimeInterceptor);
     return HttpRequestTimeInterceptor;
+}());
+
+
+
+/***/ }),
+
+/***/ "./src/app/shared/models/myservicenode.model.ts":
+/*!******************************************************!*\
+  !*** ./src/app/shared/models/myservicenode.model.ts ***!
+  \******************************************************/
+/*! exports provided: MyServiceNode */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MyServiceNode", function() { return MyServiceNode; });
+var MyServiceNode = /** @class */ (function () {
+    function MyServiceNode() {
+        this.name = '';
+        this.address = '';
+    }
+    return MyServiceNode;
 }());
 
 
@@ -1315,18 +1723,22 @@ var AccountService = /** @class */ (function () {
         var _this = this;
         return this.httpClient.get("/api/account/isAuthenticated", { withCredentials: true })
             .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["tap"])(function (isAuthenticated) {
-            console.log(isAuthenticated);
             _this._isUserAuthenticatedSubject.next(isAuthenticated);
         }));
     };
     AccountService.prototype.setUserAsNotAuthenticated = function () {
         this._isUserAuthenticatedSubject.next(false);
     };
+    AccountService.prototype.isAuthenticated = function () {
+        var isAuthenticated;
+        this.isUserAuthenticated.subscribe(function (isAuth) { return isAuthenticated = isAuth; });
+        return isAuthenticated;
+    };
     AccountService.prototype.login = function () {
-        this.document.location.href = "http://localhost:44305/api/account/SignInWithDiscord";
+        this.document.location.href = this.document.location.origin + "/api/account/SignInWithDiscord";
     };
     AccountService.prototype.logout = function () {
-        this.document.location.href = "http://localhost:44305/api/account/logout";
+        this.document.location.href = this.document.location.origin + "/api/account/logout";
     };
     AccountService = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Injectable"])(),
@@ -1427,6 +1839,76 @@ var ConfigurationService = /** @class */ (function () {
     ], ConfigurationService);
     return ConfigurationService;
 }());
+
+
+
+/***/ }),
+
+/***/ "./src/app/shared/services/myservicenodes.service.ts":
+/*!***********************************************************!*\
+  !*** ./src/app/shared/services/myservicenodes.service.ts ***!
+  \***********************************************************/
+/*! exports provided: MyServiceNodesService */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MyServiceNodesService", function() { return MyServiceNodesService; });
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm5/http.js");
+/* harmony import */ var _base_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./base.service */ "./src/app/shared/services/base.service.ts");
+var __extends = (undefined && undefined.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (undefined && undefined.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+var MyServiceNodesService = /** @class */ (function (_super) {
+    __extends(MyServiceNodesService, _super);
+    function MyServiceNodesService(http) {
+        var _this = _super.call(this) || this;
+        _this.http = http;
+        _this.apiEndpoint = 'Servicenode';
+        _this.baseEndpoint = '/api/';
+        return _this;
+    }
+    // GetServiceNode(id: number){
+    //   return this.http.get(this.baseEndpoint + this.apiEndpoint + '/GetServiceNode/?id=' + id);
+    // }
+    MyServiceNodesService.prototype.GetServiceNodes = function (id) {
+        return this.http.get(this.baseEndpoint + this.apiEndpoint + '/GetMyServiceNodes/?id=' + id);
+    };
+    MyServiceNodesService.prototype.create = function (servicenode) {
+        return this.http.post(this.baseEndpoint + this.apiEndpoint, servicenode);
+    };
+    MyServiceNodesService.prototype.delete = function (id) {
+        return this.http.delete(this.baseEndpoint + this.apiEndpoint + '/' + id);
+    };
+    MyServiceNodesService.prototype.verifyMessage = function (address, signature, message) {
+        return this.http.get(this.baseEndpoint + this.apiEndpoint + '/VerifyMessage/?address=' + address + "&signature=" + signature + "&message=" + message);
+    };
+    MyServiceNodesService = __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Injectable"])(),
+        __metadata("design:paramtypes", [_angular_common_http__WEBPACK_IMPORTED_MODULE_1__["HttpClient"]])
+    ], MyServiceNodesService);
+    return MyServiceNodesService;
+}(_base_service__WEBPACK_IMPORTED_MODULE_2__["BaseService"]));
 
 
 
@@ -1632,6 +2114,9 @@ var XrouterApiService = /** @class */ (function (_super) {
         _this.baseEndpoint = '/api/';
         return _this;
     }
+    XrouterApiService.prototype.getAllServices = function () {
+        return this.http.get(this.baseEndpoint + this.apiEndpoint + '/getAllServices');
+    };
     XrouterApiService.prototype.GetNetworkServices = function () {
         return this.http.get(this.baseEndpoint + this.apiEndpoint + '/getNetworkServices');
     };

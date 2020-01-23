@@ -144,7 +144,7 @@ namespace Xrouter.Service.Explorer.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("Xrouter.Service.Explorer.Models.ApplicationUser", b =>
+            modelBuilder.Entity("Xrouter.Service.Explorer.Core.Models.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("TEXT");
@@ -217,6 +217,37 @@ namespace Xrouter.Service.Explorer.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
+            modelBuilder.Entity("Xrouter.Service.Explorer.Core.Models.MyServicenode", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("Active")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Address")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ApplicationUserId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("NodePubKey")
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("Ownership")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ApplicationUserId");
+
+                    b.ToTable("ServiceNodes");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -228,7 +259,7 @@ namespace Xrouter.Service.Explorer.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("Xrouter.Service.Explorer.Models.ApplicationUser", null)
+                    b.HasOne("Xrouter.Service.Explorer.Core.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -237,7 +268,7 @@ namespace Xrouter.Service.Explorer.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("Xrouter.Service.Explorer.Models.ApplicationUser", null)
+                    b.HasOne("Xrouter.Service.Explorer.Core.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -252,7 +283,7 @@ namespace Xrouter.Service.Explorer.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Xrouter.Service.Explorer.Models.ApplicationUser", null)
+                    b.HasOne("Xrouter.Service.Explorer.Core.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -261,11 +292,18 @@ namespace Xrouter.Service.Explorer.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("Xrouter.Service.Explorer.Models.ApplicationUser", null)
+                    b.HasOne("Xrouter.Service.Explorer.Core.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Xrouter.Service.Explorer.Core.Models.MyServicenode", b =>
+                {
+                    b.HasOne("Xrouter.Service.Explorer.Core.Models.ApplicationUser", "ApplicationUser")
+                        .WithMany("MyServiceNodes")
+                        .HasForeignKey("ApplicationUserId");
                 });
 #pragma warning restore 612, 618
         }

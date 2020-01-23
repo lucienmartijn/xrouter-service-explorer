@@ -23,9 +23,10 @@ export class ViewSpvWalletComponent implements OnInit, OnDestroy {
   shortSpvWalletName:string;
   nodePubKey:string;
   nodeCount:number;
+  minNodeCount:number = 1;
   result:any;
 
-  @ViewChild('spvWalletForm') spvWalletForm: NgForm;
+  @ViewChild('f') f: NgForm;
   @ViewChild('t') tab: NgbTabset;
   selectedSpvCommand:string;
   blockHashes:string[] = [""];
@@ -93,18 +94,18 @@ export class ViewSpvWalletComponent implements OnInit, OnDestroy {
 
   onSubmit() {
     this.resultLoading = true;
-    let nodecount = this.spvWalletForm.value.nodeCount;
-    switch(this.spvWalletForm.value.selectedSpvCommand){
+    let nodecount = this.f.value.nodeCount;
+    switch(this.f.value.selectedSpvCommand){
       case "xrGetBlockCount":{  
         this.callXrouterCommand(this.xrouterApiService.GetBlockCount(this.spvWalletName, nodecount));
         break;    
       }
       case "xrGetBlockHash":{
-        this.callXrouterCommand(this.xrouterApiService.GetBlockHash(this.spvWalletName, this.spvWalletForm.value.blockNumber, nodecount));        
+        this.callXrouterCommand(this.xrouterApiService.GetBlockHash(this.spvWalletName, this.f.value.blockNumber, nodecount));        
         break;
       }
       case "xrGetBlock":{
-        this.callXrouterCommand(this.xrouterApiService.GetBlock(this.spvWalletName, this.spvWalletForm.value.blockHash, nodecount));
+        this.callXrouterCommand(this.xrouterApiService.GetBlock(this.spvWalletName, this.f.value.blockHash, nodecount));
         break;
       }
       case "xrGetBlocks":{
@@ -112,7 +113,7 @@ export class ViewSpvWalletComponent implements OnInit, OnDestroy {
         break;
       }
       case "xrGetTransaction":{
-        this.callXrouterCommand(this.xrouterApiService.GetTransaction(this.spvWalletName, this.spvWalletForm.value.txid, nodecount));
+        this.callXrouterCommand(this.xrouterApiService.GetTransaction(this.spvWalletName, this.f.value.txid, nodecount));
         break;
       }
       case "xrGetTransactions":{
@@ -120,11 +121,11 @@ export class ViewSpvWalletComponent implements OnInit, OnDestroy {
         break;
       }
       case "xrDecodeRawTransaction":{
-        this.callXrouterCommand(this.xrouterApiService.DecodeRawTransaction(this.spvWalletName, this.spvWalletForm.value.txHex, nodecount))        
+        this.callXrouterCommand(this.xrouterApiService.DecodeRawTransaction(this.spvWalletName, this.f.value.txHex, nodecount))        
         break;
       }
       case "xrSendTransaction":{
-        this.callXrouterCommand(this.xrouterApiService.SendTransaction(this.spvWalletName, this.spvWalletForm.value.signedTx));
+        this.callXrouterCommand(this.xrouterApiService.SendTransaction(this.spvWalletName, this.f.value.signedTx));
         break;
       }
     }

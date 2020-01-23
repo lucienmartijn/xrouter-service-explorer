@@ -36,6 +36,11 @@ import { AccountService } from './shared/services/account.service';
 import { checkIfUserIsAuthenticated } from './check-login-intializer';
 import { MyServiceNodesComponent } from './my-service-nodes/my-service-nodes.component';
 import { MyServiceNodesService } from './shared/services/myservicenodes.service';
+import { NgbdModalComponentModule } from './my-service-nodes/my-service-nodes.module';
+import { AuthGuard } from './auth.guard';
+import { CustomMinDirective } from './shared/directives/custom-min-validator';
+
+
 
 
 const appInitializerFn = (appConfig: ConfigurationService) => {
@@ -59,10 +64,10 @@ const appInitializerFn = (appConfig: ConfigurationService) => {
     ViewSnodeComponent,
     SearchFormComponent,  
     SignInComponent,  
-    MyServiceNodesComponent,
     RpcConsoleComponent,
     ErrorComponent,
-    PageNotFoundComponent
+    PageNotFoundComponent,
+    CustomMinDirective
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -71,8 +76,9 @@ const appInitializerFn = (appConfig: ConfigurationService) => {
     BrowserAnimationsModule,
     ReactiveFormsModule,
     NgbModule,
+    NgbdModalComponentModule,
     NgxPaginationModule,
-    AutocompleteLibModule,
+    AutocompleteLibModule,  
     RouterModule.forRoot([
       { path: '', component: HomeComponent, pathMatch: 'full' },
       { path: 'xrouter-snodes', component: ServiceNodeListComponent },
@@ -81,10 +87,10 @@ const appInitializerFn = (appConfig: ConfigurationService) => {
       { path: 'spv-wallets/:name/:nodePubKey', component: ViewSpvWalletComponent, runGuardsAndResolvers: 'always' },
       { path: 'xcloud-services', component: XrServicesComponent },
       { path: 'xcloud-services/:name', component: ViewXrServiceComponent, runGuardsAndResolvers: 'always' },
-      { path: 'xcloud-services/:name/:NodePubKey', component: ViewXrServiceComponent, runGuardsAndResolvers: 'always' },
+      { path: 'xcloud-services/:name/:nodePubKey', component: ViewXrServiceComponent, runGuardsAndResolvers: 'always' },
       { path: 'xrouter-snodes/:nodePubKey', component: ViewSnodeComponent},
       { path: 'xrouter-snodes/:nodePubKey/:service', component: ViewSnodeComponent},
-      { path: 'my-service-nodes', component: MyServiceNodesComponent},
+      { path: 'my-service-nodes/:id', component: MyServiceNodesComponent, canActivate: [AuthGuard]},
       { path: 'rpc-console', component: RpcConsoleComponent},
       { path: 'error', component: ErrorComponent},
       { path: '**', component: PageNotFoundComponent }
@@ -102,19 +108,20 @@ const appInitializerFn = (appConfig: ConfigurationService) => {
     NavigatorService,
     ResponseTimeService,
     // {
-    //   provide: HTTP_INTERCEPTORS,
-    //   useClass: HttpErrorInterceptor,
-    //   multi: true
-    // },
-    ConfigurationService, 
-    {
-      provide: APP_INITIALIZER,
-      useFactory: checkIfUserIsAuthenticated,
-      multi: true,
-      deps: [AccountService]
-    },
-    interceptorProviders
+      //   provide: HTTP_INTERCEPTORS,
+      //   useClass: HttpErrorInterceptor,
+      //   multi: true
+      // },
+      ConfigurationService, 
+      {
+        provide: APP_INITIALIZER,
+        useFactory: checkIfUserIsAuthenticated,
+        multi: true,
+        deps: [AccountService]
+      },
+      interceptorProviders,
+      AuthGuard,
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
 export class AppModule {}

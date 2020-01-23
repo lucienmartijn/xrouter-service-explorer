@@ -10,6 +10,7 @@ import { XrouterApiService } from '../shared/services/xrouter.service';
 import { debounceTime, tap, switchMap, finalize } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 import { BaseService } from '../shared/services/base.service';
+import { SearchService } from '../shared/services/search.service';
 
 // const NODEPUBKEY_REGEX = '^[0][a-zA-Z0-9]{65}$'; 
 // const ADDRESS_REGEX = '^[B][a-zA-Z0-9]{33}$';
@@ -22,12 +23,13 @@ import { BaseService } from '../shared/services/base.service';
 })
 export class SearchFormComponent extends BaseService implements OnInit {
   private readonly apiEndpoint = 'blocknet/xrouter';
-  private baseEndpoint = 'api/'; // http://localhost
+  private baseEndpoint = 'api/'; 
 
   constructor(
     private http: HttpClient,
     private xrouterService: XrouterApiService,
     private navigatorService: NavigatorService,
+    private searchService: SearchService
   ) {
     super();
   }
@@ -36,7 +38,7 @@ export class SearchFormComponent extends BaseService implements OnInit {
   services:any;
  
   ngOnInit(){
-    this.xrouterService.GetNetworkServices().subscribe(
+    this.xrouterService.getAllServices().subscribe(
       res => {
         this.services = res;
       }
@@ -53,7 +55,8 @@ export class SearchFormComponent extends BaseService implements OnInit {
   }
  
   onChangeSearch(val: string) {
-    this.http.get(this.baseEndpoint + this.apiEndpoint + "/?searchString=" + val).subscribe(
+    // this.http.get(this.baseEndpoint + this.apiEndpoint + "/?searchString=" + val).subscribe(
+      this.searchService.search(val).subscribe(
       data => {
         this.services = data;
       }

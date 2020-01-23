@@ -10,6 +10,7 @@ namespace Xrouter.Service.Explorer.Core.Models
         public int Id { get; set; }
         public string Name { get; set; }
         public string Address { get; set; }
+
         public string NodePubKey { get; set; }
         public bool Ownership { get; set; }
         public bool Active { get; set; }

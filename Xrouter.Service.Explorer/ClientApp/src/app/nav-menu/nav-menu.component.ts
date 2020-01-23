@@ -14,6 +14,7 @@ export class NavMenuComponent implements OnInit,OnDestroy{
   isExpanded = false;
   isUserAuthenticated = false;
   subscription: Subscription;
+  id:string;
   userName: string;
   avatarUrl: string;
 
@@ -29,15 +30,18 @@ export class NavMenuComponent implements OnInit,OnDestroy{
 
   ngOnInit() {
     this.subscription = this.accountService.isUserAuthenticated.subscribe(isAuthenticated => {
-      console.log(isAuthenticated);
       this.isUserAuthenticated = isAuthenticated;
       if (this.isUserAuthenticated) {
-      this.httpClient.get(`/api/account/name`, { responseType: 'text', withCredentials: true }).subscribe(theName => {
-          this.userName = theName;
+        //todo: forkjoin
+        this.httpClient.get(`/api/account/name`, { responseType: 'text', withCredentials: true }).subscribe(theName => {
+            this.userName = theName;
+          });
+        this.httpClient.get(`/api/account/AvatarUrl`, { responseType: 'text', withCredentials: true }).subscribe(avatarUrl => {
+          this.avatarUrl = avatarUrl;
+        }); 
+        this.httpClient.get(`/api/account/id`, { responseType: 'text', withCredentials: true }).subscribe(id => {
+          this.id = id;
         });
-      this.httpClient.get(`/api/account/AvatarUrl`, { responseType: 'text', withCredentials: true }).subscribe(avatarUrl => {
-        this.avatarUrl = avatarUrl;
-      }); 
       }
     });
   }

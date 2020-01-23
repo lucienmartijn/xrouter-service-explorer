@@ -20,12 +20,12 @@ export class HomeComponent implements OnInit{
    ];
 
    forkJoin(sources).subscribe(data =>{
-     this.networkServiceCount = data[0];
-     this.xCloudServices = data[1];
-     this.spvWallets = data[2];
-  }, err => {
-    if(err.status == 404)
-      this.router.navigate(['']);
-  });
+      this.networkServiceCount = data[0];
+      this.xCloudServices = data[1];
+      this.spvWallets = data[2];
+    }, err => {
+      if(err.status == 404)
+        this.router.navigate(['']);
+    });
   }
 }

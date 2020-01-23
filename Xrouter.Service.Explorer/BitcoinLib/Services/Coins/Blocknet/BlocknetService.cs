@@ -175,7 +175,8 @@ namespace BitcoinLib.Services.Coins.Blocknet
                 XRouterVersion = sn.XRouterVersion,
                 SpvWallets = sn.XWallets.Split(',').ToList().Where(xw => xw.Split(':')[0].Equals("xr")).Where(xw => !xw.Equals("xr")).ToList(),
                 XCloudServices = sn.XWallets.Split(',').ToList().Where(xw => xw.Split(':')[0].Equals("xrs")).ToList(),
-            }).Where(sn => sn.SpvWallets.Count() > 0).ToList();
+            })
+            .ToList();
         }
     }
 }
