@@ -146,9 +146,11 @@
                       <label for="nodeCount">Node count</label>
                       <input type="number" class="form-control" id="nodeCount"  [(ngModel)]="nodeCount" name="nodeCount" [customMin]="minNodeCount" #nodecount="ngModel" required>
                     </div>
-                    <div *ngIf="nodecount.errors?.customMin" class="alert alert-danger"> 
-                      Minimum node count is {{minNodeCount}}.
-                   </div>   
+                    <div class="form-group">
+                      <div *ngIf="nodecount.errors?.customMin" class="alert alert-danger"> 
+                        Minimum node count is {{minNodeCount}}.
+                     </div>   
+                    </div>
                     <br>
                     <button type="submit" class="btn btn-outline-primary" [disabled]="f.form.invalid">Submit</button>
                   </form>

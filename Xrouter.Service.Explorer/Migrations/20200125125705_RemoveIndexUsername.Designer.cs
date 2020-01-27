@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Xrouter.Service.Explorer.Persistence;
 
 namespace Xrouter.Service.Explorer.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200125125705_RemoveIndexUsername")]
+    partial class RemoveIndexUsername
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -209,9 +211,6 @@ namespace Xrouter.Service.Explorer.Migrations
 
                     b.HasIndex("NormalizedEmail")
                         .HasName("EmailIndex");
-
-                    b.HasIndex("NormalizedUserName", "Discriminator")
-                        .IsUnique();
 
                     b.ToTable("AspNetUsers");
                 });

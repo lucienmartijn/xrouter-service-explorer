@@ -32,12 +32,6 @@ namespace blocknet_xrouter.Controllers
             return this._blocknetService.GetBlockCount();
         }
 
-        //[HttpGet("[action]")]
-        //public string SignMessage(string address, string message)
-        //{
-        //    return this._blocknetService.SignMessage(address, message);
-        //}
-
         [HttpGet("[action]")]
         public bool VerifyMessage(string address, string signature, string message)
         {
@@ -262,6 +256,7 @@ namespace blocknet_xrouter.Controllers
             var serviceNode = connectReply.Find(s => s.NodePubKey == nodePubKey);
             if (serviceNode == null)
             {
+                if(service == null) service = "xr::BLOCK";
                 try
                 {
                     connectResponse = this._blocknetService.xrConnect(service, node_count);    

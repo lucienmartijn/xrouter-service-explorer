@@ -10,6 +10,7 @@ using BitcoinLib.Services.Coins.Blocknet;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OAuth;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -22,9 +23,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Xrouter.Service.Explorer.Authorization;
 using Xrouter.Service.Explorer.Core;
 using Xrouter.Service.Explorer.Core.Models;
 using Xrouter.Service.Explorer.Persistence;
+using Xrouter.Service.Explorer.Validators;
 
 namespace Xrouter.Service.Explorer
 {
@@ -40,8 +43,12 @@ namespace Xrouter.Service.Explorer
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            var rpcSettings = Configuration.GetSection("CoinConfig").Get<CoinRpcConfig>();
-
+            services.Configure<CookiePolicyOptions>(options =>
+            {
+                // This lambda determines whether user consent for non-essential cookies is needed for a given request.
+                options.CheckConsentNeeded = context => true;
+                options.MinimumSameSitePolicy = SameSiteMode.None;
+            });
             services.AddMvc();
             services.AddCors(corsOptions =>
             {
@@ -59,31 +66,23 @@ namespace Xrouter.Service.Explorer
                 configuration.RootPath = "ClientApp/dist";
             });
 
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("EditPolicy", policy =>
+                    policy.Requirements.Add(new SameServicenodeRequirement()));
+            });
+
             services.AddDbContext<ApplicationDbContext>(options =>
                         options.UseSqlite("Data Source=users.sqlite",
                         sqliteOptions => sqliteOptions.MigrationsAssembly("Xrouter.Service.Explorer")));
             services.AddIdentity<ApplicationUser, IdentityRole>()
                     .AddEntityFrameworkStores<ApplicationDbContext>()
-                    .AddDefaultTokenProviders();
+                    .AddDefaultTokenProviders()
+                    .AddUserManager<CustomUserManager<ApplicationUser>>();
 
             services.AddAuthentication(options =>
             {
                 options.DefaultSignOutScheme = IdentityConstants.ApplicationScheme;
-            })
-            .AddGoogle(options =>
-            {
-                options.CallbackPath = new PathString("/google-callback");
-                options.ClientId = "290568501515-f3eabqcd827986js87qtkjnestfa74d5.apps.googleusercontent.com";
-                options.ClientSecret = "LYnHpm7woKnwSF6NhtMs6j4d";
-                options.Events = new OAuthEvents
-                {
-                    OnRemoteFailure = (RemoteFailureContext context) =>
-                    {
-                        context.Response.Redirect("/");
-                        context.HandleResponse();
-                        return Task.CompletedTask;
-                    }
-                };
             })
             .AddDiscord(options =>
             {
@@ -101,16 +100,9 @@ namespace Xrouter.Service.Explorer
                 };
             });
 
+            var rpcSettings = Configuration.GetSection("CoinConfig").Get<CoinRpcConfig>();
 
-            //services.Configure<CookiePolicyOptions>(options =>
-            //{
-            //    // This lambda determines whether user consent for non-essential cookies is needed for a given request.
-            //    options.CheckConsentNeeded = context => true;
-            //    options.MinimumSameSitePolicy = SameSiteMode.None;
-            //});
-
-
-
+            services.AddTransient<ICustomUserValidator<ApplicationUser>, CustomUserValidator<ApplicationUser>>();
             services.AddTransient<ICoinService, CoinService>();
             services.AddTransient<IBitcoinService, BitcoinService>();
             services.AddTransient<IBlocknetService>(service => 
@@ -126,6 +118,7 @@ namespace Xrouter.Service.Explorer
 
             services.AddScoped<IServicenodeRepository, ServicenodeRepository>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<IAuthorizationHandler, ServicenodeAuthorizationHandler>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

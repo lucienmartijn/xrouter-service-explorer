@@ -9,7 +9,7 @@ import { MyServiceNode } from '../models/myservicenode.model';
 
 @Injectable()
 export class MyServiceNodesService extends BaseService{
-  private readonly apiEndpoint = 'Servicenode';
+  private readonly apiEndpoint = 'MyServicenode';
   private baseEndpoint = '/api/';
 
   constructor(private http:HttpClient) {

@@ -13,6 +13,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNet.Identity.Core" Version="2.2.3" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="3.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.0.0" />
@@ -33,6 +34,23 @@
     <Content Remove="$(SpaRoot)**" />
     <None Remove="$(SpaRoot)**" />
     <None Include="$(SpaRoot)**" Exclude="$(SpaRoot)node_modules\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Migrations\20200125123319_UpdateIndex.cs" />
+    <Compile Remove="Migrations\20200125123319_UpdateIndex.Designer.cs" />
+    <Compile Remove="Migrations\20200125123942_UpdateIndex.cs" />
+    <Compile Remove="Migrations\20200125123942_UpdateIndex.Designer.cs" />
+    <Compile Remove="Migrations\20200125124459_UpdateIndex.cs" />
+    <Compile Remove="Migrations\20200125124459_UpdateIndex.Designer.cs" />
+    <Compile Remove="Migrations\20200125125008_RemoveIndexUsername.cs" />
+    <Compile Remove="Migrations\20200125125008_RemoveIndexUsername.Designer.cs" />
+    <Compile Remove="Migrations\20200125154555_AddIndexUsernameDiscriminator.cs" />
+    <Compile Remove="Migrations\20200125154555_AddIndexUsernameDiscriminator.Designer.cs" />
+    <Compile Remove="Migrations\20200125155532_AddIndexUsernameDiscriminator.cs" />
+    <Compile Remove="Migrations\20200125155532_AddIndexUsernameDiscriminator.Designer.cs" />
+    <Compile Remove="Migrations\20200125155617_AddIndexUsernameDiscriminator.cs" />
+    <Compile Remove="Migrations\20200125155617_AddIndexUsernameDiscriminator.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

@@ -6,6 +6,7 @@ export class MyServiceNode{
      }
      id:number;
      applicationUserId:string;
+     ownership:boolean;
      name:string;
      address:string;
   }

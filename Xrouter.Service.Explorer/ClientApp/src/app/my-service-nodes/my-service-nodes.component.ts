@@ -148,9 +148,8 @@ export class ValidateServicenodeModalContent implements OnInit {
       this.submitted = true;
 
       if(res){
-        this.activeModal.close('Verify Message Click');
+        this.activeModal.close('Service verified!');
       } else{
-        console.log(res);
         this.signatureValidated = res;
         this.resultMessage = "Service node not verified!";
       }
@@ -245,5 +244,10 @@ export class MyServiceNodesComponent implements OnInit {
 
     const modalReference = this.modalService.open(ValidateServicenodeModalContent, {size: 'lg', windowClass:'wide-modal'});
     modalReference.componentInstance.servicenode = this.myServiceNodes[index];
+    modalReference.result.then(res => {
+      if(res === 'Service verified!'){
+        this.myServiceNodes[index].ownership == true;
+      }
+    });
   }
 }

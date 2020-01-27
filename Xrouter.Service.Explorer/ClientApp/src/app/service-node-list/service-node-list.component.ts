@@ -32,7 +32,9 @@ export class ServiceNodeListComponent implements OnInit {
 
   loading:boolean;
 
-  constructor(private router: Router, private xrouterService: XrouterApiService) { }
+  constructor(private router: Router, private xrouterService: XrouterApiService) { 
+    this.loading = true;
+  }
 
   ngOnInit() {
     var sources = [
@@ -43,6 +45,7 @@ export class ServiceNodeListComponent implements OnInit {
     forkJoin(sources).subscribe(data =>{
       this.xCloudServices = data[0];
       this.spvWallets = data[1];
+      this
     }, err => {
       if(err.status == 404)
         this.router.navigate(['']);
@@ -73,6 +76,7 @@ export class ServiceNodeListComponent implements OnInit {
     this.query = {
       page: 1,
       pageSize: this.PAGE_SIZE,
+      atleastOneSpvWallet: true
     };
     this.populateServiceNodes();
   }
