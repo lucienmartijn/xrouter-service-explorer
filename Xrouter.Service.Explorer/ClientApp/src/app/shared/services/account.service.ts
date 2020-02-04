@@ -41,5 +41,16 @@ export class AccountService {
   logout() {
     this.document.location.href =  this.document.location.origin + "/api/account/logout";
   }
+
+  name(){
+    return this.httpClient.get(`/api/account/name`, { responseType: 'text', withCredentials: true });
+  }
+
+  avatarUrl(){
+    return this.httpClient.get(`/api/account/AvatarUrl`, { responseType: 'text', withCredentials: true });
+  }
   
+  id(){
+    return this.httpClient.get(`/api/account/id`, { responseType: 'text', withCredentials: true });    
+  }
 }

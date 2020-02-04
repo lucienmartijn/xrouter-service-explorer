@@ -24,24 +24,24 @@ namespace blocknet_xrouter.Controllers
     {
         private readonly IBlocknetService _blocknetService;
         public BlocknetController(IBlocknetService blocknetService){
-            this._blocknetService = blocknetService;
+            _blocknetService = blocknetService;
         }
 
         [HttpGet("[action]")]
         public uint BlockCount(){
-            return this._blocknetService.GetBlockCount();
+            return _blocknetService.GetBlockCount();
         }
 
         [HttpGet("[action]")]
         public bool VerifyMessage(string address, string signature, string message)
         {
-            return this._blocknetService.VerifyMessage(address, signature, message);
+            return _blocknetService.VerifyMessage(address, signature, message);
         }
 
         #region XRouter
         [HttpGet("Xrouter/[action]")]
         public ConnectResponse Connect(string service, int node_count = 1){
-            var resp = this._blocknetService.xrConnect(service, node_count);
+            var resp = _blocknetService.xrConnect(service, node_count);
             return resp;
         }
         
@@ -53,7 +53,7 @@ namespace blocknet_xrouter.Controllers
             ConnectResponse connectResponse;
             try
             {
-                connectResponse = this._blocknetService.xrConnect(service, node_count);    
+                connectResponse = _blocknetService.xrConnect(service, node_count);    
             }
             catch (RpcRequestTimeoutException e)
             {
@@ -70,7 +70,7 @@ namespace blocknet_xrouter.Controllers
             }
 
             var connectReply = connectResponse.Reply;                
-            var configReply = this._blocknetService.xrShowConfigs();
+            var configReply = _blocknetService.xrShowConfigs();
 
             if(string.IsNullOrWhiteSpace(nodePubKey)){
                 serviceNode = connectReply.OrderByDescending(n => n.Score).FirstOrDefault();
@@ -87,7 +87,7 @@ namespace blocknet_xrouter.Controllers
                 
             var spvConfig = serviceNode.SpvConfigs.Find(c => c.SpvWallet == serviceName);
 
-            //TODO: Add AutoMapper to replace this.        
+            //TODO: Add AutoMapper to replace         
             var viewModel = new SpvWalletResultViewModel
             {
                 SpvConfig = new SpvConfigViewModel
@@ -129,7 +129,7 @@ namespace blocknet_xrouter.Controllers
             ConnectResponse connectResponse;
             try
             {
-                connectResponse = this._blocknetService.xrConnect(service, node_count);    
+                connectResponse = _blocknetService.xrConnect(service, node_count);    
             }
             catch (RpcRequestTimeoutException e)
             {
@@ -146,7 +146,7 @@ namespace blocknet_xrouter.Controllers
             }
 
             var connectReply = connectResponse.Reply;
-            var configReply = this._blocknetService.xrShowConfigs();
+            var configReply = _blocknetService.xrShowConfigs();
                 
             if(string.IsNullOrWhiteSpace(nodePubKey)){  
                 serviceNode = serviceNode = connectReply.OrderByDescending(n => n.Score).FirstOrDefault();
@@ -193,7 +193,7 @@ namespace blocknet_xrouter.Controllers
                 }
             }
 
-            //TODO: Add AutoMapper to replace this.     
+            //TODO: Add AutoMapper to replace      
             var viewModel = new XCloudServiceResultViewModel
             {
                 Service = new XCloudServiceViewModel
@@ -234,7 +234,7 @@ namespace blocknet_xrouter.Controllers
             GetConnectedNodesResponse getConnectedResponse;
             try
             {
-                getConnectedResponse = this._blocknetService.xrConnectedNodes();    
+                getConnectedResponse = _blocknetService.xrConnectedNodes();    
             }
             catch (RpcInternalServerErrorException e)
             {
@@ -259,7 +259,7 @@ namespace blocknet_xrouter.Controllers
                 if(service == null) service = "xr::BLOCK";
                 try
                 {
-                    connectResponse = this._blocknetService.xrConnect(service, node_count);    
+                    connectResponse = _blocknetService.xrConnect(service, node_count);    
                 }
                 catch (RpcInternalServerErrorException e)
                 {
@@ -284,7 +284,7 @@ namespace blocknet_xrouter.Controllers
                     });
             }
                
-            var configReply = this._blocknetService.xrShowConfigs();            
+            var configReply = _blocknetService.xrShowConfigs();            
 
             string config = string.Empty;
             var serviceNodeConfig = configReply.Find(c => c.NodePubKey == serviceNode.NodePubKey);
@@ -321,7 +321,7 @@ namespace blocknet_xrouter.Controllers
         [HttpGet("Xrouter/[action]")]
         public IActionResult FilterXCloudServiceServiceNode(XCloudServiceQueryViewModel filterViewModel)
         {
-            var connectedResponse = this._blocknetService.xrConnectedNodes();
+            var connectedResponse = _blocknetService.xrConnectedNodes();
 
             var serviceNode = connectedResponse.Reply.Find(c => c.NodePubKey == filterViewModel.NodePubKey);
 
@@ -364,7 +364,7 @@ namespace blocknet_xrouter.Controllers
             GetBlockCountResponse response;
             try
             {
-                response = this._blocknetService.xrGetBlockCount(blockchain, node_count);
+                response = _blocknetService.xrGetBlockCount(blockchain, node_count);
             }
             catch (RpcInternalServerErrorException e)
             {
@@ -396,7 +396,7 @@ namespace blocknet_xrouter.Controllers
             DecodeRawTransactionResponse response;
             try
             {
-                response = this._blocknetService.xrDecodeRawTransaction(blockchain, tx_hex, node_count);
+                response = _blocknetService.xrDecodeRawTransaction(blockchain, tx_hex, node_count);
             }
             catch (RpcInternalServerErrorException e)
             {
@@ -419,7 +419,7 @@ namespace blocknet_xrouter.Controllers
             GetBlockHashResponse response;
             try
             {
-                response = this._blocknetService.xrGetBlockHash(blockchain, block_number, node_count);
+                response = _blocknetService.xrGetBlockHash(blockchain, block_number, node_count);
             }
             catch (RpcInternalServerErrorException e)
             {
@@ -443,7 +443,7 @@ namespace blocknet_xrouter.Controllers
 
             try
             {
-                response =  this._blocknetService.xrGetBlock(blockchain, block_hash, node_count);
+                response =  _blocknetService.xrGetBlock(blockchain, block_hash, node_count);
             }
             catch (RpcInternalServerErrorException e)
             {
@@ -468,7 +468,7 @@ namespace blocknet_xrouter.Controllers
             try
             {
                 var result = JsonConvert.DeserializeObject<List<string>>(block_hashes);
-                response = this._blocknetService.xrGetBlocks(blockchain, string.Join(",", result), node_count);
+                response = _blocknetService.xrGetBlocks(blockchain, string.Join(",", result), node_count);
             }
             catch (RpcInternalServerErrorException e)
             {
@@ -492,7 +492,7 @@ namespace blocknet_xrouter.Controllers
             GetTransactionResponse response;
             try
             {
-                response = this._blocknetService.xrGetTransaction(blockchain, txid, node_count);
+                response = _blocknetService.xrGetTransaction(blockchain, txid, node_count);
             }
             catch (RpcInternalServerErrorException e)
             {
@@ -518,7 +518,7 @@ namespace blocknet_xrouter.Controllers
             try
             {
                 var result = JsonConvert.DeserializeObject<List<string>>(txids);        
-                response = this._blocknetService.xrGetTransactions(blockchain, string.Join(",",result), node_count);
+                response = _blocknetService.xrGetTransactions(blockchain, string.Join(",",result), node_count);
             }
             catch (RpcInternalServerErrorException e)
             {
@@ -542,7 +542,7 @@ namespace blocknet_xrouter.Controllers
             SendTransactionResponse response;
             try
             {
-                response = this._blocknetService.xrSendTransaction(blockchain, signed_tx);
+                response = _blocknetService.xrSendTransaction(blockchain, signed_tx);
             }
             catch (RpcInternalServerErrorException e)
             {
@@ -562,22 +562,22 @@ namespace blocknet_xrouter.Controllers
 
         [HttpGet("Xrouter/[action]")]
         public GetReplyResponse GetReply(string uuid){
-            return this._blocknetService.xrGetReply(uuid);
+            return _blocknetService.xrGetReply(uuid);
         }
 
         [HttpGet("Xrouter/[action]")]
         public List<ShowConfigsResponse> ShowConfigs(){
-            return this._blocknetService.xrShowConfigs();
+            return _blocknetService.xrShowConfigs();
         }
 
         [HttpPost("Xrouter/[action]")]
         public UpdateConfigsResponse UpdateConfigs(bool force_check = false){
-            return this._blocknetService.xrUpdateConfigs(force_check);
+            return _blocknetService.xrUpdateConfigs(force_check);
         }
 
         [HttpGet("Xrouter/[action]")]
         public IActionResult GetAllServices(){
-            var response = this._blocknetService.xrGetNetworkServices();
+            var response = _blocknetService.xrGetNetworkServices();
             var services = response.Reply.NodeCounts
                 .Select(s => new ServiceViewModel{
                     Name = s.Key,
@@ -591,7 +591,7 @@ namespace blocknet_xrouter.Controllers
         }
         [HttpGet("Xrouter/[action]")]
         public IActionResult GetNetworkServices(){
-            var response = this._blocknetService.xrGetNetworkServices();
+            var response = _blocknetService.xrGetNetworkServices();
             var services = response.Reply.NodeCounts
                 .Join(response.Reply.Services, m => m.Key, m => m.ToString(), 
                     (s, sn) => new ServiceViewModel{
@@ -609,7 +609,7 @@ namespace blocknet_xrouter.Controllers
 
         [HttpGet("Xrouter/[action]")]
         public IActionResult GetNetworkSpvWallets(){
-            var response = this._blocknetService.xrGetNetworkServices();
+            var response = _blocknetService.xrGetNetworkServices();
             var services = response.Reply.NodeCounts
                 .Join(response.Reply.SpvWallets, m => m.Key, m => m.ToString(), 
                     (s, sn) => new ServiceViewModel{
@@ -627,7 +627,7 @@ namespace blocknet_xrouter.Controllers
 
         [HttpGet("Xrouter/[action]")]
         public GetConnectedNodesResponse GetConnectedNodes(){
-            return this._blocknetService.xrConnectedNodes();
+            return _blocknetService.xrConnectedNodes();
         }
 
 
@@ -637,21 +637,21 @@ namespace blocknet_xrouter.Controllers
         public IActionResult Service([FromBody]ServiceRequest request){
             if(request == null)
                 return BadRequest("No service request supplied");
-            return Ok(this._blocknetService.xrService(request.Service, request.Parameters));
+            return Ok(_blocknetService.xrService(request.Service, request.Parameters));
         }
         #endregion
 
         [HttpGet("Xrouter/[action]")]
         public IActionResult GetServiceNodeCount()
         {
-            return Ok(this._blocknetService.serviceNodeList().Count());
+            return Ok(_blocknetService.serviceNodeList().Count());
         }
 
         [HttpGet("Xrouter/[action]")]
         public IActionResult GetServiceNodeList(ServiceNodeQueryViewModel filterViewModel)
         {
             var result = new QueryResult<ServiceNodeResponse>();
-            var query = this._blocknetService.serviceNodeList().AsQueryable();
+            var query = _blocknetService.serviceNodeList().AsQueryable();
             var queryObj = new ServiceNodeQuery
             {
                 Page = filterViewModel.Page,
@@ -698,7 +698,7 @@ namespace blocknet_xrouter.Controllers
         [HttpGet("Xrouter")]
         public IActionResult Index(string searchString)
         {
-            var response = this._blocknetService.xrGetNetworkServices();
+            var response = _blocknetService.xrGetNetworkServices();
 
             var services = response.Reply.NodeCounts
                 .Join(response.Reply.Services, m => m.Key, m => m.ToString(), 

@@ -14,12 +14,13 @@ namespace Xrouter.Service.Explorer.Validators
         public async Task<IdentityResult> ValidateAsync(UserManager<TUser> manager, TUser user)
         {
             var existingUser = await manager.FindByNameAsync(user.UserName);
-            if(existingUser.UserName == user.UserName && existingUser.Discriminator == user.Discriminator)
+            
+            if(existingUser != null && existingUser.UserName == user.UserName)
             {
                 return await Task.FromResult(IdentityResult.Failed(new IdentityError
                 {
                     Code = "UserAlreadyExists",
-                    Description = "Name " + user.UserName + "#" + user.Discriminator + " is already taken."
+                    Description = "Name " + user.UserName + " is already taken."
                 }));
             }
             return await Task.FromResult(IdentityResult.Success);

@@ -59,10 +59,10 @@
                 <li class="nav-item avatar dropdown">
                   <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink-5" data-toggle="dropdown" aria-haspopup="true"
                     aria-expanded="false">
-                    <img src="{{ avatarUrl }}" class="rounded-circle z-depth-0" width="30" alt="avatar image">
+                    <img src="{{ user.avatarUrl }}" class="rounded-circle z-depth-0" width="30" alt="avatar image">
                   </a>
                   <div class="dropdown-menu dropdown-menu-right dropdown-secondary" aria-labelledby="navbarDropdownMenuLink-5">
-                    <h6 class="dropdown-header">Logged in as {{ userName }}</h6>
+                    <h6 class="dropdown-header">Logged in as {{ user.userName }}</h6>
                     <a class="dropdown-item" [routerLink]="'/my-service-nodes/' + id">My Service Nodes</a>
                     <a class="dropdown-item" href="#" (click)="logout()">Logout</a>
                   </div>

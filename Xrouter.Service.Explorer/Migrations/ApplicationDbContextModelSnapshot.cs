@@ -159,9 +159,6 @@ namespace Xrouter.Service.Explorer.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Discriminator")
-                        .HasColumnType("TEXT");
-
                     b.Property<string>("Email")
                         .HasColumnType("TEXT")
                         .HasMaxLength(256);
@@ -210,10 +207,51 @@ namespace Xrouter.Service.Explorer.Migrations
                     b.HasIndex("NormalizedEmail")
                         .HasName("EmailIndex");
 
-                    b.HasIndex("NormalizedUserName", "Discriminator")
-                        .IsUnique();
+                    b.HasIndex("NormalizedUserName")
+                        .IsUnique()
+                        .HasName("UserNameIndex");
 
                     b.ToTable("AspNetUsers");
+                });
+
+            modelBuilder.Entity("Xrouter.Service.Explorer.Core.Models.Comment", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Body")
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(1000);
+
+                    b.Property<string>("CommentId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("DateTime")
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("Deleted")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("NodePubKey")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ServiceId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Username")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CommentId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Comments");
                 });
 
             modelBuilder.Entity("Xrouter.Service.Explorer.Core.Models.MyServicenode", b =>
@@ -296,6 +334,17 @@ namespace Xrouter.Service.Explorer.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Xrouter.Service.Explorer.Core.Models.Comment", b =>
+                {
+                    b.HasOne("Xrouter.Service.Explorer.Core.Models.Comment", null)
+                        .WithMany("Replies")
+                        .HasForeignKey("CommentId");
+
+                    b.HasOne("Xrouter.Service.Explorer.Core.Models.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("Xrouter.Service.Explorer.Core.Models.MyServicenode", b =>

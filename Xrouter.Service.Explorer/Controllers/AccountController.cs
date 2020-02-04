@@ -57,9 +57,8 @@ namespace Xrouter.Service.Explorer.Controllers
                 var newUser = new ApplicationUser
                 {
                     Id = userId,
-                    UserName = userName,
+                    UserName = userName + "#" + discriminator,
                     AvatarHash = avatarHash,
-                    Discriminator = discriminator
                 };
 
                 var createResult = await _userManager.CreateAsync(newUser);
@@ -94,8 +93,7 @@ namespace Xrouter.Service.Explorer.Controllers
         {
             var claimsPrincial = (ClaimsPrincipal)User;
             var name = claimsPrincial.FindFirst(ClaimTypes.Name).Value;
-            var discriminator = claimsPrincial.FindFirst(DiscordAuthenticationDefaults.DiscriminatorClaimType).Value;
-            return Ok(name + "#" + discriminator);
+            return Ok(name);
         }
 
         [HttpGet("[action]")]

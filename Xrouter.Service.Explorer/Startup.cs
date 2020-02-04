@@ -117,6 +117,7 @@ namespace Xrouter.Service.Explorer
             );
 
             services.AddScoped<IServicenodeRepository, ServicenodeRepository>();
+            services.AddScoped<ICommentRepository, CommentRepository>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IAuthorizationHandler, ServicenodeAuthorizationHandler>();
         }

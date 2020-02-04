@@ -31,7 +31,7 @@ export class ViewXrServiceComponent implements OnInit, OnDestroy {
     private location:Location
     ) 
     { 
-      route.params.subscribe(p => {
+      this.route.params.subscribe(p => {
         this.serviceName = p['name'];
         if (isNullOrUndefined(this.serviceName)) {
           router.navigate(['']);
@@ -62,7 +62,8 @@ export class ViewXrServiceComponent implements OnInit, OnDestroy {
         this.router.navigate(['/error'], {queryParams: error});
       });
   }
-  ngOnInit() {}
+  ngOnInit() {
+  }
 
   onSubmit() {  
     this.resultLoading = true; 

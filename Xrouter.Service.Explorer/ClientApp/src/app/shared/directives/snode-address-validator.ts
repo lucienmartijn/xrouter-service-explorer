@@ -18,6 +18,7 @@ export class ServicenodeAddressValidatorDirective implements Validator {
     validate(control: AbstractControl): ValidationErrors | null {
         /* validation rules */
         const address = control.value;
+        console.log(this.serviceNodes);
 
         /* check validation rules */
         if(this.serviceNodes !== undefined){

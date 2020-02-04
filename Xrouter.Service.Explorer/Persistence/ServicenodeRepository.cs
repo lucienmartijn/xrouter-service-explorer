@@ -11,6 +11,8 @@ namespace Xrouter.Service.Explorer.Persistence
     public class ServicenodeRepository : IServicenodeRepository
     {
         private readonly ApplicationDbContext context;
+        private readonly IUnitOfWork unitOfWork;
+
         public ServicenodeRepository(ApplicationDbContext context)
         {
             this.context = context;

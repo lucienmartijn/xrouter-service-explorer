@@ -37,20 +37,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Remove="Migrations\20200125123319_UpdateIndex.cs" />
-    <Compile Remove="Migrations\20200125123319_UpdateIndex.Designer.cs" />
-    <Compile Remove="Migrations\20200125123942_UpdateIndex.cs" />
-    <Compile Remove="Migrations\20200125123942_UpdateIndex.Designer.cs" />
-    <Compile Remove="Migrations\20200125124459_UpdateIndex.cs" />
-    <Compile Remove="Migrations\20200125124459_UpdateIndex.Designer.cs" />
-    <Compile Remove="Migrations\20200125125008_RemoveIndexUsername.cs" />
-    <Compile Remove="Migrations\20200125125008_RemoveIndexUsername.Designer.cs" />
-    <Compile Remove="Migrations\20200125154555_AddIndexUsernameDiscriminator.cs" />
-    <Compile Remove="Migrations\20200125154555_AddIndexUsernameDiscriminator.Designer.cs" />
-    <Compile Remove="Migrations\20200125155532_AddIndexUsernameDiscriminator.cs" />
-    <Compile Remove="Migrations\20200125155532_AddIndexUsernameDiscriminator.Designer.cs" />
-    <Compile Remove="Migrations\20200125155617_AddIndexUsernameDiscriminator.cs" />
-    <Compile Remove="Migrations\20200125155617_AddIndexUsernameDiscriminator.Designer.cs" />
+    <Compile Remove="Migrations\20200202141319_addCommentId.cs" />
+    <Compile Remove="Migrations\20200202141319_addCommentId.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

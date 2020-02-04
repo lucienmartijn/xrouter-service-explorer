@@ -3,22 +3,23 @@ import { Subscription } from 'rxjs';
 import { AccountService } from '../shared/services/account.service';
 import { Router } from '@angular/router';
 import { finalize } from 'rxjs/operators';
-import { HttpClient } from '@angular/common/http';
+import { forkJoin } from 'rxjs';
+import { User } from '../shared/models/user.model';
 
 @Component({
   selector: 'app-nav-menu',
   templateUrl: './nav-menu.component.html',
   styleUrls: ['./nav-menu.component.css']
 })
-export class NavMenuComponent implements OnInit,OnDestroy{
+export class NavMenuComponent implements OnInit, OnDestroy{
   isExpanded = false;
   isUserAuthenticated = false;
   subscription: Subscription;
-  id:string;
-  userName: string;
-  avatarUrl: string;
+  user:User;
 
-  constructor(private httpClient: HttpClient, private accountService: AccountService) { }
+  constructor(private router: Router, private accountService: AccountService) { 
+    this.user = new User();
+  }
 
   collapse() {
     this.isExpanded = false;
@@ -32,15 +33,19 @@ export class NavMenuComponent implements OnInit,OnDestroy{
     this.subscription = this.accountService.isUserAuthenticated.subscribe(isAuthenticated => {
       this.isUserAuthenticated = isAuthenticated;
       if (this.isUserAuthenticated) {
-        //todo: forkjoin
-        this.httpClient.get(`/api/account/name`, { responseType: 'text', withCredentials: true }).subscribe(theName => {
-            this.userName = theName;
-          });
-        this.httpClient.get(`/api/account/AvatarUrl`, { responseType: 'text', withCredentials: true }).subscribe(avatarUrl => {
-          this.avatarUrl = avatarUrl;
-        }); 
-        this.httpClient.get(`/api/account/id`, { responseType: 'text', withCredentials: true }).subscribe(id => {
-          this.id = id;
+        var sources = [
+          this.accountService.name(),
+          this.accountService.avatarUrl(),
+          this.accountService.id(),
+        ];
+
+        forkJoin(sources).subscribe(data =>{
+          this.user.userName = data[0];
+          this.user.avatarUrl = data[1];
+          this.user.userId = data[2];
+        }, err => {
+          if(err.status == 404)
+            this.router.navigate(['']);
         });
       }
     });

@@ -9,7 +9,6 @@ namespace Xrouter.Service.Explorer.Core.Models
     public class ApplicationUser : IdentityUser
     {
         public string AvatarHash { get; set; }
-        public string Discriminator { get; set; }
         public bool? Verified { get; set; }
 
         public List<MyServicenode> MyServiceNodes { get; set; }

@@ -39,6 +39,9 @@ import { MyServiceNodesService } from './shared/services/myservicenodes.service'
 import { NgbdModalComponentModule } from './my-service-nodes/my-service-nodes.module';
 import { AuthGuard } from './auth.guard';
 import { CustomMinDirective } from './shared/directives/custom-min-validator';
+import { CommentService } from './shared/services/comment.service';
+import { CommentsComponent } from './comments/comments.component';
+import { CommentNewComponent } from './comment-new/comment-new.component';
 
 
 
@@ -53,6 +56,8 @@ const appInitializerFn = (appConfig: ConfigurationService) => {
     AppComponent,
     NavMenuComponent,
     HomeComponent,
+    CommentsComponent,
+    CommentNewComponent,
     FooterComponent,
     PaginationComponent,
     ServiceNodeListComponent,
@@ -97,12 +102,14 @@ const appInitializerFn = (appConfig: ConfigurationService) => {
       
     ], { 
       useHash: true,
-      onSameUrlNavigation: 'reload'
+      onSameUrlNavigation: 'reload',
+      anchorScrolling: 'enabled'
     })
   ],
   providers: [
     XrouterApiService, 
     MyServiceNodesService,
+    CommentService,
     SearchService,
     AccountService,
     NavigatorService,
@@ -123,5 +130,6 @@ const appInitializerFn = (appConfig: ConfigurationService) => {
       AuthGuard,
   ],
   bootstrap: [AppComponent],
+  entryComponents:[CommentNewComponent]
 })
 export class AppModule {}

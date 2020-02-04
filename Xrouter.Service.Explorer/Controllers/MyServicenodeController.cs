@@ -48,7 +48,7 @@ namespace Xrouter.Service.Explorer.Controllers
                 Ownership = saveServicenodeViewModel.Ownership
             };
 
-            var authorizationResult = await authorizationService.AuthorizeAsync(User, serviceNode, Operations.Create);
+            var authorizationResult = await authorizationService.AuthorizeAsync(User, serviceNode, "EditPolicy");
 
             if (authorizationResult.Succeeded)
             {
@@ -73,6 +73,9 @@ namespace Xrouter.Service.Explorer.Controllers
 
             if (myServiceNodes == null)
                 return NotFound();
+            
+            if(myServiceNodes.Count == 0)
+                return Ok(CreateMyServiceNodeViewModel(myServiceNodes));
 
             var authorizationResult = await authorizationService.AuthorizeAsync(User, myServiceNodes.FirstOrDefault(), "EditPolicy");
 
@@ -92,9 +95,25 @@ namespace Xrouter.Service.Explorer.Controllers
 
                 unitOfWork.Complete();
 
-                var myServiceNodesViewModel = new List<MyServiceNodeViewModel>();
+                var myServiceNodesViewModel = CreateMyServiceNodeViewModel(myServiceNodes);
 
-                foreach (var serviceNode in myServiceNodes)
+                return Ok(myServiceNodesViewModel);
+            }
+            else if (User.Identity.IsAuthenticated)
+            {
+                return new ForbidResult();
+            }
+            else
+            {
+                return new ChallengeResult();
+            }
+        }
+
+        private List<MyServiceNodeViewModel> CreateMyServiceNodeViewModel(List<MyServicenode> myServicenodes)
+        {
+             var myServiceNodesViewModel = new List<MyServiceNodeViewModel>();
+
+                foreach (var serviceNode in myServicenodes)
                 {
                     var myServiceNodeViewModel = new MyServiceNodeViewModel
                     {
@@ -108,19 +127,7 @@ namespace Xrouter.Service.Explorer.Controllers
                     };
                     myServiceNodesViewModel.Add(myServiceNodeViewModel);
                 }
-
-                return Ok(myServiceNodesViewModel);
-            }
-            else if (User.Identity.IsAuthenticated)
-            {
-                return new ForbidResult();
-            }
-            else
-            {
-                return new ChallengeResult();
-            }
-
-
+                return myServiceNodesViewModel;
         }
 
         [HttpDelete("{id}")]
@@ -128,7 +135,7 @@ namespace Xrouter.Service.Explorer.Controllers
         {
             var serviceNode = repository.GetServicenode(id);
 
-            var authorizationResult = await authorizationService.AuthorizeAsync(User, serviceNode, Operations.Delete);
+            var authorizationResult = await authorizationService.AuthorizeAsync(User, serviceNode, "EditPolicy");
 
             if (authorizationResult.Succeeded)
             {
