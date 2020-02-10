@@ -18,7 +18,7 @@ export class ViewXrServiceComponent implements OnInit, OnDestroy {
   loading:boolean = true;
   serviceName:string;
   result:any;
-  parametervalues:string[]=[""];
+  parametervalues:string[];
 
   @ViewChild('serviceForm') serviceForm: NgForm;
   serviceResult:any;
@@ -52,8 +52,10 @@ export class ViewXrServiceComponent implements OnInit, OnDestroy {
       .subscribe(result => {
         this.result = result;
         this.location.replaceState("/xcloud-services/" + this.serviceName + "/" + this.result.node.nodePubKey);
-        if(this.result.service.parametersList)
-          this.parametervalues = new Array<string>(this.result.service.parametersList.length);
+        if(this.result.service.parametersList){
+          if(this.result.service.parametersList.length > 0)
+            this.parametervalues = new Array<string>(this.result.service.parametersList.length);
+        }
 
         this.loading = false;
         this.resultLoading = false;

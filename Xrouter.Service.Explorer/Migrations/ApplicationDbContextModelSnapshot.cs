@@ -260,9 +260,6 @@ namespace Xrouter.Service.Explorer.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<bool>("Active")
-                        .HasColumnType("INTEGER");
-
                     b.Property<string>("Address")
                         .HasColumnType("TEXT");
 
@@ -272,11 +269,14 @@ namespace Xrouter.Service.Explorer.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("NodePubKey")
-                        .HasColumnType("TEXT");
-
                     b.Property<bool>("Ownership")
                         .HasColumnType("INTEGER");
+
+                    b.Property<string>("SNodeKey")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Status")
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
@@ -338,7 +338,7 @@ namespace Xrouter.Service.Explorer.Migrations
 
             modelBuilder.Entity("Xrouter.Service.Explorer.Core.Models.Comment", b =>
                 {
-                    b.HasOne("Xrouter.Service.Explorer.Core.Models.Comment", null)
+                    b.HasOne("Xrouter.Service.Explorer.Core.Models.Comment", "ParentComment")
                         .WithMany("Replies")
                         .HasForeignKey("CommentId");
 

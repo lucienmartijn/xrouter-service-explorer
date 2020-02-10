@@ -19,8 +19,11 @@ export class XrServicesComponent implements OnInit {
   queryPastCourses:any = {
     pageSize: this.PAGE_SIZE,
   }; 
+  loading: boolean;
 
-  constructor(private router: Router, private xrouterService: XrouterApiService) { }
+  constructor(private router: Router, private xrouterService: XrouterApiService) { 
+    this.loading = true;
+  }
 
   ngOnInit() {
     this.populateServices();
@@ -30,6 +33,7 @@ export class XrServicesComponent implements OnInit {
     this.xrouterService.GetNetworkServices()
       .subscribe(result => {
         this.services = result;
+        this.loading = false;
       });
   }
 

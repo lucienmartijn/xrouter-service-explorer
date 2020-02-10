@@ -7,18 +7,13 @@ namespace blocknet_xrouter.Controllers.ViewModels
 {
     public class ServiceNodeViewModel
     {
-        public int Rank { get; set; }
-		public string NodePubKey { get; set; }
-		public string TxHash { get; set; }
-		public int OutIdx { get; set; }
+		public string SNodeKey { get; set; }
+		public string Tier { get; set; }
 		public string Status { get; set; }
-		public string Addr { get; set; }
-		public int Version { get; set; }
-		public long XBridgeVersion { get; set; }
-		public long XRouterVersion { get; set; }
-		public DateTime LastSeen { get; set; }
-		public DateTime ActiveTime { get; set; }
-		public DateTime LastPaid { get; set; }
+		public string Address { get; set; }
+		public int Score { get; set; }
+		public DateTime TimeLastSeenStr { get; set; }
+		public long TimeLastSeen { get; set; }
         public List<string> SpvWallets { get; set; }
         public List<string> XCloudServices { get; set; }
     }

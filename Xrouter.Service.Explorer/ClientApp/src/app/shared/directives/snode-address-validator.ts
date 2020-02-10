@@ -13,16 +13,13 @@ export class ServicenodeAddressValidatorDirective implements Validator {
 
     constructor() {}
 
-    
-
     validate(control: AbstractControl): ValidationErrors | null {
         /* validation rules */
         const address = control.value;
-        console.log(this.serviceNodes);
 
         /* check validation rules */
         if(this.serviceNodes !== undefined){
-            const addressToCheck = this.serviceNodes.items.find(sn => sn.addr === address);
+            const addressToCheck = this.serviceNodes.items.find(sn => sn.address === address);
             if (addressToCheck !== undefined) {
                 return null;
             } else {

@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Xrouter.Service.Explorer.Migrations
 {
-    public partial class initialCommit : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -193,9 +193,9 @@ namespace Xrouter.Service.Explorer.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     Name = table.Column<string>(nullable: true),
                     Address = table.Column<string>(nullable: true),
-                    NodePubKey = table.Column<string>(nullable: true),
+                    SNodeKey = table.Column<string>(nullable: true),
                     Ownership = table.Column<bool>(nullable: false),
-                    Active = table.Column<bool>(nullable: false),
+                    Status = table.Column<string>(nullable: true),
                     ApplicationUserId = table.Column<string>(nullable: true)
                 },
                 constraints: table =>

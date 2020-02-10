@@ -336,8 +336,8 @@ namespace blocknet_xrouter.Controllers
             var query = serviceNode.Services.Select(s => s.Key).AsQueryable();
             var queryObj = new XCloudQuery
             {
-                Page = filterViewModel.Page,
-                PageSize = filterViewModel.PageSize,
+                Page = (int) filterViewModel.Page,
+                PageSize = (byte) filterViewModel.PageSize,
             };
             result.TotalItems = query.Count();
 
@@ -648,23 +648,26 @@ namespace blocknet_xrouter.Controllers
         }
 
         [HttpGet("Xrouter/[action]")]
-        public IActionResult GetServiceNodeList(ServiceNodeQueryViewModel filterViewModel)
+        public IActionResult GetServiceNodeList([FromQuery]ServiceNodeQueryViewModel filterViewModel)
         {
             var result = new QueryResult<ServiceNodeResponse>();
             var query = _blocknetService.serviceNodeList().AsQueryable();
-            var queryObj = new ServiceNodeQuery
+            if(filterViewModel.Page != null && filterViewModel.PageSize != null)
             {
-                Page = filterViewModel.Page,
-                AtleastOneSpvWallet = filterViewModel.AtleastOneSpvWallet,
-                PageSize = filterViewModel.PageSize,
-                SpvWallet = filterViewModel.SpvWallet,
-                XCloudService = filterViewModel.XCloudService
-            };
-            query = query.ApplyServiceNodeFiltering(queryObj);
+                var queryObj = new ServiceNodeQuery
+                {
+                    Page = (int) filterViewModel.Page,
+                    AtleastOneSpvWallet = filterViewModel.AtleastOneSpvWallet,
+                    PageSize = (byte) filterViewModel.PageSize,
+                    SpvWallet = filterViewModel.SpvWallet,
+                    XCloudService = filterViewModel.XCloudService
+                };
+                query = query.ApplyServiceNodeFiltering(queryObj);
 
-            result.TotalItems = query.Count();
+                result.TotalItems = query.Count();
 
-            query = query.ApplyPaging(queryObj);
+                query = query.ApplyPaging(queryObj);
+            }
 
             result.Items = query.ToList();
 
@@ -673,18 +676,13 @@ namespace blocknet_xrouter.Controllers
             {
                 Items = result.Items.Select(sn => new ServiceNodeViewModel
                 {
-                    ActiveTime = DateTimeOffset.FromUnixTimeSeconds(sn.ActiveTime).UtcDateTime,
-                    LastPaid = DateTimeOffset.FromUnixTimeSeconds(sn.LastPaid).UtcDateTime,
-                    LastSeen = DateTimeOffset.FromUnixTimeSeconds(sn.LastSeen).UtcDateTime,
-                    Addr = sn.Addr,
-                    NodePubKey = sn.NodePubKey,
-                    OutIdx = sn.OutIdx,
-                    Rank = sn.Rank,
+                    Score = sn.Score,
+                    Tier = sn.Tier,
+                    TimeLastSeen = sn.TimeLastSeen,
+                    TimeLastSeenStr = sn.TimeLastSeenStr,
+                    Address = sn.Address,
+                    SNodeKey = sn.SNodeKey,
                     Status = sn.Status,
-                    TxHash = sn.TxHash,
-                    Version = sn.Version,
-                    XBridgeVersion = sn.XBridgeVersion,
-                    XRouterVersion = sn.XRouterVersion,
                     SpvWallets = sn.SpvWallets,
                     XCloudServices = sn.XCloudServices
 

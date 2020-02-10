@@ -7,6 +7,7 @@ import { MyServiceNodesService } from '../shared/services/myservicenodes.service
 import { isNullOrUndefined } from 'util';
 import { MyServiceNode } from '../shared/models/myservicenode.model';
 import { NgbModal, ModalDismissReasons, NgbModalRef, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { ServiceNode } from '../shared/models/servicenode.model';
 
 
 @Component({
@@ -146,9 +147,8 @@ export class ValidateServicenodeModalContent implements OnInit {
     let address = this.servicenode.address;
     this.myServiceNodesService.verifyMessage(address, encodeURIComponent(this.formGroup.get('signature').value), this.toBeSignedMessage).subscribe(res => {
       this.submitted = true;
-
       if(res){
-        this.activeModal.close('Service verified!');
+        this.activeModal.close(res);
       } else{
         this.signatureValidated = res;
         this.resultMessage = "Service node not verified!";
@@ -175,7 +175,7 @@ export class MyServiceNodesComponent implements OnInit {
   @ViewChild('f') serviceNodeForm: NgForm;
   allServiceNodes:any;
   myServiceNodes:MyServiceNode[];
-  model: MyServiceNode = new MyServiceNode();
+  newServiceNode: MyServiceNode = new MyServiceNode();
   serviceNodePublicAddress:string;
   private applicationUserId:string;
   
@@ -202,13 +202,13 @@ export class MyServiceNodesComponent implements OnInit {
           return; 
         }
       });
-      this.model.applicationUserId = this.applicationUserId;
+      this.loading = true;
+      this.newServiceNode.applicationUserId = this.applicationUserId;
     }
 
   ngOnInit() {
     var observableMyServiceNodes: Observable<MyServiceNode[]> = this.myServiceNodesService.GetServiceNodes(this.applicationUserId);
-    var observableAllServiceNodes: Observable<any> = this.xrouterApiService.GetServiceNodeList({});
-    this.loading = true;
+    var observableAllServiceNodes: Observable<any> = this.xrouterApiService.GetServiceNodeList();
 
     forkJoin([observableMyServiceNodes, observableAllServiceNodes]).subscribe(([mySn, allSn]) =>{
       this.loading = false;
@@ -221,7 +221,9 @@ export class MyServiceNodesComponent implements OnInit {
   }
 
   onSubmit() {
-    this.myServiceNodesService.create(this.model)
+    const servicenode = this.allServiceNodes.items.find(sn => sn.address === this.newServiceNode.address);
+    this.newServiceNode.status = servicenode.status;
+    this.myServiceNodesService.create(this.newServiceNode)
       .subscribe(serviceNode =>{
         this.myServiceNodes.push(serviceNode);
       }, err => {
@@ -241,13 +243,24 @@ export class MyServiceNodesComponent implements OnInit {
   }
   
   open(index: number) {
-
     const modalReference = this.modalService.open(ValidateServicenodeModalContent, {size: 'lg', windowClass:'wide-modal'});
     modalReference.componentInstance.servicenode = this.myServiceNodes[index];
     modalReference.result.then(res => {
-      if(res === 'Service verified!'){
-        this.myServiceNodes[index].ownership == true;
-      }
+      let myServiceNode = this.myServiceNodes[index];
+      const servicenode = this.allServiceNodes.items.find(sn => sn.address === this.newServiceNode.address);
+      console.log(servicenode);
+      let updatedServiceNode = new MyServiceNode();      
+      updatedServiceNode.address = myServiceNode.address;
+      updatedServiceNode.applicationUserId = myServiceNode.applicationUserId;
+      updatedServiceNode.id = myServiceNode.id;
+      updatedServiceNode.ownership = res;
+      updatedServiceNode.status = myServiceNode.status;
+      updatedServiceNode.sNodeKey = servicenode.sNodeKey;
+      console.log(updatedServiceNode);
+
+      this.myServiceNodesService.update(myServiceNode.id, updatedServiceNode).subscribe(sn =>{
+        this.myServiceNodes[index].ownership = sn.ownership;
+      });  
     });
   }
 }

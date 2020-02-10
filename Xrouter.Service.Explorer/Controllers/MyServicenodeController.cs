@@ -39,9 +39,9 @@ namespace Xrouter.Service.Explorer.Controllers
 
             var serviceNode = new MyServicenode
             {
-                Active = saveServicenodeViewModel.Active,
+                Status = saveServicenodeViewModel.Status,
                 Address = saveServicenodeViewModel.Address,
-                NodePubKey = saveServicenodeViewModel.NodePubKey,
+                SNodeKey = saveServicenodeViewModel.NodePubKey,
                 ApplicationUserId = saveServicenodeViewModel.ApplicationUserId,
                 Id = saveServicenodeViewModel.Id,
                 Name = saveServicenodeViewModel.Name,
@@ -86,11 +86,7 @@ namespace Xrouter.Service.Explorer.Controllers
                 ServiceNodeResponse response;
                 foreach (var serviceNode in myServiceNodes)
                 {
-                    response = allServiceNodes.Find(sn => sn.Addr == serviceNode.Address);
-                    if (response.Status == "ENABLED")
-                        serviceNode.Active = true;
-                    else
-                        serviceNode.Active = false;
+                    response = allServiceNodes.Find(sn => sn.Address == serviceNode.Address);
                 }
 
                 unitOfWork.Complete();
@@ -118,12 +114,11 @@ namespace Xrouter.Service.Explorer.Controllers
                     var myServiceNodeViewModel = new MyServiceNodeViewModel
                     {
                         Ownership = serviceNode.Ownership,
-                        Active = serviceNode.Active,
+                        Status = serviceNode.Status,
                         Address = serviceNode.Address,
                         Id = serviceNode.Id,
                         Name = serviceNode.Name,
                         ApplicationUserId = serviceNode.ApplicationUserId,
-
                     };
                     myServiceNodesViewModel.Add(myServiceNodeViewModel);
                 }
@@ -176,6 +171,17 @@ namespace Xrouter.Service.Explorer.Controllers
             }
 
             return Ok(result);
+        }
+
+        [HttpPut("{id}")]
+        public IActionResult UpdateServiceNode(int id, [FromBody]MyServicenode myServicenode)
+        {
+            var serviceNode = repository.GetServicenode(id);
+            serviceNode.SNodeKey = myServicenode.SNodeKey;
+            serviceNode.Ownership = myServicenode.Ownership;
+            serviceNode.Status = myServicenode.Status;
+            unitOfWork.Complete();
+            return Ok(serviceNode);
         }
 
         // [HttpGet("{id}")]

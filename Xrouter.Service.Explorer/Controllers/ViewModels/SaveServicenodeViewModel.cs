@@ -12,7 +12,7 @@ namespace Xrouter.Service.Explorer.Controllers.ViewModels
         public string Address { get; set; }
         public string NodePubKey { get; set; }
         public bool Ownership { get; set; }
-        public bool Active { get; set; }
+        public string Status { get; set; }
         public string ApplicationUserId { get; set; }
     }
 }

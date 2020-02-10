@@ -161,20 +161,15 @@ namespace BitcoinLib.Services.Coins.Blocknet
             var query = _rpcConnector.MakeRequest<List<ServiceNode>>(RpcMethods.servicenodelist);
             return query.Select(sn => new ServiceNodeResponse
             {
-                ActiveTime = sn.ActiveTime,
-                LastPaid = sn.LastPaid,
-                LastSeen = sn.LastSeen,
-                Addr = sn.Addr,
-                NodePubKey = sn.NodePubKey,
-                OutIdx = sn.OutIdx,
-                Rank = sn.Rank,
+                Tier = sn.Tier,
+                Score = sn.Score,
+                TimeLastSeen = sn.TimeLastSeen,
+                TimeLastSeenStr = sn.TimeLastSeenStr,
+                Address = sn.Address,
+                SNodeKey = sn.SNodeKey,
                 Status = sn.Status,
-                TxHash = sn.TxHash,
-                Version = sn.Version,
-                XBridgeVersion = sn.XBridgeVersion,
-                XRouterVersion = sn.XRouterVersion,
-                SpvWallets = sn.XWallets.Split(',').ToList().Where(xw => xw.Split(':')[0].Equals("xr")).Where(xw => !xw.Equals("xr")).ToList(),
-                XCloudServices = sn.XWallets.Split(',').ToList().Where(xw => xw.Split(':')[0].Equals("xrs")).ToList(),
+                SpvWallets = sn.Services.Where(xw => xw.Split(':')[0].Equals("xr")).Where(xw => !xw.Equals("xr")).ToList(),
+                XCloudServices = sn.Services.Where(xw => xw.Split(':')[0].Equals("xrs")).ToList(),
             })
             .ToList();
         }

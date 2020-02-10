@@ -23,6 +23,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Newtonsoft.Json;
 using Xrouter.Service.Explorer.Authorization;
 using Xrouter.Service.Explorer.Core;
 using Xrouter.Service.Explorer.Core.Models;
@@ -49,7 +50,10 @@ namespace Xrouter.Service.Explorer
                 options.CheckConsentNeeded = context => true;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
-            services.AddMvc();
+            services.AddMvc()
+                .SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
+                .AddNewtonsoftJson(opt => opt.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
+;
             services.AddCors(corsOptions =>
             {
                 corsOptions.AddPolicy("fully permissive", configurePolicy => configurePolicy
@@ -73,7 +77,7 @@ namespace Xrouter.Service.Explorer
             });
 
             services.AddDbContext<ApplicationDbContext>(options =>
-                        options.UseSqlite("Data Source=users.sqlite",
+                        options.UseSqlite("Data Source=serviceexplorer.sqlite",
                         sqliteOptions => sqliteOptions.MigrationsAssembly("Xrouter.Service.Explorer")));
             services.AddIdentity<ApplicationUser, IdentityRole>()
                     .AddEntityFrameworkStores<ApplicationDbContext>()

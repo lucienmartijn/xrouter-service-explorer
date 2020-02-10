@@ -5,7 +5,9 @@ export class MyServiceNode{
       this.address = '';
      }
      id:number;
+     sNodeKey:string;
      applicationUserId:string;
+     status:string;
      ownership:boolean;
      name:string;
      address:string;

@@ -19,8 +19,11 @@ export class SpvWalletsComponent implements OnInit {
   queryPastCourses:any = {
     pageSize: this.PAGE_SIZE,
   }; 
+  loading: boolean;
 
-  constructor(private router: Router, private xrouterService: XrouterApiService) { }
+  constructor(private router: Router, private xrouterService: XrouterApiService) { 
+    this.loading = true;
+  }
 
   ngOnInit() {
     this.populateSpvWallets();
@@ -28,7 +31,10 @@ export class SpvWalletsComponent implements OnInit {
 
   private populateSpvWallets(){
     this.xrouterService.GetNetworkSpvWallets()
-      .subscribe(result => this.spvWallets = result);
+      .subscribe(result => {
+        this.spvWallets = result;
+        this.loading = false;
+      });
   }
 
   onQueryChange(query){

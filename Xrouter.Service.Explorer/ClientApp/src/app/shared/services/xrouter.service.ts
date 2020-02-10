@@ -4,6 +4,7 @@ import { HttpClient , HttpParams} from '@angular/common/http';
 import { BaseService } from './base.service';
 import { isNullOrUndefined } from 'util';
 import { ConfigurationService } from './configuration.service';
+import { ServiceNode } from '../models/servicenode.model';
 
 
 @Injectable()
@@ -56,12 +57,12 @@ export class XrouterApiService extends BaseService{
 
   FilterXCloudServiceServiceNode(filter){
     let url = this.baseEndpoint + this.apiEndpoint + '/FilterXCloudServiceServiceNode' + '?' + this.toQueryString(filter);
-    return this.http.get<any[]>(url);
+    return this.http.get<any>(url);
   }
 
-  GetServiceNodeList(filter){
+  GetServiceNodeList(filter?){
     let url = this.baseEndpoint + this.apiEndpoint + '/GetServiceNodeList' + '?' + this.toQueryString(filter);
-    return this.http.get<any[]>(url);
+    return this.http.get<any>(url);
   }
 
   private toQueryString(obj) {  

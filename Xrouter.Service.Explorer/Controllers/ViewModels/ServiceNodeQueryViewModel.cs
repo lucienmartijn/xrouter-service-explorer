@@ -11,5 +11,4 @@ namespace blocknet_xrouter.Controllers.ViewModels
         public bool AtleastOneSpvWallet { get; set; }
         public bool Reliable { get; set; }
     }
-
 }

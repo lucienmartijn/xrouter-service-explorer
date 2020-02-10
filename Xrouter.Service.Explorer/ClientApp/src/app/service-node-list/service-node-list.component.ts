@@ -20,20 +20,24 @@ export class ServiceNodeListComponent implements OnInit {
   query:any = {
     page: 1,
     pageSize: this.PAGE_SIZE,
-    atleastOneSpvWallet: true
+    atleastOneSpvWallet: false
   };
 
   columns:any=[
-    {title: 'Node Id', key: 'nodeId'},
-    {title: 'Address', key: 'addr'},
+    {title: 'SNode Key', key: 'snodeKey'},
+    {title: 'Address', key: 'address'},
+    {title: 'Score', key: 'score'},
+    {title: 'Status', key: 'status'},
     {title: 'Spv Wallets', key: 'spvWallets'},
     {title: 'XCloud Services', key: 'xCloudServices'},
   ];
 
   loading:boolean;
+  querying:boolean;
 
   constructor(private router: Router, private xrouterService: XrouterApiService) { 
     this.loading = true;
+    this.querying = true;
   }
 
   ngOnInit() {
@@ -45,7 +49,6 @@ export class ServiceNodeListComponent implements OnInit {
     forkJoin(sources).subscribe(data =>{
       this.xCloudServices = data[0];
       this.spvWallets = data[1];
-      this
     }, err => {
       if(err.status == 404)
         this.router.navigate(['']);
@@ -58,6 +61,7 @@ export class ServiceNodeListComponent implements OnInit {
       .subscribe(result => {        
         this.serviceNodes = result;
         this.loading = false;
+        this.querying = false;
       });
   }
 
@@ -83,6 +87,7 @@ export class ServiceNodeListComponent implements OnInit {
 
   onPageChange(page) {
     this.query.page = page;
+    this.querying = true;
     this.populateServiceNodes();
   }
 }

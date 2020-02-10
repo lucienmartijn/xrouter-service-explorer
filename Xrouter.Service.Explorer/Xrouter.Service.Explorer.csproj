@@ -37,12 +37,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Remove="Migrations\20200202141319_addCommentId.cs" />
-    <Compile Remove="Migrations\20200202141319_addCommentId.Designer.cs" />
+    <ProjectReference Include="..\AspNet.Security.OAuth.Discord\AspNet.Security.OAuth.Discord.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\AspNet.Security.OAuth.Discord\AspNet.Security.OAuth.Discord.csproj" />
+    <Folder Include="Helpers\" />
   </ItemGroup>
 
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">
