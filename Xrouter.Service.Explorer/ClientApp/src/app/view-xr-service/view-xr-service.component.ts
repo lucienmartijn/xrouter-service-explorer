@@ -31,6 +31,7 @@ export class ViewXrServiceComponent implements OnInit, OnDestroy {
     private location:Location
     ) 
     { 
+      this.router.routeReuseStrategy.shouldReuseRoute = () => false;
       this.route.params.subscribe(p => {
         this.serviceName = p['name'];
         if (isNullOrUndefined(this.serviceName)) {
@@ -65,6 +66,7 @@ export class ViewXrServiceComponent implements OnInit, OnDestroy {
       });
   }
   ngOnInit() {
+    console.log("OnInit");
   }
 
   onSubmit() {  

@@ -9,7 +9,7 @@ namespace Xrouter.Service.Explorer.Controllers.ViewModels
     public class CommentViewModel
     {
         public CommentViewModel() { }
-        public DateTime DateTime { get; set; }
+        public string DateTime { get; set; }
         public IList<CommentViewModel> Replies { get; set; }
         public string Body { get; set; }
         public string Id { get; set; }

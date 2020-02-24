@@ -25,7 +25,7 @@ export class CommentService extends BaseService{
   }
 
   editComment(comment:SaveComment){
-    return this.http.put<Comment>(this.baseEndpoint + this.apiEndpoint + '/' + comment.id, comment.body);
+    return this.http.put<Comment>(this.baseEndpoint + this.apiEndpoint + '/' + comment.id, comment);
   }
 
   deleteComment(id:string){

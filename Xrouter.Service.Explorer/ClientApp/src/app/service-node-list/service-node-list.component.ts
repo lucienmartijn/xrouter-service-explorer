@@ -20,7 +20,6 @@ export class ServiceNodeListComponent implements OnInit {
   query:any = {
     page: 1,
     pageSize: this.PAGE_SIZE,
-    atleastOneSpvWallet: false
   };
 
   columns:any=[
@@ -57,6 +56,7 @@ export class ServiceNodeListComponent implements OnInit {
   }
 
   private populateServiceNodes(){
+    this.querying = true;
     this.xrouterService.GetServiceNodeList(this.query)
       .subscribe(result => {        
         this.serviceNodes = result;

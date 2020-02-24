@@ -72,8 +72,10 @@ namespace Xrouter.Service.Explorer
 
             services.AddAuthorization(options =>
             {
-                options.AddPolicy("EditPolicy", policy =>
-                    policy.Requirements.Add(new SameServicenodeRequirement()));
+                options.AddPolicy("CanCrudOwnServicenode", policy =>
+                    policy.Requirements.Add(new SameUserServiceNodeRequirement()));
+                options.AddPolicy("CanCrudOwnComment", policy => 
+                    policy.Requirements.Add(new SameUserCommentRequirement()));
             });
 
             services.AddDbContext<ApplicationDbContext>(options =>
@@ -124,6 +126,7 @@ namespace Xrouter.Service.Explorer
             services.AddScoped<ICommentRepository, CommentRepository>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IAuthorizationHandler, ServicenodeAuthorizationHandler>();
+            services.AddScoped<IAuthorizationHandler, CommentAuthorizationHandler>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

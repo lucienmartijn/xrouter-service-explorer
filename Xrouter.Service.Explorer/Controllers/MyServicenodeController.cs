@@ -48,7 +48,7 @@ namespace Xrouter.Service.Explorer.Controllers
                 Ownership = saveServicenodeViewModel.Ownership
             };
 
-            var authorizationResult = await authorizationService.AuthorizeAsync(User, serviceNode, "EditPolicy");
+            var authorizationResult = await authorizationService.AuthorizeAsync(User, serviceNode, "CanCrudOwnServicenode");
 
             if (authorizationResult.Succeeded)
             {
@@ -77,7 +77,7 @@ namespace Xrouter.Service.Explorer.Controllers
             if(myServiceNodes.Count == 0)
                 return Ok(CreateMyServiceNodeViewModel(myServiceNodes));
 
-            var authorizationResult = await authorizationService.AuthorizeAsync(User, myServiceNodes.FirstOrDefault(), "EditPolicy");
+            var authorizationResult = await authorizationService.AuthorizeAsync(User, myServiceNodes.FirstOrDefault(), "CanCrudOwnServicenode");
 
             if (authorizationResult.Succeeded)
             {
@@ -130,7 +130,7 @@ namespace Xrouter.Service.Explorer.Controllers
         {
             var serviceNode = repository.GetServicenode(id);
 
-            var authorizationResult = await authorizationService.AuthorizeAsync(User, serviceNode, "EditPolicy");
+            var authorizationResult = await authorizationService.AuthorizeAsync(User, serviceNode, "CanCrudOwnServicenode");
 
             if (authorizationResult.Succeeded)
             {

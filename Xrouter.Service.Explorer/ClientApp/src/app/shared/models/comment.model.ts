@@ -5,4 +5,5 @@ export class Comment {
     public avatarUrl:string;
     public datetime:Date;
     public replies: Comment[];
+    public editMode:boolean = false;
 }

@@ -236,14 +236,12 @@
                   <tr>
                     <th>Address</th>
                     <th>Score</th>
-                    <th>Banned</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr *ngFor="let s of result.otherNodes">
                     <td class="ellipsis"><a [routerLink]="['/xrouter-snodes', s.nodePubKey]">{{s.nodePubKey}}</a></td>
                     <td>{{s.score}}</td>
-                    <td>{{s.banned}}</td>
                   </tr>
                 </tbody>
               </table>

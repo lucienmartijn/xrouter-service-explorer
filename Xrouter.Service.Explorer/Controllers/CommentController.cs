@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 using Xrouter.Service.Explorer.Controllers.ViewModels;
 using Xrouter.Service.Explorer.Core;
 using Xrouter.Service.Explorer.Core.Models;
+using Xrouter.Service.Explorer.Helpers;
 
 namespace Xrouter.Service.Explorer.Controllers
 {
@@ -19,11 +20,13 @@ namespace Xrouter.Service.Explorer.Controllers
     {
         private readonly ICommentRepository _repository;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IAuthorizationService authorizationService;
         private readonly string defaultLogoUrl = "../../assets/discord-default-logo.png";
-        public CommentController(ICommentRepository repository, IUnitOfWork unitOfWork)
+        public CommentController(ICommentRepository repository, IUnitOfWork unitOfWork, IAuthorizationService authorizationService)
         {
-            _repository = repository;
-            _unitOfWork = unitOfWork;
+            this._repository = repository;
+            this._unitOfWork = unitOfWork;
+            this.authorizationService = authorizationService;
         }
 
         private string GetUserId()
@@ -37,14 +40,16 @@ namespace Xrouter.Service.Explorer.Controllers
             return id;
         }
 
-        private string GetAvatarUrl()
+        private string GetAvatarUrl(string discordId = null)
         {
             var avatarClaim = User.FindFirst(DiscordAuthenticationDefaults.AvatarClaimType);
-            var id = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            if(string.IsNullOrEmpty(discordId))
+                discordId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+
             string avatarUrl = defaultLogoUrl;
             if (avatarClaim != null)
             {
-                avatarUrl = "https://cdn.discordapp.com/avatars/" + id + "/" + avatarClaim.Value + ".png";
+                avatarUrl = "https://cdn.discordapp.com/avatars/" + discordId + "/" + avatarClaim.Value + ".png";
             }
             return avatarUrl;
         }
@@ -57,46 +62,19 @@ namespace Xrouter.Service.Explorer.Controllers
             var commentsViewModel = new List<CommentViewModel>();
             foreach (var comment in comments)
             {
-                var replies = new List<CommentViewModel>();
-                if(comment.Replies != null)
-                {
-                    foreach (var r in comment.Replies)
-                    {
-                        replies.Add(new CommentViewModel
-                        {
-                            Body = r.Body,
-                            DateTime = r.DateTime,
-                            Id = r.Id,
-                            UserName = r.Username,
-                            AvatarUrl = r.User.AvatarHash != null ? "https://cdn.discordapp.com/avatars/" + r.User.Id + "/" + r.User.AvatarHash + ".png" : defaultLogoUrl
-                              
-                        });
-                    }
-                }
-                commentsViewModel.Add(new CommentViewModel
-                {
-                    AvatarUrl = comment.User.AvatarHash != null ? "https://cdn.discordapp.com/avatars/" + comment.User.Id + "/" + comment.User.AvatarHash + ".png" : defaultLogoUrl,
-                    Body = comment.Body,
-                    DateTime = comment.DateTime,
-                    Id = comment.Id,
-                    ParentComment = comment.ParentComment == null ? null : new CommentViewModel
-                    {
-                        Id = comment.ParentComment?.Id,
-                        Body = comment.ParentComment?.Body,
-                        UserName = comment.ParentComment?.Username,
-                        AvatarUrl = comment.ParentComment?.User.AvatarHash != null ? "https://cdn.discordapp.com/avatars/" + comment.ParentComment.User.Id + "/" + comment.ParentComment.User.AvatarHash + ".png" : defaultLogoUrl
-                    },
-                    Replies = replies,
-                    UserName = comment.User.UserName
-                });
+                commentsViewModel.Add(CreateCommentViewModel(comment));
             }
             return Ok(commentsViewModel);
         }
 
         [HttpPost("[action]")]
         // [ValidateAntiForgeryToken]
-        public IActionResult NewComment([FromBody] NewCommentViewModel newCommentViewModel)
+        public async Task<IActionResult> NewComment([FromBody] NewCommentViewModel newCommentViewModel)
         {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            //TODO: Replace w/ PK id value
             List<int> numlist = new List<int>();
             var comments = _repository.GetComments().ToList();
             int num;
@@ -129,47 +107,75 @@ namespace Xrouter.Service.Explorer.Controllers
                 Body = newCommentViewModel.CommentBody,
                 CommentId = newCommentViewModel.CommentId
             };
-            _repository.AddNewComment(comment);
-            _unitOfWork.Complete();
 
-            var commentViewModel = new CommentViewModel
+            var authorizationResult = await authorizationService.AuthorizeAsync(User, comment, "CanCrudOwnComment");
+
+            if (authorizationResult.Succeeded)
             {
-                AvatarUrl = GetAvatarUrl(),
-                Body = newCommentViewModel.CommentBody,
-                DateTime = now,
-                Id = newid,
-                UserName = User.Identity.Name,
-                Replies = new List<CommentViewModel>()
-            };
-
-            return Ok(commentViewModel);
+                _repository.AddNewComment(comment);
+                _unitOfWork.Complete();  
+                return Ok(CreateCommentViewModel(comment));
+            }
+            else if (User.Identity.IsAuthenticated)
+            {
+                return new ForbidResult();
+            }
+            else
+            {
+                return new ChallengeResult();
+            }
         }
 
         [HttpPut("{id}")]
         // [ValidateAntiForgeryToken]
-        public IActionResult EditComment(string id, string body)
+        public async Task<IActionResult> EditComment(string id, [FromBody] SaveCommentViewModel saveCommentViewModel)
         {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
             var comment = _repository.GetCommentById(id);
-            comment.Body = body;
-            comment.DateTime = DateTime.Now;
-            _unitOfWork.Complete();
-            return Ok(comment);
+
+            var authorizationResult = await authorizationService.AuthorizeAsync(User, comment, "CanCrudOwnComment");
+
+            if (authorizationResult.Succeeded)
+            {
+                comment.Body = saveCommentViewModel.Body;
+                comment.DateTime = DateTime.Now;
+                _unitOfWork.Complete();
+                return Ok(CreateCommentViewModel(comment));
+            }
+            else if (User.Identity.IsAuthenticated)
+            {
+                return new ForbidResult();
+            }
+            else
+            {
+                return new ChallengeResult();
+            }            
         }
 
         [HttpDelete("{id}")]
         // [ValidateAntiForgeryToken]
-        public IActionResult DeleteComment(string id)
+        public async Task<IActionResult> DeleteComment(string id)
         {
             var comment = _repository.GetCommentById(id);
             
+            var authorizationResult = await authorizationService.AuthorizeAsync(User, comment, "CanCrudOwnComment");
 
-            if (comment == null)
-                return NotFound();
-
-            _repository.DeleteComment(comment);
-            _unitOfWork.Complete();
-
-            return Ok();
+            if (authorizationResult.Succeeded)
+            {
+                _repository.DeleteComment(comment);
+                _unitOfWork.Complete();
+                return Ok();
+            }
+            else if (User.Identity.IsAuthenticated)
+            {
+                return new ForbidResult();
+            }
+            else
+            {
+                return new ChallengeResult();
+            }      
         }
 
         private bool CommentDeleteCheck(string commentid)
@@ -177,27 +183,55 @@ namespace Xrouter.Service.Explorer.Controllers
             return _repository.CommentDeleteCheck(commentid);
         }
 
-        private CommentViewModel CreateCommentViewModel(string serviceId, string nodePubKey, string sortOrder)
+        private CommentViewModel CreateCommentViewModel(Comment comment)
         {
-            CommentViewModel model = new CommentViewModel();
-
-            var comments = _repository.GetCommentsByServiceIdAndNodePubKey(serviceId, nodePubKey).OrderByDescending(d => d.DateTime).ToList();
-            foreach (var comment in comments)
+            var replies = new List<CommentViewModel>();
+            if(comment.Replies != null)
             {
-
-                switch (sortOrder)
+                foreach (var r in comment.Replies)
                 {
-                    case "date_asc":
-                        comments = comments.OrderBy(x => x.DateTime).ToList();
-                        break;
-                    default:
-                        comments = comments.OrderByDescending(x => x.DateTime).ToList();
-                        break;
+                    replies.Add(new CommentViewModel
+                    {
+                        Body = r.Body,
+                        DateTime = r.DateTime.TimeAgo(),
+                        Id = r.Id,
+                        UserName = r.Username,
+                        AvatarUrl = r.User.AvatarHash != null ? "https://cdn.discordapp.com/avatars/" + r.User.Id + "/" + r.User.AvatarHash + ".png" : defaultLogoUrl
+                            
+                    });
                 }
-
-                //model.Comments = comments;
             }
-            return model;
+
+            var model = new CommentViewModel 
+            {
+                Body = comment.Body,
+                DateTime = comment.DateTime.TimeAgo(),
+                Id = comment.Id,
+                ParentComment = comment.ParentComment == null ? null : new CommentViewModel
+                {
+                    Id = comment.ParentComment?.Id,
+                    Body = comment.ParentComment?.Body,
+                    UserName = comment.ParentComment?.Username,
+                },
+                Replies = replies,
+                UserName = comment.Username
+            };
+
+            if(comment.User != null)
+            {
+                model.AvatarUrl = comment.User.AvatarHash != null ? "https://cdn.discordapp.com/avatars/" + comment.User.Id + "/" + comment.User.AvatarHash + ".png" : defaultLogoUrl;
+            }
+            else
+            {
+                model.AvatarUrl = GetAvatarUrl();
+            }
+
+            if(comment.ParentComment?.User != null)
+            {
+                model.ParentComment.AvatarUrl = comment.ParentComment?.User.AvatarHash != null ? "https://cdn.discordapp.com/avatars/" + comment.ParentComment.User.Id + "/" + comment.ParentComment.User.AvatarHash + ".png" : defaultLogoUrl;
+            }
+            
+           return model;
         }
     }
 }

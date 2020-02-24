@@ -42,6 +42,7 @@ import { CustomMinDirective } from './shared/directives/custom-min-validator';
 import { CommentService } from './shared/services/comment.service';
 import { CommentsComponent } from './comments/comments.component';
 import { CommentNewComponent } from './comment-new/comment-new.component';
+import { CommentComponent } from './comment/comment.component';
 
 
 
@@ -57,6 +58,7 @@ const appInitializerFn = (appConfig: ConfigurationService) => {
     NavMenuComponent,
     HomeComponent,
     CommentsComponent,
+    CommentComponent,
     CommentNewComponent,
     FooterComponent,
     PaginationComponent,
@@ -87,14 +89,14 @@ const appInitializerFn = (appConfig: ConfigurationService) => {
     RouterModule.forRoot([
       { path: '', component: HomeComponent, pathMatch: 'full' },
       { path: 'xrouter-snodes', component: ServiceNodeListComponent },
-      { path: 'spv-wallets', component: SpvWalletsComponent },
+      { path: 'spv-wallets', component: SpvWalletsComponent, runGuardsAndResolvers: 'always' },
       { path: 'spv-wallets/:name', component: ViewSpvWalletComponent, runGuardsAndResolvers: 'always' },
       { path: 'spv-wallets/:name/:nodePubKey', component: ViewSpvWalletComponent, runGuardsAndResolvers: 'always' },
-      { path: 'xcloud-services', component: XrServicesComponent },
+      { path: 'xcloud-services', component: XrServicesComponent, runGuardsAndResolvers: 'always' },
       { path: 'xcloud-services/:name', component: ViewXrServiceComponent, runGuardsAndResolvers: 'always' },
       { path: 'xcloud-services/:name/:nodePubKey', component: ViewXrServiceComponent, runGuardsAndResolvers: 'always' },
-      { path: 'xrouter-snodes/:nodePubKey', component: ViewSnodeComponent},
-      { path: 'xrouter-snodes/:nodePubKey/:service', component: ViewSnodeComponent},
+      { path: 'xrouter-snodes/:nodePubKey', component: ViewSnodeComponent, runGuardsAndResolvers: 'always' },
+      { path: 'xrouter-snodes/:nodePubKey/:service', component: ViewSnodeComponent, runGuardsAndResolvers: 'always' },
       { path: 'my-service-nodes/:id', component: MyServiceNodesComponent, canActivate: [AuthGuard]},
       { path: 'rpc-console', component: RpcConsoleComponent},
       { path: 'error', component: ErrorComponent},

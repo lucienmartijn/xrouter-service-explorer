@@ -21,9 +21,10 @@ namespace Xrouter.Service.Explorer.Persistence
 
         public IList<Comment> GetServiceComments(string serviceId, string nodePubKey)
         {
-            return _context.Comments
+           return _context.Comments
                 .Include(c => c.User)
                 .Include(c => c.ParentComment)
+                    .ThenInclude(c => c.User)
                 .Where(p => p.ServiceId == serviceId && p.NodePubKey == nodePubKey)
                 .ToList();
         }
@@ -54,14 +55,12 @@ namespace Xrouter.Service.Explorer.Persistence
 
         public Comment GetCommentById(string id)
         {
-            return _context.Comments.Where(p => p.Id == id).FirstOrDefault();
-        }
-
-        public void EditComment(Comment editedComment)
-        {
-            var comment = _context.Comments.Where(c => c.Id == editedComment.Id).FirstOrDefault();
-            comment.Body = editedComment.Body;
-            comment.DateTime = DateTime.Now;
+            return _context.Comments
+                .Include(c => c.User)
+                .Include(c => c.ParentComment)
+                    .ThenInclude(c => c.User)
+                .Include(c => c.Replies)
+                .SingleOrDefault(c => c.Id == id);
         }
 
         public void DeleteComment(Comment comment)

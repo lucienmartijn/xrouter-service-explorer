@@ -165,7 +165,9 @@ namespace blocknet_xrouter.Controllers
             
             string help = string.Empty;
             string xcloudConfig = string.Empty;
-            if(serviceNodeConfig.Plugins.Count > 0){
+
+
+            if(serviceNodeConfig?.Plugins.Count > 0){
                 // Try get help key from config string
                 var listConfig = serviceNodeConfig.Plugins[serviceName]
                         .Split(new string[] { "\n", "\r\n" }, StringSplitOptions.RemoveEmptyEntries)

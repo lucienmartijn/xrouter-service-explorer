@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
@@ -8,18 +8,18 @@ using Xrouter.Service.Explorer.Core.Models;
 
 namespace Xrouter.Service.Explorer.Authorization
 {
-    public class ServicenodeAuthorizationHandler : AuthorizationHandler<SameUserServiceNodeRequirement, MyServicenode>
+    public class CommentAuthorizationHandler : AuthorizationHandler<SameUserCommentRequirement, Comment>
     {
         private readonly UserManager<ApplicationUser> _userManager;
-        public ServicenodeAuthorizationHandler(UserManager<ApplicationUser>
+        public CommentAuthorizationHandler(UserManager<ApplicationUser>
             userManager)
         {
             _userManager = userManager;
         }
-        protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, SameUserServiceNodeRequirement requirement, MyServicenode resource)
+        protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, SameUserCommentRequirement requirement, Comment comment)
         {
             string userId = _userManager.GetUserId(context.User);
-            if (userId == resource.ApplicationUserId)
+            if (userId == comment.UserId)
             {
                 context.Succeed(requirement);
             }
@@ -28,6 +28,6 @@ namespace Xrouter.Service.Explorer.Authorization
         }
     }
 
-    public class SameUserServiceNodeRequirement : IAuthorizationRequirement { }
+    public class SameUserCommentRequirement : IAuthorizationRequirement { }
 }
 

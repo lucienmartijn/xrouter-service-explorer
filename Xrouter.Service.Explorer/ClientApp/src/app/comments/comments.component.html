@@ -5,58 +5,18 @@
 <ng-template #loaded>
   <h2>Comments</h2>
   <div class="comments">
-    <div class="media mb-3" *ngFor="let c of comments; let i = index;">
-      <img src="{{c.avatarUrl}}" class="mr-3 rounded-circle z-depth-0" width="40" alt="avatar image">
-      <div class="media-body" attr.id ="{{c.id}}">
-        <header class="mt-0 comment-header">
-          <div class="username">
-            <span class="h5">{{ c.userName}}</span>
-          </div>
-          <span *ngIf ="c.parentComment" style="font-size: 1rem!important;" class="text-muted mr-5">
-            <a class="reply-to-tab text-muted" href="javascript:void(0)" (click)="onJump(c.parentComment.id)">
-              <img src="{{c.parentComment.avatarUrl}}" class="rounded-circle z-depth-0" width="20" alt="avatar image">
-              <span>{{ c.parentComment.userName }}</span>
-            </a>
-          </span>  
-          <span style="font-size: 1rem!important;" class="text-muted">{{ c.dateTime }}</span>  
-        </header>
-        <div class="comment-body">
-          <p>{{ c.body }}</p>
-        </div>
-        <footer class="comment-footer">        
-          <div class="first">
-            <a *ngIf="c.replies.length > 1" data-toggle="collapse" href="#collapseReplies-{{ i }}" role="button" aria-expanded="false" aria-controls="collapseExample">
-              {{ c.replies.length }} Replies
-            </a>
-            <a *ngIf="c.replies.length == 1" data-toggle="collapse" href="#collapseReplies-{{ i }}" role="button" aria-expanded="false" aria-controls="collapseExample">
-              {{ c.replies.length }} Reply
-            </a>
-          </div>
-          <div class="actions">            
-              <a href="javascript:void(0)" (click)="editComment(i)">Edit</a>
-              <a href="javascript:void(0)" (click)="deleteComment(i)">Delete</a>
-              <a href="javascript:void(0)" (click)="createCommentReplyComponent(i)" #replyButtons>Reply</a>
-          </div>            
-        </footer>
-        <ng-template #reply></ng-template>
-          <div class="collapse" id="collapseReplies-{{ i }}">
-            <div class="media mb-3" *ngFor="let r of c.replies">
-              <img src="{{ r.avatarUrl}}" class="mr-3 rounded-circle z-depth-0" width="45" alt="avatar image">
-              <div class="media-body">
-                <header class="mt-0 comment-header">
-                  <div class="username">
-                    <span class="h4">{{ r.userName}}</span>
-                  </div>
-                </header>
-                <div class="card card-body">
-                  <p>{{ r.body }}</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        <hr>
-      </div>
-    </div>
-    <comment-new [user]="user" [nodePubKey]="nodePubKey" [serviceName]="serviceName" (newComment)="onNewComment($event)"></comment-new>
+    <comment *ngFor="let c of comments; let i = index;"
+      [comment]="c"
+      [nodePubKey]="nodePubKey" 
+      [serviceName]="serviceName" 
+    >
+
+    </comment>
+    <comment-new 
+      [user]="user" 
+      [nodePubKey]="nodePubKey" 
+      [serviceName]="serviceName" 
+      (newComment)="onNewComment($event)"
+      ></comment-new>
   </div>
 </ng-template>
