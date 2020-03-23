@@ -1,6 +1,6 @@
 <div class="media mb-3">
     <img src="{{comment.avatarUrl}}" class="mr-3 rounded-circle z-depth-0" width="40" alt="avatar image">
-    <div class="media-body" attr.id ="{{comment.id}}">
+    <div class="media-body" attr.id ="cmt-{{comment.id}}">
       <header class="mt-0 comment-header">
         <div class="username">
           <span class="h5">{{ comment.userName}}</span>
@@ -11,7 +11,8 @@
             <span>{{ comment.parentComment.userName }}</span>
           </a>
         </span>  
-        <span style="font-size: 1rem!important;" class="text-muted">{{ comment.dateTime }}</span>  
+        <span *ngIf="comment.dateModified != comment.dateCreated" style="font-size: 1rem!important;" title="Post last edited on {{ comment.dateModified }}" class="text-muted">Edited</span>  
+        <span style="font-size: 1rem!important;" class="text-muted ml-4" title="{{ comment.dateCreated }}">{{ comment.dateCreatedIndication }}</span>  
       </header>
       <div class="comment-body">
         <div *ngIf="!comment.editMode; else editing">
@@ -27,7 +28,7 @@
         </ng-template>
       </div>
       <footer class="comment-footer">        
-        <div class="first">
+        <div>
           <a *ngIf="comment.replies.length > 1" data-toggle="collapse" href="#collapseReplies-{{ comment.id }}" role="button" aria-expanded="false" aria-controls="collapseExample">
             {{ comment.replies.length }} Replies
           </a>
@@ -37,9 +38,15 @@
         </div>
         <div class="actions">
           <div *ngIf="!comment.editMode; else editFooter">
-            <a href="javascript:void(0)" (click)="toggleEditComment()">Edit</a>
-            <a href="javascript:void(0)" (click)="deleteComment()">Delete</a>
-            <a href="javascript:void(0)" (click)="createCommentReplyComponent()" #replyButtons>Reply</a>
+              <div *ngIf="isUserAuthenticated && comment.userId == user.userId; else notAuthenticated">
+                  <a href="javascript:void(0)" (click)="toggleEditComment()">Edit</a>
+                  <a href="javascript:void(0)" (click)="deleteComment()">Delete</a>
+                  <a href="javascript:void(0)" (click)="createCommentReplyComponent()" #replyButton>Reply</a>
+              </div>
+              <ng-template #notAuthenticated>
+                <a href="javascript:void(0)" (click)="createCommentReplyComponent()" #replyButton>Reply</a>
+              </ng-template>
+              
           </div>            
           <ng-template #editFooter>
             <a href="javascript:void(0)" (click)="cancelEditComment()">Cancel</a>

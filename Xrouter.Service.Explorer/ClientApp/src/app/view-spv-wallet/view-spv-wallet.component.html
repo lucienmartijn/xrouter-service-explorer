@@ -177,7 +177,7 @@
                 <table class="table">
                   <tbody>
                     <tr>
-                      <td>NodePubKey</td>
+                      <td>SNode Key</td>
                       <td class="ellipsis"><a [routerLink]="['/xrouter-snodes', result.node.nodePubKey]">{{result.node.nodePubKey}}</a></td>
                     </tr>
                     <tr>
@@ -185,8 +185,10 @@
                       <td>{{result.node.score}}</td>
                     </tr>
                     <tr>
-                      <td>Banned</td>
-                      <td>{{result.node.banned}}</td>
+                      <td>Payment Address</td>
+                      <td>
+                        <a href="https://chainz.cryptoid.info/block/address.dws?{{result.node.paymentAddress}}">{{result.node.paymentAddress}}</a>
+                      </td>
                     </tr>
                     <tr>
                       <td>Default Fee</td>
@@ -229,7 +231,12 @@
           </ngb-tab> 
       <ngb-tab title="Offered by others">
         <ng-template ngbTabContent>
-            <h3>Other Service Nodes that offer this service</h3>
+          <h3>Other Service Nodes that offer {{shortSpvWalletName}} SPV</h3>
+          <div *ngIf="result?.otherNodes.length == 0 else notEmpty">
+            There are no other service nodes supporting {{shortSpvWalletName}} SPV.
+          </div>
+          
+          <ng-template #notEmpty>
             <div class="table-responsive">
               <table class="table">
                 <thead>
@@ -246,7 +253,14 @@
                 </tbody>
               </table>
             </div>
+          </ng-template>
+            
         </ng-template>
       </ngb-tab>
     </ngb-tabset>
+    <hr>
+    <comments 
+      [nodePubKey]="result.node.nodePubKey"
+      [serviceName]="spvWalletName"
+    ></comments>
 </ng-template>  

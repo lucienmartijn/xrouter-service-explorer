@@ -1,4 +1,4 @@
 export class SaveComment {
-    public id:string;
+    public id:number;
     public body:string;
 }

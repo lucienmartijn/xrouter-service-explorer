@@ -23,8 +23,8 @@ namespace Xrouter.Service.Explorer.Persistence
         {
             base.OnModelCreating(modelBuilder);
 
-            var index = modelBuilder.Entity<ApplicationUser>()
-                .HasIndex(u => new { u.NormalizedUserName });
+            // var index = modelBuilder.Entity<ApplicationUser>()
+            //     .HasIndex(u => new { u.NormalizedUserName });
         }
     }
 }

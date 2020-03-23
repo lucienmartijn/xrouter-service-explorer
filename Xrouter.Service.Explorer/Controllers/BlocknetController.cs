@@ -184,13 +184,13 @@ namespace blocknet_xrouter.Controllers
                     }
                     //FIXME: i out of bounds when there is no help key in config. Check for help key
                     help = listConfig[i][1];
-                    if(i < listConfig.Count())
-                    {
-                        foreach (var config in listConfig.Skip(i))
-                        {
-                            help += '\n' + config[0];
-                        }
-                    }
+                    // if(i < listConfig.Count())
+                    // {
+                    //     foreach (var config in listConfig.Skip(i))
+                    //     {
+                    //         help += '\n' + config[0];
+                    //     }
+                    // }
                     xcloudConfig = serviceNodeConfig.Plugins[serviceName];
                 }
             }

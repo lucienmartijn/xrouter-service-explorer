@@ -5,15 +5,15 @@
 <ng-template #loaded>
   <h2>Comments</h2>
   <div class="comments">
-    <comment *ngFor="let c of comments; let i = index;"
-      [comment]="c"
-      [nodePubKey]="nodePubKey" 
-      [serviceName]="serviceName" 
+    <comment *ngFor="let c of comments"
+    [comment]="c"
+    [nodePubKey]="nodePubKey" 
+    [serviceName]="serviceName" 
+    (newComment)="onNewComment($event)"
+    (deletedComment)="onDeletedComment($event)"
     >
-
     </comment>
     <comment-new 
-      [user]="user" 
       [nodePubKey]="nodePubKey" 
       [serviceName]="serviceName" 
       (newComment)="onNewComment($event)"

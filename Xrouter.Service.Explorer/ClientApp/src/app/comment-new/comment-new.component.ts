@@ -1,4 +1,5 @@
-import { Component, OnInit, Input, ViewChild, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, Output, EventEmitter, OnDestroy, Inject } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
 import { Router } from '@angular/router';
 import { XrouterApiService } from '../shared/services/xrouter.service';
 import { CommentService } from '../shared/services/comment.service';
@@ -6,26 +7,60 @@ import { NewComment } from '../shared/models/newComment.model';
 import { Comment } from '../shared/models/Comment.model';
 import { NgForm } from '@angular/forms';
 import { User } from '../shared/models/user.model';
+import { Subscription, forkJoin } from 'rxjs';
+import { AccountService } from '../shared/services/account.service';
 @Component({
   selector: 'comment-new',
   templateUrl: './comment-new.component.html',
   styleUrls: ['./comment-new.component.css']
 })
-export class CommentNewComponent implements OnInit {
+export class CommentNewComponent implements OnInit, OnDestroy {
   commentBody:string;
   @Output('newComment') newComment = new EventEmitter<Comment>();
 
   @Input('nodePubKey') nodePubKey:string;
   @Input('serviceName') serviceName:string;
-  @Input('user') user:User;
   @Input('commentId') commentId:string;
-
+  
   @ViewChild('commentForm') serviceForm: NgForm;
+  
+  user:User;
+  subscription: Subscription;
+  isUserAuthenticated: boolean;
+  constructor(
+    private commentService: CommentService,
+    private accountService: AccountService,
+    @Inject(DOCUMENT) private document: Document
+    ) { 
+      this.user = new User();
 
-  constructor(private commentService: CommentService) { }
+      this.subscription = this.accountService.isUserAuthenticated.subscribe(isAuthenticated => {
+        this.isUserAuthenticated = isAuthenticated;
+        if(isAuthenticated) {
+          var sources = [
+              this.accountService.name(),
+              this.accountService.avatarUrl(),
+              this.accountService.id(),
+          ];
 
-  ngOnInit() {
-    
+          forkJoin(sources).subscribe(data =>{
+              this.user.userName = data[0];
+              this.user.avatarUrl = data[1];
+              this.user.userId = data[2];
+          }, err => {
+              if(err.status == 404){
+                console.log(err);
+              }
+              
+          });
+        }
+      });
+  }
+
+  ngOnInit() {}
+
+  ngOnDestroy(){
+    this.subscription.unsubscribe();
   }
 
   onCommentSubmit(){
@@ -33,10 +68,18 @@ export class CommentNewComponent implements OnInit {
     newComment.commentBody = this.commentBody;
     newComment.nodePubKey = this.nodePubKey;
     newComment.serviceId = this.serviceName;
-    newComment.commentId = this.commentId;
+    if(this.commentId){
+      newComment.parentCommentId = this.commentId;
+    }
+    console.log(newComment);
     this.commentService.newComment(newComment).subscribe(newComment =>{
       this.newComment.emit(newComment);
       this.serviceForm.reset();
     });
+  }
+
+  login(){
+    console.log(this.document.location.hash.substr(1))
+    // this.accountService.login(this.document.location.hash.substr(1));
   }
 }

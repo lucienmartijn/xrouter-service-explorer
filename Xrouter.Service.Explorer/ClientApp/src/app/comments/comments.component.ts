@@ -18,56 +18,24 @@ import { trigger, state, style, transition, animate, keyframes } from '@angular/
   templateUrl: './comments.component.html',
   styleUrls: ['./comments.component.css'],
 })
-export class CommentsComponent implements OnInit, OnDestroy {
+export class CommentsComponent implements OnInit {
   
   comments:Comment[];
   @Input('nodePubKey') nodePubKey:string;
   @Input('serviceName') serviceName:string;
 
-  isUserAuthenticated = false;
-  subscription: Subscription;
-  user:User;
+  loading:boolean;
 
-  loading:boolean = true;
-
-  constructor(
-    private accountService: AccountService,
-    private commentService: CommentService,
-    ) 
-    {
-      this.user = new User();
-
-      this.subscription = this.accountService.isUserAuthenticated.subscribe(isAuthenticated => {
-        this.isUserAuthenticated = isAuthenticated;
-        if (this.isUserAuthenticated) {
-          var sources = [
-            this.accountService.name(),
-            this.accountService.avatarUrl(),
-            this.accountService.id(),
-          ];
-
-          forkJoin(sources).subscribe(data =>{
-            this.user.userName = data[0];
-            this.user.avatarUrl = data[1];
-            this.user.userId = data[2];
-          }, err => {
-            if(err.status == 404)
-              console.log(err);
-          });
-        }
-      });
-    }
+  constructor(private commentService: CommentService){}
 
   ngOnInit() {
     this.populateComments();
   }
 
-  ngOnDestroy() {
-    this.subscription.unsubscribe();
-  }
-
   private populateComments(){
+    this.loading = true;
     this.commentService.getServiceComments(this.serviceName, this.nodePubKey).subscribe(comments => {
+      console.log(comments);
       this.comments = comments;      
       this.loading = false;
     });
@@ -75,5 +43,11 @@ export class CommentsComponent implements OnInit, OnDestroy {
 
   onNewComment(c:Comment){
     this.comments.push(c);
+    this.populateComments();
+  }
+
+  onDeletedComment(commentId:number){
+    const index = this.comments.findIndex(c => c.id == commentId);
+    this.comments.splice(index, 1);
   }
 }

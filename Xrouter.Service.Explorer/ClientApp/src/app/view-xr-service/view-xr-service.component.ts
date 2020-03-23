@@ -65,9 +65,7 @@ export class ViewXrServiceComponent implements OnInit, OnDestroy {
         this.router.navigate(['/error'], {queryParams: error});
       });
   }
-  ngOnInit() {
-    console.log("OnInit");
-  }
+  ngOnInit() {}
 
   onSubmit() {  
     this.resultLoading = true; 
@@ -77,10 +75,11 @@ export class ViewXrServiceComponent implements OnInit, OnDestroy {
         this.resultLoading = false;
     }))  
     .subscribe(result => {
-        this.serviceResult = result;
+        this.serviceResult = JSON.stringify(result, undefined, 2);
       },
       error => {
-        this.router.navigate(['/error'], {queryParams: error})
+        this.serviceResult = error;
+        // this.router.navigate(['/error'], {queryParams: error})
       });    
   }
 

@@ -1,4 +1,5 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, Inject } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { AccountService } from '../shared/services/account.service';
 import { Router } from '@angular/router';
@@ -17,7 +18,10 @@ export class NavMenuComponent implements OnInit, OnDestroy{
   subscription: Subscription;
   user:User;
 
-  constructor(private router: Router, private accountService: AccountService) { 
+  constructor(
+    private router: Router, 
+    private accountService: AccountService,
+    @Inject(DOCUMENT) private document: Document) { 
     this.user = new User();
   }
 
@@ -60,6 +64,6 @@ export class NavMenuComponent implements OnInit, OnDestroy{
   }
 
   login() {
-    this.accountService.login();
+    this.accountService.login(this.document.location.hash.substr(1));
   }
 }

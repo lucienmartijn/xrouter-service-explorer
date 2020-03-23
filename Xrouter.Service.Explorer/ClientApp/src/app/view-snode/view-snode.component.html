@@ -7,16 +7,12 @@
     <table class="table">
       <tbody>
         <tr>
-          <td>NodePubKey</td>
+          <td>SNode Key	</td>
           <td>{{nodePubKey}}</td>
         </tr>
         <tr>
           <td>Score</td>
           <td>{{result?.score}}</td>
-        </tr>
-        <tr>
-          <td>Banned</td>
-          <td>{{result?.banned}}</td>
         </tr>
         <tr>
           <td>Payment Address</td>
@@ -31,7 +27,7 @@
     <ngb-tabset>     
         <ngb-tab title="Configuration">
             <ng-template ngbTabContent>
-                <h3>Config</h3>
+                <h3>xrouter.conf</h3>
                 <pre>
                   <code>{{result?.config}}</code>
                 </pre>
@@ -69,7 +65,7 @@
                 <h3>XCloud Services offered by this Service Node</h3>
 
                 <div *ngIf="result?.services.length == 0 else notEmpty">
-                    This service node doesn't offer XCloud Services yet :(
+                    This service node doesn't offer XCloud Services yet.
                   </div>
                   
                 <ng-template #notEmpty>

@@ -57,10 +57,13 @@ namespace Xrouter.Service.Explorer
             services.AddCors(corsOptions =>
             {
                 corsOptions.AddPolicy("fully permissive", configurePolicy => configurePolicy
-                .AllowAnyHeader()
+                .AllowAnyOrigin()
                 .AllowAnyMethod()
-                .WithOrigins("http://localhost:44305")
-                .AllowCredentials()); //localhost:4200 is the default port an angular runs in dev mode with ng serve
+                .AllowAnyHeader()
+                );
+                //.WithOrigins("http://localhost:44305")
+                // .AllowCredentials()); //localhost:4200 is the default port an angular runs in dev mode with ng serve
+                
             });
 
             services.AddControllersWithViews();
@@ -81,10 +84,13 @@ namespace Xrouter.Service.Explorer
             services.AddDbContext<ApplicationDbContext>(options =>
                         options.UseSqlite("Data Source=serviceexplorer.sqlite",
                         sqliteOptions => sqliteOptions.MigrationsAssembly("Xrouter.Service.Explorer")));
-            services.AddIdentity<ApplicationUser, IdentityRole>()
-                    .AddEntityFrameworkStores<ApplicationDbContext>()
-                    .AddDefaultTokenProviders()
-                    .AddUserManager<CustomUserManager<ApplicationUser>>();
+            services.AddIdentity<ApplicationUser, IdentityRole>(options =>{
+                options.User.AllowedUserNameCharacters="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+#";
+            })
+            .AddEntityFrameworkStores<ApplicationDbContext>()
+            .AddDefaultTokenProviders()
+            //.AddUserManager<CustomUserManager<ApplicationUser>>()
+            ;
 
             services.AddAuthentication(options =>
             {

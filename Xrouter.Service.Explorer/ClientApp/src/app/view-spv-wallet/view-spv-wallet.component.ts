@@ -38,7 +38,6 @@ export class ViewSpvWalletComponent implements OnInit, OnDestroy {
 
   constructor(
     private xrouterApiService:XrouterApiService,
-    private responseTimeService: ResponseTimeService,
     private router:Router,
     private route:ActivatedRoute, 
     private location:Location
@@ -46,7 +45,7 @@ export class ViewSpvWalletComponent implements OnInit, OnDestroy {
     { 
       route.params.subscribe(p => {
         this.spvWalletName = p['name'];
-        // this.shortSpvWalletName = this.shortSpvWalletName.replace("xr::", "");
+        this.shortSpvWalletName = this.spvWalletName.replace("xr::", "");
         this.nodePubKey = p['nodePubKey'];
         if (isNullOrUndefined(this.spvWalletName)) {
           router.navigate(['']);

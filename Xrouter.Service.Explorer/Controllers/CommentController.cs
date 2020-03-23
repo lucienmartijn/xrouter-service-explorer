@@ -74,38 +74,16 @@ namespace Xrouter.Service.Explorer.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            //TODO: Replace w/ PK id value
-            List<int> numlist = new List<int>();
-            var comments = _repository.GetComments().ToList();
-            int num;
-            if (comments.Count() != 0)
-            {
-                foreach (var cmnt in comments)
-                {
-                    var comid = cmnt.Id;
-                    Int32.TryParse(comid.Replace("cmt", ""), out num);
-                    numlist.Add(num);
-                }
-                numlist.Sort();
-                num = numlist.Last();
-                num++;
-            }
-            else
-            {
-                num = 1;
-            }
-            var newid = "cmt" + num.ToString();
-            DateTime now = DateTime.Now;
             var comment = new Comment()
             {
-                Id = newid,
                 ServiceId = newCommentViewModel.ServiceId,
                 NodePubKey = newCommentViewModel.NodePubKey,
-                DateTime = now,
+                DateCreated =  DateTime.Now,
+                DateModified =  DateTime.Now,
                 UserId = GetUserId(),
                 Username = User.Identity.Name,
                 Body = newCommentViewModel.CommentBody,
-                CommentId = newCommentViewModel.CommentId
+                ParentCommentId = newCommentViewModel.ParentCommentId
             };
 
             var authorizationResult = await authorizationService.AuthorizeAsync(User, comment, "CanCrudOwnComment");
@@ -128,7 +106,7 @@ namespace Xrouter.Service.Explorer.Controllers
 
         [HttpPut("{id}")]
         // [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditComment(string id, [FromBody] SaveCommentViewModel saveCommentViewModel)
+        public async Task<IActionResult> EditComment(int id, [FromBody] SaveCommentViewModel saveCommentViewModel)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -140,7 +118,7 @@ namespace Xrouter.Service.Explorer.Controllers
             if (authorizationResult.Succeeded)
             {
                 comment.Body = saveCommentViewModel.Body;
-                comment.DateTime = DateTime.Now;
+                comment.DateModified = DateTime.Now;
                 _unitOfWork.Complete();
                 return Ok(CreateCommentViewModel(comment));
             }
@@ -156,7 +134,7 @@ namespace Xrouter.Service.Explorer.Controllers
 
         [HttpDelete("{id}")]
         // [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteComment(string id)
+        public async Task<IActionResult> DeleteComment(int id)
         {
             var comment = _repository.GetCommentById(id);
             
@@ -166,7 +144,7 @@ namespace Xrouter.Service.Explorer.Controllers
             {
                 _repository.DeleteComment(comment);
                 _unitOfWork.Complete();
-                return Ok();
+                return Ok(id);
             }
             else if (User.Identity.IsAuthenticated)
             {
@@ -178,7 +156,7 @@ namespace Xrouter.Service.Explorer.Controllers
             }      
         }
 
-        private bool CommentDeleteCheck(string commentid)
+        private bool CommentDeleteCheck(int commentid)
         {
             return _repository.CommentDeleteCheck(commentid);
         }
@@ -193,9 +171,13 @@ namespace Xrouter.Service.Explorer.Controllers
                     replies.Add(new CommentViewModel
                     {
                         Body = r.Body,
-                        DateTime = r.DateTime.TimeAgo(),
+                        DateCreatedIndication = r.DateCreated.TimeAgo(),
+                        DateCreated = r.DateCreated.DateTimeText(),
+                        DateModifiedIndication = r.DateModified.TimeAgo(),
+                        DateModified = r.DateModified.DateTimeText(),
                         Id = r.Id,
                         UserName = r.Username,
+                        UserId = r.UserId,
                         AvatarUrl = r.User.AvatarHash != null ? "https://cdn.discordapp.com/avatars/" + r.User.Id + "/" + r.User.AvatarHash + ".png" : defaultLogoUrl
                             
                     });
@@ -205,16 +187,20 @@ namespace Xrouter.Service.Explorer.Controllers
             var model = new CommentViewModel 
             {
                 Body = comment.Body,
-                DateTime = comment.DateTime.TimeAgo(),
+                DateCreatedIndication = comment.DateCreated.TimeAgo(),
+                DateCreated = comment.DateCreated.DateTimeText(),
+                DateModifiedIndication = comment.DateModified.TimeAgo(),
+                DateModified = comment.DateModified.DateTimeText(),
                 Id = comment.Id,
                 ParentComment = comment.ParentComment == null ? null : new CommentViewModel
                 {
-                    Id = comment.ParentComment?.Id,
-                    Body = comment.ParentComment?.Body,
-                    UserName = comment.ParentComment?.Username,
+                    Id = comment.ParentComment.Id,
+                    Body = comment.ParentComment.Body,
+                    UserName = comment.ParentComment.Username,
                 },
                 Replies = replies,
-                UserName = comment.Username
+                UserName = comment.Username,
+                UserId = comment.UserId
             };
 
             if(comment.User != null)

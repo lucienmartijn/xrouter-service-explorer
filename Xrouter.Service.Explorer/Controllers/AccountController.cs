@@ -28,22 +28,16 @@ namespace Xrouter.Service.Explorer.Controllers
             _signInManager = signInManager;
             _userManager = userManager;
         }
-        [HttpGet("[action]")]
-        public IActionResult SignInWithGoogle()
-        {
-            var authenticationProperties = _signInManager.ConfigureExternalAuthenticationProperties("Google", Url.Action(nameof(HandleExternalLogin)));
-            return Challenge(authenticationProperties, "Google");
-        }
 
         [HttpGet("[action]")]
-        public IActionResult SignInWithDiscord()
+        public IActionResult SignInWithDiscord(string returnUrl)
         {
-            var authenticationProperties = _signInManager.ConfigureExternalAuthenticationProperties("Discord", Url.Action(nameof(HandleExternalLogin)));
+            var authenticationProperties = _signInManager.ConfigureExternalAuthenticationProperties("Discord", Url.Action(nameof(HandleExternalLogin),  new { returnUrl = returnUrl }));
             return Challenge(authenticationProperties, "Discord");
         }
 
         [HttpGet("[action]")]
-        public async Task<IActionResult> HandleExternalLogin()
+        public async Task<IActionResult> HandleExternalLogin(string returnUrl)
         {
             var info = await _signInManager.GetExternalLoginInfoAsync();
             var result = await _signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, isPersistent: false);
@@ -58,7 +52,6 @@ namespace Xrouter.Service.Explorer.Controllers
                 {
                     Id = userId,
                     UserName = userName + "#" + discriminator,
-                    AvatarHash = avatarHash,
                 };
 
                 var createResult = await _userManager.CreateAsync(newUser);
@@ -71,6 +64,8 @@ namespace Xrouter.Service.Explorer.Controllers
                 await _signInManager.SignInAsync(newUser, isPersistent: false);
                 await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
             }
+
+            if(Url.IsLocalUrl(returnUrl)) return Redirect(returnUrl);
             return Redirect("/");
         }
 

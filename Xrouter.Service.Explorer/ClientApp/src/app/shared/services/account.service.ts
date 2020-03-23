@@ -8,7 +8,7 @@ import { DOCUMENT } from '@angular/common';
 
 // Add the RxJS Observable operators we need in this app.
 import { tap } from 'rxjs/operators';
-import { HttpParams, HttpClient } from '@angular/common/http';
+import { HttpParams, HttpClient, HttpHeaders } from '@angular/common/http';
 
 @Injectable()
 export class AccountService {
@@ -34,8 +34,10 @@ export class AccountService {
     return isAuthenticated;
   }
 
-  login() {
-    this.document.location.href = this.document.location.origin + "/api/account/SignInWithDiscord";
+  login(returnUrl:string) {
+    console.log(returnUrl)
+    let url = this.document.location.origin + "/api/account/SignInWithDiscord" + "?returnUrl=" + returnUrl;
+    this.document.location.href = url;
   }
 
   logout() {

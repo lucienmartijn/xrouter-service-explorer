@@ -33,12 +33,12 @@ namespace Xrouter.Service.Explorer.Persistence
             return _context.Comments.Where(p => p.ServiceId == serviceId && p.NodePubKey == nodePubKey).ToList();
         }
 
-        public bool CommentDeleteCheck(string commentid)
+        public bool CommentDeleteCheck(int commentid)
         {
             return _context.Comments.Where(x => x.Id == commentid).Select(x => x.Deleted).FirstOrDefault();
         }
 
-        public string GetServiceIdByComment(string commentId)
+        public string GetServiceIdByComment(int commentId)
         {
             return _context.Comments.Where(x => x.Id == commentId).Select(x => x.ServiceId).FirstOrDefault();
         }
@@ -53,7 +53,7 @@ namespace Xrouter.Service.Explorer.Persistence
             _context.Comments.Add(comment);
         }
 
-        public Comment GetCommentById(string id)
+        public Comment GetCommentById(int id)
         {
             return _context.Comments
                 .Include(c => c.User)

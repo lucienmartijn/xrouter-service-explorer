@@ -11,7 +11,7 @@
         <tr>
           <td>Fee</td>
           <td>{{result.service.fee}} BLOCK</td>
-        <tr>
+        <tr *ngIf="result.service.parameters">
             <td>Parameter Types</td>
             <td>{{result.service.parameters}}</td>
         </tr>
@@ -20,8 +20,14 @@
           <td>{{result.service.helpDescription}}</td>
         </tr>
         <tr>
+          <div *ngIf="result.service.parameters; else noParams">
             <td>Usage Instructions Blocknet CLI</td>
             <td>xrService {{serviceName}} [{{result.service.parameters}}]</td>
+          </div>
+          <ng-template #noParams>
+            <td>Usage Instructions Blocknet CLI</td>
+            <td>xrService {{serviceName}}</td>
+          </ng-template> 
         </tr>
         </tbody>
       </table>
@@ -62,7 +68,7 @@
                             Executing...
                           </div>
                           <ng-template #resultLoaded>
-                            {{ serviceResult | json }}
+                            {{ serviceResult }}
                           </ng-template>
                         </code>
                       </pre>
@@ -86,8 +92,10 @@
                           <td>{{result.node.score}}</td>
                         </tr>
                         <tr>
-                          <td>Banned</td>
-                          <td>{{result.node.banned}}</td>
+                          <td>Payment Address</td>
+                          <td>
+                            <a href="https://chainz.cryptoid.info/block/address.dws?{{result.node.paymentAddress}}">{{result.node.paymentAddress}}</a>
+                          </td>
                         </tr>
                         <tr>
                           <td>Default Fee</td>
@@ -101,7 +109,7 @@
             </ngb-tab>
             <ngb-tab title="Configuration">
                 <ng-template ngbTabContent>
-                  <h3>Configuration {{serviceName}}.conf</h3>
+                  <h3>Configuration [{{serviceName}}] in xrouter.conf</h3>
                   <pre>
                     <code>{{result.service.config}}</code>
                   </pre>

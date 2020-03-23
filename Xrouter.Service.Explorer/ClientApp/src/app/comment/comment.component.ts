@@ -1,8 +1,8 @@
-import { OnInit, OnDestroy, Component, ViewChildren, QueryList, ViewContainerRef, ElementRef, Input, ComponentFactoryResolver, Renderer2 } from "@angular/core";
+import { OnInit, OnDestroy, Component, ViewChildren, QueryList, ViewContainerRef, ElementRef, Input, ComponentFactoryResolver, Renderer2, ViewChild, Output, EventEmitter } from "@angular/core";
 import { AccountService } from "../shared/services/account.service";
 import { CommentService } from "../shared/services/comment.service";
 import { ViewportScroller } from "@angular/common";
-import { User } from "../shared/models/user.model";
+import { User } from '../shared/models/user.model';
 import { Subscription, forkJoin } from "rxjs";
 import { Comment } from '../shared/models/Comment.model';
 import { SaveComment } from "../shared/models/saveComment.model";
@@ -17,11 +17,16 @@ import { CommentNewComponent } from "../comment-new/comment-new.component";
     @Input('comment') comment:Comment;
     @Input('nodePubKey') nodePubKey:string;
     @Input('serviceName') serviceName:string;
-    @Input('user')user:User;
+    @Output('newComment') newComment = new EventEmitter<Comment>();
+    @Output('deletedComment') deletedComment = new EventEmitter<string>();
+    
+    user:User;
+    subscription: Subscription;
+
     commentBody:string;
     isUserAuthenticated = false;
-    @ViewChildren('reply', { read: ViewContainerRef }) container: ViewContainerRef;
-    @ViewChildren('replyButtons') replyButtonRef: ElementRef;
+    @ViewChild('reply', { read: ViewContainerRef }) container: ViewContainerRef;
+    @ViewChild('replyButton') replyButtonRef: ElementRef;
     componentRef:any;
 
     constructor(private resolver: ComponentFactoryResolver, 
@@ -30,18 +35,38 @@ import { CommentNewComponent } from "../comment-new/comment-new.component";
             private viewportScroller: ViewportScroller,
             private renderer: Renderer2) 
     {
+        this.user = new User();
+
+        this.subscription = this.accountService.isUserAuthenticated.subscribe(isAuthenticated => {
+            this.isUserAuthenticated = isAuthenticated;
+            if(isAuthenticated) {
+                var sources = [
+                    this.accountService.name(),
+                    this.accountService.avatarUrl(),
+                    this.accountService.id(),
+                ];
+
+                forkJoin(sources).subscribe(data =>{
+                    this.user.userName = data[0];
+                    this.user.avatarUrl = data[1];
+                    this.user.userId = data[2];
+                }, err => {
+                    if(err.status == 404)
+                    console.log(err);
+                });
+            }
+        });
     }
 
-    ngOnInit() {
-    }
+    ngOnInit() {}
 
     ngOnDestroy() {
-        this.destroyComponents();
+        this.subscription.unsubscribe();
     }
 
         
     onJump(elementId:string){
-        this.viewportScroller.scrollToAnchor(elementId);
+        this.viewportScroller.scrollToAnchor("cmt-" + elementId);
     }
 
     toggleEditComment(){
@@ -63,16 +88,14 @@ import { CommentNewComponent } from "../comment-new/comment-new.component";
 
     deleteComment(){
         if(confirm("Are you sure?")){ 
-                this.commentService.deleteComment(this.comment.id).subscribe(res =>{
-                // this.populateComments();
+            this.commentService.deleteComment(this.comment.id).subscribe(res =>{
+                this.deletedComment.emit(res);
             });
         }
     }
 
     createCommentReplyComponent() {
-        //FIXME
         let el = this.replyButtonRef.nativeElement;
-        console.log(el);
         let commentBox = this.container;
         let componentRef = this.componentRef;
 
@@ -91,19 +114,12 @@ import { CommentNewComponent } from "../comment-new/comment-new.component";
             componentRef.instance.user = this.user;
             componentRef.instance.commentId = this.comment.id;  
             componentRef.instance.newComment.subscribe(c => {
-            // this.loading = true;
-            // this.populateComments();
-            this.renderer.setProperty(el, "textContent", "Reply");
-            componentRef.destroy();
+                this.newComment.emit(c);
+                this.renderer.setProperty(el, "textContent", "Reply");
+                componentRef.destroy();
             });
     
             this.renderer.setProperty(el, "textContent", "Cancel");
         }   
-    }
-
-    destroyComponents() {
-        this.componentRef.forEach(ref => {
-            ref.destroy();
-        });
     }
   }

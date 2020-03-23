@@ -10,12 +10,12 @@ namespace Xrouter.Service.Explorer.Core
     public interface ICommentRepository:IDisposable
     {        
         IList<Comment> GetServiceComments(string serviceId, string nodePubKey);
-        bool CommentDeleteCheck(string commentid);
-        string GetServiceIdByComment(string commentId);
+        bool CommentDeleteCheck(int commentid);
+        string GetServiceIdByComment(int commentId);
         IList<Comment> GetCommentsByServiceIdAndNodePubKey(string serviceId, string nodePubKey);
         IList<Comment> GetComments();
         void AddNewComment(Comment comment);
-        Comment GetCommentById(string id);
+        Comment GetCommentById(int id);
         void DeleteComment(Comment comment);
     }
 }

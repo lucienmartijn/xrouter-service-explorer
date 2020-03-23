@@ -28,7 +28,7 @@ export class CommentService extends BaseService{
     return this.http.put<Comment>(this.baseEndpoint + this.apiEndpoint + '/' + comment.id, comment);
   }
 
-  deleteComment(id:string){
+  deleteComment(id:number){
     return this.http.delete<string>(this.baseEndpoint + this.apiEndpoint + '/' + id);
   }
 

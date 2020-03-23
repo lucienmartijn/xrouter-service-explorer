@@ -216,18 +216,19 @@ namespace Xrouter.Service.Explorer.Migrations
 
             modelBuilder.Entity("Xrouter.Service.Explorer.Core.Models.Comment", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("TEXT");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Body")
                         .IsRequired()
                         .HasColumnType("TEXT")
                         .HasMaxLength(1000);
 
-                    b.Property<string>("CommentId")
+                    b.Property<DateTime>("DateCreated")
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTime>("DateTime")
+                    b.Property<DateTime>("DateModified")
                         .HasColumnType("TEXT");
 
                     b.Property<bool>("Deleted")
@@ -235,6 +236,9 @@ namespace Xrouter.Service.Explorer.Migrations
 
                     b.Property<string>("NodePubKey")
                         .HasColumnType("TEXT");
+
+                    b.Property<int?>("ParentCommentId")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("ServiceId")
                         .HasColumnType("TEXT");
@@ -247,7 +251,7 @@ namespace Xrouter.Service.Explorer.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CommentId");
+                    b.HasIndex("ParentCommentId");
 
                     b.HasIndex("UserId");
 
@@ -340,7 +344,7 @@ namespace Xrouter.Service.Explorer.Migrations
                 {
                     b.HasOne("Xrouter.Service.Explorer.Core.Models.Comment", "ParentComment")
                         .WithMany("Replies")
-                        .HasForeignKey("CommentId");
+                        .HasForeignKey("ParentCommentId");
 
                     b.HasOne("Xrouter.Service.Explorer.Core.Models.ApplicationUser", "User")
                         .WithMany()

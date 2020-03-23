@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Xrouter.Service.Explorer.Migrations
 {
-    public partial class Initial : Migration
+    public partial class CreateDb : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -158,22 +158,24 @@ namespace Xrouter.Service.Explorer.Migrations
                 name: "Comments",
                 columns: table => new
                 {
-                    Id = table.Column<string>(nullable: false),
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
                     ServiceId = table.Column<string>(nullable: true),
                     NodePubKey = table.Column<string>(nullable: true),
-                    DateTime = table.Column<DateTime>(nullable: false),
+                    DateCreated = table.Column<DateTime>(nullable: false),
+                    DateModified = table.Column<DateTime>(nullable: false),
                     UserId = table.Column<string>(nullable: true),
                     Username = table.Column<string>(nullable: true),
                     Body = table.Column<string>(maxLength: 1000, nullable: false),
                     Deleted = table.Column<bool>(nullable: false),
-                    CommentId = table.Column<string>(nullable: true)
+                    ParentCommentId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Comments", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Comments_Comments_CommentId",
-                        column: x => x.CommentId,
+                        name: "FK_Comments_Comments_ParentCommentId",
+                        column: x => x.ParentCommentId,
                         principalTable: "Comments",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -247,9 +249,9 @@ namespace Xrouter.Service.Explorer.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Comments_CommentId",
+                name: "IX_Comments_ParentCommentId",
                 table: "Comments",
-                column: "CommentId");
+                column: "ParentCommentId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Comments_UserId",
