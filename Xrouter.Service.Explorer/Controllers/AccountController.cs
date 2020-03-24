@@ -65,15 +65,16 @@ namespace Xrouter.Service.Explorer.Controllers
                 await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
             }
 
-            if(Url.IsLocalUrl(returnUrl)) return Redirect(returnUrl);
-            return Redirect("/");
+            if(Url.IsLocalUrl(returnUrl)) return Redirect("/#" + returnUrl);
+            return Redirect("/#");
         }
 
         [HttpGet("[action]")]
-        public async Task<IActionResult> Logout()
+        public async Task<IActionResult> Logout(string returnUrl)
         {
             await _signInManager.SignOutAsync();
-            return Redirect("/");
+            if(Url.IsLocalUrl(returnUrl)) return Redirect("/#" + returnUrl);
+            return Redirect("/#");
         }
 
         [HttpGet("[action]")]

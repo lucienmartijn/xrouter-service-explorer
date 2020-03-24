@@ -35,13 +35,12 @@ export class AccountService {
   }
 
   login(returnUrl:string) {
-    console.log(returnUrl)
     let url = this.document.location.origin + "/api/account/SignInWithDiscord" + "?returnUrl=" + returnUrl;
     this.document.location.href = url;
   }
 
-  logout() {
-    this.document.location.href =  this.document.location.origin + "/api/account/logout";
+  logout(returnUrl:string) {
+    this.document.location.href =  this.document.location.origin + "/api/account/logout" + "?returnUrl=" + returnUrl;
   }
 
   name(){

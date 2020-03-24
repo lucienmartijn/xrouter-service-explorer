@@ -64,7 +64,7 @@
                   <div class="dropdown-menu dropdown-menu-right dropdown-secondary" aria-labelledby="navbarDropdownMenuLink-5">
                     <h6 class="dropdown-header">Logged in as {{ user.userName }}</h6>
                     <a class="dropdown-item" [routerLink]="'/my-service-nodes/' + this.user.userId">My Service Nodes</a>
-                    <a class="dropdown-item" href="#" (click)="logout()">Logout</a>
+                    <a class="dropdown-item" href="javascript:void(0)" (click)="logout()">Logout</a>
                   </div>
                 </li>
                 </ng-template>

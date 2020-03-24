@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, ViewChild, Output, EventEmitter, OnDestroy, Inject } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
-import { Router } from '@angular/router';
+import { Router, Route, ActivatedRoute } from '@angular/router';
 import { XrouterApiService } from '../shared/services/xrouter.service';
 import { CommentService } from '../shared/services/comment.service';
 import { NewComment } from '../shared/models/newComment.model';
@@ -30,7 +30,8 @@ export class CommentNewComponent implements OnInit, OnDestroy {
   constructor(
     private commentService: CommentService,
     private accountService: AccountService,
-    @Inject(DOCUMENT) private document: Document
+    @Inject(DOCUMENT) private document: Document,
+    private route: ActivatedRoute,
     ) { 
       this.user = new User();
 
@@ -79,7 +80,8 @@ export class CommentNewComponent implements OnInit, OnDestroy {
   }
 
   login(){
+    // console.log(this.route)
     console.log(this.document.location.hash.substr(1))
-    // this.accountService.login(this.document.location.hash.substr(1));
+    this.accountService.login(this.document.location.hash.substr(1));
   }
 }
