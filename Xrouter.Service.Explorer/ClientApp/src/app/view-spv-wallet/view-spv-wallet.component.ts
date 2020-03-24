@@ -9,6 +9,7 @@ import { HttpRequestTimeInterceptor } from '../shared/http-responsetime-logging/
 import { forkJoin, Observable, Subject } from 'rxjs';
 import { ResponseTimeService } from '../shared/services/responsetime.service';
 import { NgbTabset } from "@ng-bootstrap/ng-bootstrap";
+import { MyServiceNodesService } from '../shared/services/myservicenodes.service';
 
 @Component({
   selector: 'app-view-spv-wallet',
@@ -25,6 +26,7 @@ export class ViewSpvWalletComponent implements OnInit, OnDestroy {
   nodeCount:number;
   minNodeCount:number = 1;
   result:any;
+  snodeVerified:boolean;
 
   @ViewChild('f') f: NgForm;
   @ViewChild('t') tab: NgbTabset;
@@ -40,7 +42,8 @@ export class ViewSpvWalletComponent implements OnInit, OnDestroy {
     private xrouterApiService:XrouterApiService,
     private router:Router,
     private route:ActivatedRoute, 
-    private location:Location
+    private location:Location,
+    private myServiceNodesService: MyServiceNodesService,
     ) 
     { 
       route.params.subscribe(p => {
@@ -62,20 +65,22 @@ export class ViewSpvWalletComponent implements OnInit, OnDestroy {
     }
 
   private initializeData(){
-    this.xrouterApiService.GetSpvWalletInfo(this.spvWalletName, this.nodePubKey)
-        .pipe(takeUntil(this.ngUnsubscribe))
-        .subscribe(result => {
-          this.result = result;
-          this.location.replaceState("/spv-wallets/" + this.spvWalletName + "/" + this.result.node.nodePubKey);
-          this.loading = false;
-          
-          this.selectedSpvCommand = this.result.spvConfig.commands[0].command;
-          this.nodeCount = 1;
-          this.resultLoading = false;
-        },
-        error => {
-          this.router.navigate(['/error'], {queryParams: error});
-        });
+    var observableIsServiceNodeVerified: Observable<boolean> = this.myServiceNodesService.isServiceNodeVerified(this.nodePubKey);
+    var observableServiceNodeInfo: Observable<any> = this.xrouterApiService.GetSpvWalletInfo(this.spvWalletName, this.nodePubKey);
+
+    forkJoin([observableIsServiceNodeVerified, observableServiceNodeInfo]).pipe(takeUntil(this.ngUnsubscribe)).subscribe(([verified, spvInfo]) =>{
+      this.loading = false;
+      this.snodeVerified = verified;
+      this.result = spvInfo;
+      this.location.replaceState("/spv-wallets/" + this.spvWalletName + "/" + this.result.node.nodePubKey);
+      this.selectedSpvCommand = this.result.spvConfig.commands[0].command;
+      this.nodeCount = 1;
+      this.resultLoading = false;
+
+    }, err => {
+      if(err.status == 404)
+      this.router.navigate(['/error'], {queryParams: err});
+    });
   }
 
   private callXrouterCommand(callback:Observable<object>){

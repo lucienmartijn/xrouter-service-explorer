@@ -200,6 +200,7 @@ namespace Xrouter.Service.Explorer.Controllers
                 },
                 Replies = replies,
                 UserName = comment.Username,
+                Verified = comment.User.MyServiceNodes.Count == 0 ? false : comment.User.MyServiceNodes.Any(s => s.Ownership == true && s.ApplicationUserId == comment.UserId ),
                 UserId = comment.UserId
             };
 

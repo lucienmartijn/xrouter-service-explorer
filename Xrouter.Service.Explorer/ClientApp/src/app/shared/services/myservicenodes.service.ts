@@ -36,6 +36,10 @@ export class MyServiceNodesService extends BaseService{
     return this.http.get<boolean>(this.baseEndpoint + this.apiEndpoint + '/VerifyMessage/?address=' + address + "&signature="+ signature + "&message=" + message);
   }
 
+  isServiceNodeVerified(sNodeKey:string){
+    return this.http.get<boolean>(this.baseEndpoint + this.apiEndpoint + '/IsServiceNodeVerified/?sNodeKey=' + sNodeKey);
+  }
+
   update(id: number, servicenode:MyServiceNode){
     return this.http.put<MyServiceNode>(this.baseEndpoint + this.apiEndpoint + '/' + id, servicenode);
   }

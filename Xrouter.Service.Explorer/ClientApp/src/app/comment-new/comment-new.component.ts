@@ -80,8 +80,6 @@ export class CommentNewComponent implements OnInit, OnDestroy {
   }
 
   login(){
-    // console.log(this.route)
-    console.log(this.document.location.hash.substr(1))
     this.accountService.login(this.document.location.hash.substr(1));
   }
 }

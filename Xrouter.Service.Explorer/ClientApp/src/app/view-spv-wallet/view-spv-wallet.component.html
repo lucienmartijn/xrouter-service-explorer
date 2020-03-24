@@ -178,17 +178,20 @@
                   <tbody>
                     <tr>
                       <td>SNode Key</td>
-                      <td class="ellipsis"><a [routerLink]="['/xrouter-snodes', result.node.nodePubKey]">{{result.node.nodePubKey}}</a></td>
-                    </tr>
-                    <tr>
-                      <td>Score</td>
-                      <td>{{result.node.score}}</td>
+                      <td class="ellipsis">
+                        <a [routerLink]="['/xrouter-snodes', result.node.nodePubKey]">{{result.node.nodePubKey}}</a>
+                        <span *ngIf="snodeVerified" class="ml-2 badge badge-secondary" title="This user has verified its ownership of a blocknet service node.">Verified</span>
+                    </td>
                     </tr>
                     <tr>
                       <td>Payment Address</td>
                       <td>
                         <a href="https://chainz.cryptoid.info/block/address.dws?{{result.node.paymentAddress}}">{{result.node.paymentAddress}}</a>
                       </td>
+                    </tr>
+                    <tr>
+                      <td>Score</td>
+                      <td>{{result.node.score}}</td>
                     </tr>
                     <tr>
                       <td>Default Fee</td>

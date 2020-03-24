@@ -85,7 +85,10 @@
                       <tbody>
                         <tr>
                           <td>NodePubKey</td>
-                          <td class="ellipsis"><a [routerLink]="['/xrouter-snodes', result.node.nodePubKey]">{{result.node.nodePubKey}}</a></td>
+                          <td class="ellipsis">
+                            <a [routerLink]="['/xrouter-snodes', result.node.nodePubKey]">{{result.node.nodePubKey}}</a>
+                            <span *ngIf="snodeVerified" class="ml-2 badge badge-secondary" title="This user has verified its ownership of a blocknet service node.">Verified</span>
+                          </td>
                         </tr>
                         <tr>
                           <td>Score</td>

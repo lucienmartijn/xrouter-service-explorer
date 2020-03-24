@@ -18,6 +18,7 @@ namespace Xrouter.Service.Explorer.Controllers.ViewModels
         public string Body { get; set; }
         public CommentViewModel ParentComment { get; set; }
         public string UserName { get; set; }
+        public bool Verified { get; set; }
         public string UserId { get; set; }
         public string AvatarUrl { get; set; }
     }

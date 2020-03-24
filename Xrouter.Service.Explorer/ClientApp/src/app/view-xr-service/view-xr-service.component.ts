@@ -5,7 +5,8 @@ import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { isNullOrUndefined } from 'util';
 import { NgForm } from '@angular/forms';
 import { finalize, takeUntil } from 'rxjs/operators';
-import { Subject } from 'rxjs';
+import { Subject, Observable, forkJoin } from 'rxjs';
+import { MyServiceNodesService } from '../shared/services/myservicenodes.service';
 
 @Component({
   selector: 'app-view-xr-service',
@@ -17,7 +18,9 @@ export class ViewXrServiceComponent implements OnInit, OnDestroy {
   navigationSubscription;
   loading:boolean = true;
   serviceName:string;
+  nodePubKey:string;
   result:any;
+  snodeVerified:boolean;
   parametervalues:string[];
 
   @ViewChild('serviceForm') serviceForm: NgForm;
@@ -28,12 +31,14 @@ export class ViewXrServiceComponent implements OnInit, OnDestroy {
     private xrouterApiService:XrouterApiService,
     private router:Router,
     private route:ActivatedRoute, 
-    private location:Location
+    private location:Location,
+    private myServiceNodesService: MyServiceNodesService,
     ) 
     { 
       this.router.routeReuseStrategy.shouldReuseRoute = () => false;
       this.route.params.subscribe(p => {
         this.serviceName = p['name'];
+        this.nodePubKey = p['nodePubKey'];
         if (isNullOrUndefined(this.serviceName)) {
           router.navigate(['']);
           return; 
@@ -48,22 +53,25 @@ export class ViewXrServiceComponent implements OnInit, OnDestroy {
     }
 
   private initializeData(){
-    this.xrouterApiService.GetServiceInfo(this.serviceName)
-      .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe(result => {
-        this.result = result;
-        this.location.replaceState("/xcloud-services/" + this.serviceName + "/" + this.result.node.nodePubKey);
-        if(this.result.service.parametersList){
-          if(this.result.service.parametersList.length > 0)
-            this.parametervalues = new Array<string>(this.result.service.parametersList.length);
-        }
+    var observableIsServiceNodeVerified: Observable<boolean> = this.myServiceNodesService.isServiceNodeVerified(this.nodePubKey);
+    var observableServiceNodeInfo: Observable<any> = this.xrouterApiService.GetServiceInfo(this.serviceName);
 
-        this.loading = false;
-        this.resultLoading = false;
-      },
-      error => {
-        this.router.navigate(['/error'], {queryParams: error});
-      });
+    forkJoin([observableIsServiceNodeVerified, observableServiceNodeInfo]).pipe(takeUntil(this.ngUnsubscribe)).subscribe(([verified, serviceInfo]) =>{
+      this.snodeVerified = verified;
+      this.result = serviceInfo;
+      this.location.replaceState("/xcloud-services/" + this.serviceName + "/" + this.result.node.nodePubKey);
+      if(this.result.service.parametersList){
+        if(this.result.service.parametersList.length > 0)
+          this.parametervalues = new Array<string>(this.result.service.parametersList.length);
+      }
+
+      this.loading = false;
+      this.resultLoading = false;
+
+    }, err => {
+      if(err.status == 404)
+      this.router.navigate(['/error'], {queryParams: err});
+    });
   }
   ngOnInit() {}
 

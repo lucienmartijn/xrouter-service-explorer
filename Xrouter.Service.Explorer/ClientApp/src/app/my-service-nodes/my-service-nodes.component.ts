@@ -223,6 +223,7 @@ export class MyServiceNodesComponent implements OnInit {
   onSubmit() {
     const servicenode = this.allServiceNodes.items.find(sn => sn.address === this.newServiceNode.address);
     this.newServiceNode.status = servicenode.status;
+    this.newServiceNode.sNodeKey = servicenode.sNodeKey;
     this.myServiceNodesService.create(this.newServiceNode)
       .subscribe(serviceNode =>{
         this.myServiceNodes.push(serviceNode);

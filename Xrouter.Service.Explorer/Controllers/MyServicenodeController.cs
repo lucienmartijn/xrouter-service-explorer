@@ -41,7 +41,7 @@ namespace Xrouter.Service.Explorer.Controllers
             {
                 Status = saveServicenodeViewModel.Status,
                 Address = saveServicenodeViewModel.Address,
-                SNodeKey = saveServicenodeViewModel.NodePubKey,
+                SNodeKey = saveServicenodeViewModel.SNodeKey,
                 ApplicationUserId = saveServicenodeViewModel.ApplicationUserId,
                 Id = saveServicenodeViewModel.Id,
                 Name = saveServicenodeViewModel.Name,
@@ -72,7 +72,7 @@ namespace Xrouter.Service.Explorer.Controllers
             var myServiceNodes = repository.GetServiceNodes(id);
 
             if (myServiceNodes == null)
-                return NotFound();
+            return NotFound();
             
             if(myServiceNodes.Count == 0)
                 return Ok(CreateMyServiceNodeViewModel(myServiceNodes));
@@ -182,6 +182,15 @@ namespace Xrouter.Service.Explorer.Controllers
             serviceNode.Status = myServicenode.Status;
             unitOfWork.Complete();
             return Ok(serviceNode);
+        }
+
+        [HttpGet("[action]")]
+        public IActionResult IsServiceNodeVerified(string sNodeKey)
+        {
+            var serviceNode = repository.GetServicenode(sNodeKey);
+
+            if(serviceNode == null) return Ok(false);
+            return Ok(serviceNode.Ownership);
         }
 
         // [HttpGet("{id}")]

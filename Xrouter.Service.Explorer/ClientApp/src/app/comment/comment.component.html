@@ -3,7 +3,7 @@
     <div class="media-body" attr.id ="cmt-{{comment.id}}">
       <header class="mt-0 comment-header">
         <div class="username">
-          <span class="h5">{{ comment.userName}}</span>
+          <h6>{{ comment.userName}} <span *ngIf="comment.verified" class="badge badge-secondary" title="This user has verified its ownership of a blocknet service node.">Verified Service Node</span></h6>
         </div>
         <span *ngIf ="comment.parentComment" style="font-size: 1rem!important;" class="text-muted mr-5">
           <a class="reply-to-tab text-muted" href="javascript:void(0)" (click)="onJump(comment.parentComment.id)">

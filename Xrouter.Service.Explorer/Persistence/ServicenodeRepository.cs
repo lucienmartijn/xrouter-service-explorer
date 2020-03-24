@@ -28,6 +28,13 @@ namespace Xrouter.Service.Explorer.Persistence
                 .SingleOrDefault(sn => sn.Id == id);
         }
 
+        public MyServicenode GetServicenode(string sNodeKey)
+        {
+            return context.ServiceNodes
+                .Include(sn => sn.ApplicationUser)
+                .SingleOrDefault(sn => sn.SNodeKey == sNodeKey);
+        }
+
         public List<MyServicenode> GetServiceNodes(string id)
         {
             return context.ServiceNodes

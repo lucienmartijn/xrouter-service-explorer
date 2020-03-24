@@ -13,5 +13,6 @@ namespace Xrouter.Service.Explorer.Core
         void RemoveServiceNode(MyServicenode node);
 
         MyServicenode GetServicenode(int id);
+        MyServicenode GetServicenode(string sNodeKey);
     }
 }

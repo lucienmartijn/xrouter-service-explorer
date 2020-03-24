@@ -23,6 +23,7 @@ namespace Xrouter.Service.Explorer.Persistence
         {
            return _context.Comments
                 .Include(c => c.User)
+                    .ThenInclude(c => c.MyServiceNodes)
                 .Include(c => c.ParentComment)
                     .ThenInclude(c => c.User)
                 .Where(p => p.ServiceId == serviceId && p.NodePubKey == nodePubKey)

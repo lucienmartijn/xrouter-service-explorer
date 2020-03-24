@@ -617,7 +617,7 @@ namespace blocknet_xrouter.Controllers
                     (s, sn) => new ServiceViewModel{
                         Name = s.Key,
                         NodeCount = s.Value
-                    }).ToList();
+                    }).OrderByDescending(s => s.NodeCount).ToList();
                 
             var viewModel = new NetworkServicesResponseViewModel
             {

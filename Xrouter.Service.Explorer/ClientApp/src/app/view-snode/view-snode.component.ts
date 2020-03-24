@@ -4,7 +4,8 @@ import { XrouterApiService } from '../shared/services/xrouter.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { isNullOrUndefined } from 'util';
 import { takeUntil } from 'rxjs/operators';
-import { Subject } from 'rxjs';
+import { Subject, forkJoin, Observable } from 'rxjs';
+import { MyServiceNodesService } from '../shared/services/myservicenodes.service';
 
 @Component({
   selector: 'app-view-snode',
@@ -21,6 +22,7 @@ export class ViewSnodeComponent implements OnInit, OnDestroy {
   service:string;
   xCloudServices:any;
   result:any;
+  snodeVerified:boolean;
 
   query:any = {
     page: 1,
@@ -31,7 +33,8 @@ export class ViewSnodeComponent implements OnInit, OnDestroy {
     private xrouterApiService:XrouterApiService,
     private router:Router,
     private route:ActivatedRoute, 
-    private location:Location
+    private location:Location,
+    private myServiceNodesService: MyServiceNodesService,
   ) 
   { 
     route.params.subscribe(p => {
@@ -46,15 +49,17 @@ export class ViewSnodeComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.xrouterApiService.GetNodeInfo(this.nodePubKey, this.service)
-      .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe(result => {
-        this.result = result;
-        this.loading = false;
-      },
-      error => {
-        this.router.navigate(['/error'], {queryParams: error});
-      });
+    var observableIsServiceNodeVerified: Observable<boolean> = this.myServiceNodesService.isServiceNodeVerified(this.nodePubKey);
+    var observableServiceNodeInfo: Observable<any> = this.xrouterApiService.GetNodeInfo(this.nodePubKey, this.service);
+
+    forkJoin([observableIsServiceNodeVerified, observableServiceNodeInfo]).pipe(takeUntil(this.ngUnsubscribe)).subscribe(([verified, nodeInfo]) =>{
+      this.loading = false;
+      this.snodeVerified = verified;
+      this.result = nodeInfo;
+    }, err => {
+      if(err.status == 404)
+      this.router.navigate(['/error'], {queryParams: err});
+    });
   }
 
   ngOnDestroy() {
