@@ -184,6 +184,21 @@ namespace Xrouter.Service.Explorer.Controllers
                 }
             }
 
+            bool verified;
+
+            if(comment.User == null)
+            {
+                verified = false;
+            }
+            else if (comment.User.MyServiceNodes.Count == 0)
+            {
+                verified = false;
+            }
+            else
+            {
+                verified = comment.User.MyServiceNodes.Any(s => s.Ownership == true && s.ApplicationUserId == comment.UserId );
+            }
+
             var model = new CommentViewModel 
             {
                 Body = comment.Body,
@@ -200,7 +215,7 @@ namespace Xrouter.Service.Explorer.Controllers
                 },
                 Replies = replies,
                 UserName = comment.Username,
-                Verified = comment.User.MyServiceNodes.Count == 0 ? false : comment.User.MyServiceNodes.Any(s => s.Ownership == true && s.ApplicationUserId == comment.UserId ),
+                Verified = verified,
                 UserId = comment.UserId
             };
 
