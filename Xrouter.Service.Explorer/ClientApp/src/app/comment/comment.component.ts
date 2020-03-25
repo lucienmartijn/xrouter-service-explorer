@@ -4,7 +4,7 @@ import { CommentService } from "../shared/services/comment.service";
 import { ViewportScroller } from "@angular/common";
 import { User } from '../shared/models/user.model';
 import { Subscription, forkJoin } from "rxjs";
-import { Comment } from '../shared/models/Comment.model';
+import { Comment } from '../shared/models/comment.model';
 import { SaveComment } from "../shared/models/saveComment.model";
 import { CommentNewComponent } from "../comment-new/comment-new.component";
 
@@ -51,8 +51,10 @@ import { CommentNewComponent } from "../comment-new/comment-new.component";
                     this.user.avatarUrl = data[1];
                     this.user.userId = data[2];
                 }, err => {
-                    if(err.status == 404)
-                    console.log(err);
+                    if(err.status == 404) {
+
+                    }
+                    
                 });
             }
         });

@@ -9,4 +9,6 @@ export class Comment {
     public dateModified:Date;
     public replies: Comment[];
     public editMode:boolean = false;
+    public verified:boolean;
+    public parentComment:boolean;
 }

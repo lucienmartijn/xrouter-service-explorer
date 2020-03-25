@@ -4,7 +4,7 @@ import { Router, Route, ActivatedRoute } from '@angular/router';
 import { XrouterApiService } from '../shared/services/xrouter.service';
 import { CommentService } from '../shared/services/comment.service';
 import { NewComment } from '../shared/models/newComment.model';
-import { Comment } from '../shared/models/Comment.model';
+import { Comment } from '../shared/models/comment.model';
 import { NgForm } from '@angular/forms';
 import { User } from '../shared/models/user.model';
 import { Subscription, forkJoin } from 'rxjs';
@@ -50,7 +50,6 @@ export class CommentNewComponent implements OnInit, OnDestroy {
               this.user.userId = data[2];
           }, err => {
               if(err.status == 404){
-                console.log(err);
               }
               
           });

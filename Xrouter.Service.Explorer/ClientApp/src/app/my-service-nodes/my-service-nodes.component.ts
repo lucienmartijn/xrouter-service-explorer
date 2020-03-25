@@ -141,7 +141,7 @@ export class ValidateServicenodeModalContent implements OnInit {
     });
   }
 
-  onVerifySubmit(index: number){
+  onVerifySubmit(){
     if(this.formGroup.invalid) return;
 
     let address = this.servicenode.address;
@@ -249,7 +249,6 @@ export class MyServiceNodesComponent implements OnInit {
     modalReference.result.then(res => {
       let myServiceNode = this.myServiceNodes[index];
       const servicenode = this.allServiceNodes.items.find(sn => sn.address === this.newServiceNode.address);
-      console.log(servicenode);
       let updatedServiceNode = new MyServiceNode();      
       updatedServiceNode.address = myServiceNode.address;
       updatedServiceNode.applicationUserId = myServiceNode.applicationUserId;
