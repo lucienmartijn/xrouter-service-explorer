@@ -5,8 +5,6 @@ VisualStudioVersion = 16.0.29503.13
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xrouter.Service.Explorer", "Xrouter.Service.Explorer\Xrouter.Service.Explorer.csproj", "{E2E4C7DB-92DF-4ABE-9EF5-A5B5C2403509}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AspNet.Security.OAuth.Discord", "AspNet.Security.OAuth.Discord\AspNet.Security.OAuth.Discord.csproj", "{8E7108D6-76CE-45BC-BECC-8D8930EDFE6E}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -23,14 +21,6 @@ Global
 		{E2E4C7DB-92DF-4ABE-9EF5-A5B5C2403509}.Release|Any CPU.Build.0 = Release|Any CPU
 		{E2E4C7DB-92DF-4ABE-9EF5-A5B5C2403509}.Staging|Any CPU.ActiveCfg = Release|Any CPU
 		{E2E4C7DB-92DF-4ABE-9EF5-A5B5C2403509}.Staging|Any CPU.Build.0 = Release|Any CPU
-		{8E7108D6-76CE-45BC-BECC-8D8930EDFE6E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8E7108D6-76CE-45BC-BECC-8D8930EDFE6E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8E7108D6-76CE-45BC-BECC-8D8930EDFE6E}.QA|Any CPU.ActiveCfg = Debug|Any CPU
-		{8E7108D6-76CE-45BC-BECC-8D8930EDFE6E}.QA|Any CPU.Build.0 = Debug|Any CPU
-		{8E7108D6-76CE-45BC-BECC-8D8930EDFE6E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8E7108D6-76CE-45BC-BECC-8D8930EDFE6E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8E7108D6-76CE-45BC-BECC-8D8930EDFE6E}.Staging|Any CPU.ActiveCfg = Debug|Any CPU
-		{8E7108D6-76CE-45BC-BECC-8D8930EDFE6E}.Staging|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
