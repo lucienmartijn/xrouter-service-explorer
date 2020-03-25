@@ -32,7 +32,7 @@
                       <div *ngSwitchCase="'xrGetBlockHash'">
                         <div class="form-group">
                           <label for="blockNumber">Block Number</label>
-                          <input type="number" class="form-control" id="blockNumber" ngModel name="blockNumber" #blockNumber="ngModel" required>
+                          <input type="text" class="form-control" id="blockNumber" ngModel name="blockNumber" #blockNumber="ngModel" required>
                         </div>
                           <div class="form-group">
                             <div *ngIf="blockNumber.invalid && (blockNumber.dirty || blockNumber.touched)"

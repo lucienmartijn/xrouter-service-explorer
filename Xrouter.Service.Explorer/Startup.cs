@@ -34,9 +34,11 @@ namespace Xrouter.Service.Explorer
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        private IWebHostEnvironment _appEnv;
+        public Startup(IConfiguration configuration, IWebHostEnvironment appEnv)
         {
             Configuration = configuration;
+            _appEnv = appEnv;
         }
 
         public IConfiguration Configuration { get; }
@@ -53,7 +55,6 @@ namespace Xrouter.Service.Explorer
             services.AddMvc()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
                 .AddNewtonsoftJson(opt => opt.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
-;
             services.AddCors(corsOptions =>
             {
                 corsOptions.AddPolicy("fully permissive", configurePolicy => configurePolicy
@@ -81,9 +82,8 @@ namespace Xrouter.Service.Explorer
                     policy.Requirements.Add(new SameUserCommentRequirement()));
             });
 
-            services.AddDbContext<ApplicationDbContext>(options =>
-                        options.UseSqlite("Data Source=serviceexplorer.sqlite",
-                        sqliteOptions => sqliteOptions.MigrationsAssembly("Xrouter.Service.Explorer")));
+            services.AddDbContext<ApplicationDbContext>(options => options.UseSqlite($"Data Source={_appEnv.ContentRootPath}/serviceexplorer.sqlite",
+                            sqliteOptions => sqliteOptions.MigrationsAssembly("Xrouter.Service.Explorer")));
             services.AddIdentity<ApplicationUser, IdentityRole>(options =>{
                 options.User.AllowedUserNameCharacters="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+#";
             })
@@ -136,7 +136,7 @@ namespace Xrouter.Service.Explorer
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ApplicationDbContext context)
         {
             if (env.IsDevelopment())
             {
@@ -148,7 +148,7 @@ namespace Xrouter.Service.Explorer
                 app.UseHsts();
             }
 
-            // app.UseHttpsRedirection();
+            app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
 
@@ -181,6 +181,10 @@ namespace Xrouter.Service.Explorer
                     spa.UseAngularCliServer(npmScript: "start");
                 }
             }); 
+
+            // if (context.Database.GetPendingMigrations().Any()) {
+            //     context.Database.Migrate();
+            // }
 
         }
     }

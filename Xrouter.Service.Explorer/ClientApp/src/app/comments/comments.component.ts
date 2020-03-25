@@ -35,7 +35,6 @@ export class CommentsComponent implements OnInit {
   private populateComments(){
     this.loading = true;
     this.commentService.getServiceComments(this.serviceName, this.nodePubKey).subscribe(comments => {
-      console.log(comments);
       this.comments = comments;      
       this.loading = false;
     });

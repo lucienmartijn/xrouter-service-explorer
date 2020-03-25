@@ -7,7 +7,7 @@ namespace BitcoinLib.Services.Coins.Blocknet.Xrouter
 {
     public class GetBlockCountResponse : ResponseBase
     {
-        public int Reply { get; set; }
+        public string Reply { get; set; }
         public string Uuid { get; set; }
         
         [JsonProperty("allreplies")]

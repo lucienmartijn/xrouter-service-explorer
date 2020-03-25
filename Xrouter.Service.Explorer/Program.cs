@@ -7,6 +7,7 @@ using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Xrouter.Service.Explorer.Persistence;
 
 namespace Xrouter.Service.Explorer
 {
@@ -14,7 +15,9 @@ namespace Xrouter.Service.Explorer
     {
         public static void Main(string[] args)
         {
-            CreateWebHostBuilder(args).Build().Run();
+            CreateWebHostBuilder(args).Build()
+            .CreateDatabase<ApplicationDbContext>()
+            .Run();
         }
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
