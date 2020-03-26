@@ -8,16 +8,16 @@
     <div class="table-responsive">
       <table class="table">
         <tbody>
+          <tr>
+            <td>Description</td>
+            <td>{{result.service.helpDescription}}</td>
+          </tr>
         <tr>
           <td>Fee</td>
           <td>{{result.service.fee}} BLOCK</td>
         <tr *ngIf="result.service.parameters">
             <td>Parameter Types</td>
             <td>{{result.service.parameters}}</td>
-        </tr>
-        <tr>
-          <td>Description</td>
-          <td>{{result.service.helpDescription}}</td>
         </tr>
         <tr>
           <div *ngIf="result.service.parameters; else noParams">
@@ -84,21 +84,21 @@
                     <table class="table">
                       <tbody>
                         <tr>
-                          <td>NodePubKey</td>
+                          <td>Snode Key</td>
                           <td class="ellipsis">
                             <a [routerLink]="['/xrouter-snodes', result.node.nodePubKey]">{{result.node.nodePubKey}}</a>
                             <span *ngIf="snodeVerified" class="ml-2 badge badge-secondary" title="This user has verified its ownership of a blocknet service node.">Verified</span>
                           </td>
                         </tr>
                         <tr>
-                          <td>Score</td>
-                          <td>{{result.node.score}}</td>
-                        </tr>
-                        <tr>
                           <td>Payment Address</td>
                           <td>
                             <a href="https://chainz.cryptoid.info/block/address.dws?{{result.node.paymentAddress}}">{{result.node.paymentAddress}}</a>
                           </td>
+                        </tr>
+                        <tr>
+                          <td>Score</td>
+                          <td>{{result.node.score}}</td>
                         </tr>
                         <tr>
                           <td>Default Fee</td>

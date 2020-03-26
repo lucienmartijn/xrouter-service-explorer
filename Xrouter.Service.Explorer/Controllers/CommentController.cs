@@ -190,7 +190,7 @@ namespace Xrouter.Service.Explorer.Controllers
             {
                 verified = false;
             }
-            else if (comment.User.MyServiceNodes.Count == 0)
+            else if (comment.User.MyServiceNodes == null || comment.User.MyServiceNodes.Count == 0)
             {
                 verified = false;
             }

@@ -26,7 +26,7 @@ items:
           run: serviceexplorer
       spec:
         containers:
-        - image: lucienmartijn/xrouterserviceexplorer_web:v0.2
+        - image: lucienmartijn/xrouterserviceexplorer_web:v0.2.1
           imagePullPolicy: Always
           name: serviceexplorer
           ports:

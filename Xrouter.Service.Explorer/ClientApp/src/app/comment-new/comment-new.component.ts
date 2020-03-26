@@ -71,7 +71,6 @@ export class CommentNewComponent implements OnInit, OnDestroy {
     if(this.commentId){
       newComment.parentCommentId = this.commentId;
     }
-    console.log(newComment);
     this.commentService.newComment(newComment).subscribe(newComment =>{
       this.newComment.emit(newComment);
       this.serviceForm.reset();

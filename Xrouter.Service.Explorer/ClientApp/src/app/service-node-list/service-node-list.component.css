@@ -3,4 +3,9 @@ td{
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    vertical-align: middle;
+}
+
+ngb-pagination ::ng-deep ul {
+    margin-bottom: 0;
 }
