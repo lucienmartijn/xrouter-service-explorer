@@ -22,6 +22,7 @@ export class ViewXrServiceComponent implements OnInit, OnDestroy {
   result:any;
   snodeVerified:boolean;
   parametervalues:string[];
+  active = 1;
 
   @ViewChild('serviceForm') serviceForm: NgForm;
   serviceResult:any;

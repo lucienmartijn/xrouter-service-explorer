@@ -12,7 +12,6 @@ import { AppComponent } from './app.component';
 import { interceptorProviders } from './interceptors';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { HomeComponent } from './home/home.component';
-import { PaginationComponent } from './shared/pagination/pagination.component';
 import { ServiceListComponent } from './service-list/service-list.component';
 import { XrServicesComponent } from './xr-services/xr-services.component';
 import { SpvWalletsComponent } from './spv-wallets/spv-wallets.component';
@@ -43,6 +42,8 @@ import { CommentService } from './shared/services/comment.service';
 import { CommentsComponent } from './comments/comments.component';
 import { CommentNewComponent } from './comment-new/comment-new.component';
 import { CommentComponent } from './comment/comment.component';
+import { TabsComponent } from './shared/tabs/tabs.component';
+import { TabComponent } from './shared/tabs/tab.component';
 
 
 
@@ -61,7 +62,6 @@ const appInitializerFn = (appConfig: ConfigurationService) => {
     CommentComponent,
     CommentNewComponent,
     FooterComponent,
-    PaginationComponent,
     ServiceNodeListComponent,
     ServiceListComponent,
     XrServicesComponent,
@@ -71,6 +71,8 @@ const appInitializerFn = (appConfig: ConfigurationService) => {
     ViewSnodeComponent,
     SearchFormComponent,  
     SignInComponent,  
+    TabsComponent,
+    TabComponent,
     RpcConsoleComponent,
     ErrorComponent,
     PageNotFoundComponent,

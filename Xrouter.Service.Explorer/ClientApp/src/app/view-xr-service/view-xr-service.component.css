@@ -10,10 +10,3 @@ pre > code{
   word-wrap: break-word;
   white-space: pre-line;
 }
-
-.ellipsis{
-  max-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}

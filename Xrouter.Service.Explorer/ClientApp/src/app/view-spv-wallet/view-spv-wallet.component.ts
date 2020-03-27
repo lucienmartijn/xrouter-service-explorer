@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef, Output, EventEmitter } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Location } from '@angular/common';
 import { XrouterApiService } from '../shared/services/xrouter.service';
@@ -27,9 +27,11 @@ export class ViewSpvWalletComponent implements OnInit, OnDestroy {
   minNodeCount:number = 1;
   result:any;
   snodeVerified:boolean;
+  
+  active = 1;
+  @Output('tab-changed') commandSelected = new EventEmitter();
 
   @ViewChild('f') f: NgForm;
-  @ViewChild('t') tab: NgbTabset;
   selectedSpvCommand:string;
   blockHashes:string[] = [""];
   txIds:string[] = [""];
@@ -153,7 +155,8 @@ export class ViewSpvWalletComponent implements OnInit, OnDestroy {
 
   onSelectTryItOut(command:string){
     this.selectedSpvCommand = this.result.spvConfig.commands.find(c => c.command == command).command;
-    this.tab.select('try-it-out');
+    // this.tab.select('try-it-out');
+    this.commandSelected.emit('Try it out')
   }
 
   ngOnInit() {}

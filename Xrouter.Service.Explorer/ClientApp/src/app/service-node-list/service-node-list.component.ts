@@ -12,7 +12,6 @@ import { debounceTime, distinctUntilChanged, tap, filter } from 'rxjs/operators'
 export class ServiceNodeListComponent implements OnInit, AfterViewInit {
   private readonly PAGE_SIZE = 10; 
 
-  // @Output('query-changed') queryChanged = new EventEmitter();
   @ViewChild('searchSNode') searchSNode;
   serviceNodes:any;
   spvWallets:any;
@@ -60,7 +59,6 @@ export class ServiceNodeListComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    //server-side search
     fromEvent(this.searchSNode.nativeElement,'keyup')
       .pipe(
           filter(Boolean),

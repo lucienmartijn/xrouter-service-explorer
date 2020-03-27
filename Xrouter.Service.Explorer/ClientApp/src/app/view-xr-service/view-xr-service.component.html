@@ -4,139 +4,98 @@
 
 <ng-template #loaded>
     <h1>XCloud Service</h1>
-    <h2>{{serviceName}}</h2>
-    <div class="table-responsive">
-      <table class="table">
-        <tbody>
-          <tr>
-            <td>Description</td>
-            <td>{{result.service.helpDescription}}</td>
-          </tr>
-        <tr>
-          <td>Fee</td>
-          <td>{{result.service.fee}} BLOCK</td>
-        <tr *ngIf="result.service.parameters">
-            <td>Parameter Types</td>
-            <td>{{result.service.parameters}}</td>
-        </tr>
-        <tr>
-          <div *ngIf="result.service.parameters; else noParams">
-            <td>Usage Instructions Blocknet CLI</td>
-            <td>xrService {{serviceName}} [{{result.service.parameters}}]</td>
-          </div>
-          <ng-template #noParams>
-            <td>Usage Instructions Blocknet CLI</td>
-            <td>xrService {{serviceName}}</td>
-          </ng-template> 
-        </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <ngb-tabset>     
-        <ngb-tab title="Try it out">
-            <ng-template ngbTabContent>
-                <h3>Try it out</h3>
-                <div class="row">
-                  <div class="col-md-3 col-sm-12">
-                    <h4>Request</h4>
-                    <form (ngSubmit)="onSubmit()" #serviceForm="ngForm">
-                      <div *ngFor="let p of result.service.parametersList; let i = index">
-                        <div class="form-group">
-                          <label for="param-{{i}}">Param-{{i + 1}} [{{p}}] </label>
-                          <input type="text" class="form-control" id="param-{{i}}" [(ngModel)]="parametervalues[i]" name="param-{{i}}" #params="ngModel" required>
-                        </div>
-                        <div class="form-group">
-                          <div *ngIf="params.invalid && (params.dirty || params.touched)"
-                                    class="alert alert-danger">
-                                    <div *ngIf="params.errors.required">
-                                            Param-{{i + 1}} Tx is required.
-                                    </div>
-                            </div> 
-                        </div>
-                      </div>
-
-                      <br>
-                      <button type="submit" class="btn btn-outline-primary" [disabled]="serviceForm.form.invalid">Submit</button>
-                    </form> 
+    <my-tabs>
+      <div class="row">
+        <div class="col-9">
+          <my-tab tabTitle="Readme">
+            <h3>{{serviceName}}</h3>
+            <hr>
+            <h6>Description</h6>
+            <p>{{result.service.helpDescription}}</p>
+            <h6>Fee</h6>
+            <p>{{result.service.fee}} BLOCK</p>
+            <div *ngIf="result.service.parameters">
+              <h6>Parameter Types</h6>
+              <p>{{result.service.parameters}}</p>
+            </div>
+            <h6>Usage Instructions Blocknet CLI</h6>
+            <div *ngIf="result.service.parameters; else noParams">
+              <p>xrService {{serviceName}} [{{result.service.parameters}}]</p> 
+            </div>
+            <ng-template #noParams>
+              <p>xrService {{serviceName}}</p>
+            </ng-template>  
+          </my-tab>
+          <my-tab tabTitle="Try it out">
+            <h3>Try it out</h3>
+            <hr>
+            <div class="row">
+              <div class="col-md-3 col-sm-12">
+                <h4>Request</h4>
+                <form (ngSubmit)="onSubmit()" #serviceForm="ngForm">
+                  <div *ngFor="let p of result.service.parametersList; let i = index">
+                    <div class="form-group">
+                      <label for="param-{{i}}">Param-{{i + 1}} [{{p}}] </label>
+                      <input type="text" class="form-control" id="param-{{i}}" [(ngModel)]="parametervalues[i]" name="param-{{i}}" #params="ngModel" required>
+                    </div>
+                    <div class="form-group">
+                      <div *ngIf="params.invalid && (params.dirty || params.touched)"
+                                class="alert alert-danger">
+                                <div *ngIf="params.errors.required">
+                                        Param-{{i + 1}} is required.
+                                </div>
+                        </div> 
+                    </div>
                   </div>
-                  <div class="col-md-9 col-sm-12">
-                    <h4>Response</h4>
-                      <pre>
-                        <code>
-                          <div *ngIf="resultLoading else resultLoaded">
-                            Executing...
-                          </div>
-                          <ng-template #resultLoaded>
-                            {{ serviceResult }}
-                          </ng-template>
-                        </code>
-                      </pre>
-                  </div>
-                </div>
-          
-            </ng-template>
-          </ngb-tab>
-          <ngb-tab title="Service Node Info">
-              <ng-template ngbTabContent>
-                  <h3>Offered By</h3>
-                  <div class="table-responsive">
-                    <table class="table">
-                      <tbody>
-                        <tr>
-                          <td>Snode Key</td>
-                          <td class="ellipsis">
-                            <a [routerLink]="['/xrouter-snodes', result.node.nodePubKey]">{{result.node.nodePubKey}}</a>
-                            <span *ngIf="snodeVerified" class="ml-2 badge badge-secondary" title="This user has verified its ownership of a blocknet service node.">Verified</span>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>Payment Address</td>
-                          <td>
-                            <a href="https://chainz.cryptoid.info/block/address.dws?{{result.node.paymentAddress}}">{{result.node.paymentAddress}}</a>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>Score</td>
-                          <td>{{result.node.score}}</td>
-                        </tr>
-                        <tr>
-                          <td>Default Fee</td>
-                          <td>{{result.node.feeDefault}} BLOCK</td>
-                        </tr>
-                    
-                      </tbody>
-                    </table>
-                  </div>
-              </ng-template>
-            </ngb-tab>
-            <ngb-tab title="Configuration">
-                <ng-template ngbTabContent>
-                  <h3>Configuration [{{serviceName}}] in xrouter.conf</h3>
+                  <br>
+                  <button type="submit" class="btn btn-outline-primary" [disabled]="serviceForm.form.invalid">Submit</button>
+                </form> 
+              </div>
+              <div class="col-md-9 col-sm-12">
+                <h4>Response</h4>
                   <pre>
-                    <code>{{result.service.config}}</code>
+                    <code>
+                      <div *ngIf="resultLoading else resultLoaded">
+                        Executing...
+                      </div>
+                      <ng-template #resultLoaded>
+                        {{ serviceResult }}
+                      </ng-template>
+                    </code>
                   </pre>
-                </ng-template>
-              </ngb-tab>
-          </ngb-tabset> 
-    
-    <!-- <h3>Other Service Nodes that offer this service</h3>
-    <table class="table">
-      <thead>
-        <tr>
-          <th>Address</th>
-          <th>Score</th>
-          <th>Banned</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let s of result.otherNodes">
-          <td><a [routerLink]="['/xrouter-snodes', s.nodePubKey]">{{s.nodePubKey}}</a></td>
-          <td>{{s.score}}</td>
-          <td>{{s.banned}}</td>
-        </tr>
-      </tbody>
-    </table>   -->
+              </div>
+            </div>
+          </my-tab>
+          <my-tab tabTitle="Configuration">
+            <h3>Configuration [{{serviceName}}] in xrouter.conf</h3>
+            <hr>
+            <pre>
+              <code>{{result.service.config}}</code>
+            </pre>
+          </my-tab>
+        </div>
+        <div class="col-3">
+          <div class="pane">
+            <h3>Service Node</h3>
+            <hr>
+            <h4 class="black-50 f5">Snode Key</h4>
+            <p>
+              <a class="truncate" [routerLink]="['/xrouter-snodes', result.node.nodePubKey]">{{result.node.nodePubKey}}</a>
+            </p>
+            <span *ngIf="snodeVerified" class="ml-2 badge badge-secondary" title="This user has verified its ownership of a blocknet service node.">Verified</span>
+            <h4 class="black-50 f5">Payment Address</h4>
+            <p>
+              <a href="https://chainz.cryptoid.info/block/address.dws?{{result.node.paymentAddress}}">{{result.node.paymentAddress}}</a>
+            </p>
+            <h4 class="black-50 f5">Score</h4>
+            <p class="black-80 fw6">{{result.node.score}}</p>
+            <h4 class="black-50 f5">Default Fee</h4>
+            <p class="black-80 fw6">{{result.node.feeDefault}} BLOCK</p>
+          </div>
+        </div>
+      </div>
+      
+    </my-tabs>
     <hr>
     <comments 
       [nodePubKey]="result.node.nodePubKey"
