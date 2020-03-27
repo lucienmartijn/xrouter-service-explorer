@@ -9,6 +9,7 @@ namespace BitcoinLib.Services.Coins.Blocknet
 		public string SpvWallet{ get; set; }
         public string XCloudService{ get; set; }
         public bool AtleastOneSpvWallet { get; set; }
+        public string Search { get; set; }
         public int Page { get; set; }
         public byte PageSize { get; set; }
     }

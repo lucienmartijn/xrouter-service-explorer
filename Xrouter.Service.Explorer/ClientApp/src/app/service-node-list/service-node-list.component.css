@@ -9,3 +9,16 @@ td{
 ngb-pagination ::ng-deep ul {
     margin-bottom: 0;
 }
+
+.show{
+    display: block;
+}
+
+.hide{
+    display: none;
+}
+
+.table-overflow{
+    overflow-y: auto;
+    max-height: 700px;
+}

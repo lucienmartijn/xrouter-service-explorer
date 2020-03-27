@@ -11,6 +11,10 @@ namespace Xrouter.Service.Explorer.Extensions
     {
         public static IQueryable<ServiceNodeResponse> ApplyServiceNodeFiltering(this IQueryable<ServiceNodeResponse> query, ServiceNodeQuery queryObj)
         {
+            if(!string.IsNullOrWhiteSpace(queryObj.Search))
+            {
+                query = query.Where(sn => sn.Address.Contains(queryObj.Search) || sn.SNodeKey.Contains(queryObj.Search));
+            }
             if (queryObj.AtleastOneSpvWallet)
             {
                 query = query.Where(sn => sn.SpvWallets.Count > 0 );

@@ -652,21 +652,25 @@ namespace blocknet_xrouter.Controllers
         [HttpGet("Xrouter/[action]")]
         public IActionResult GetServiceNodeList([FromQuery]ServiceNodeQueryViewModel filterViewModel)
         {
-            var result = new QueryResult<ServiceNodeResponse>();
+            var result = new ServiceNodeQueryResult<ServiceNodeResponse>();
             var query = _blocknetService.serviceNodeList().AsQueryable();
             if(filterViewModel.Page != null && filterViewModel.PageSize != null)
             {
                 var queryObj = new ServiceNodeQuery
                 {
                     Page = (int) filterViewModel.Page,
-                    AtleastOneSpvWallet = filterViewModel.AtleastOneSpvWallet,
                     PageSize = (byte) filterViewModel.PageSize,
+                    AtleastOneSpvWallet = filterViewModel.AtleastOneSpvWallet,
                     SpvWallet = filterViewModel.SpvWallet,
-                    XCloudService = filterViewModel.XCloudService
+                    XCloudService = filterViewModel.XCloudService,
+                    Search = filterViewModel.Search
                 };
                 query = query.ApplyServiceNodeFiltering(queryObj);
 
                 result.TotalItems = query.Count();
+
+                result.TotalSpvWallets = query.SelectMany(sn => sn.SpvWallets).Distinct().Count();
+                result.TotalXCloudServices = query.SelectMany(sn => sn.XCloudServices).Distinct().Count();
 
                 query = query.ApplyPaging(queryObj);
             }
@@ -674,7 +678,7 @@ namespace blocknet_xrouter.Controllers
             result.Items = query.ToList();
 
             //TODO: Add an automapper module
-            var viewModel = new QueryResultViewModel<ServiceNodeViewModel>
+            var viewModel = new ServiceNodeQueryResultViewModel<ServiceNodeViewModel>
             {
                 Items = result.Items.Select(sn => new ServiceNodeViewModel
                 {
@@ -689,7 +693,9 @@ namespace blocknet_xrouter.Controllers
                     XCloudServices = sn.XCloudServices
 
                 }).ToList(),
-                TotalItems = result.TotalItems
+                TotalItems = result.TotalItems,
+                TotalSpvWallets = result.TotalSpvWallets,
+                TotalXCloudServices = result.TotalXCloudServices
             };
 
             return Ok(viewModel);

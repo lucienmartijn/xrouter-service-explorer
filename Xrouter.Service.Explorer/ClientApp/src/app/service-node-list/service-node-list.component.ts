@@ -9,11 +9,11 @@ import { debounceTime, distinctUntilChanged, tap, filter } from 'rxjs/operators'
   templateUrl: './service-node-list.component.html',
   styleUrls: ['./service-node-list.component.css']
 })
-export class ServiceNodeListComponent implements OnInit {
+export class ServiceNodeListComponent implements OnInit, AfterViewInit {
   private readonly PAGE_SIZE = 10; 
 
   // @Output('query-changed') queryChanged = new EventEmitter();
-  @ViewChild('input') input: ElementRef;
+  @ViewChild('searchSNode') searchSNode;
   serviceNodes:any;
   spvWallets:any;
   xCloudServices:any;
@@ -60,14 +60,15 @@ export class ServiceNodeListComponent implements OnInit {
   }
 
   ngAfterViewInit() {
-    // server-side search
-    fromEvent(this.input.nativeElement,'keyup')
+    //server-side search
+    fromEvent(this.searchSNode.nativeElement,'keyup')
       .pipe(
           filter(Boolean),
           debounceTime(150),
           distinctUntilChanged(),
           tap((text) => {
-            console.log(this.input.nativeElement.value)
+            this.query.search = this.searchSNode.nativeElement.value
+            this.onFilterChange()
           })
       )
       .subscribe();
@@ -77,6 +78,7 @@ export class ServiceNodeListComponent implements OnInit {
     this.querying = true;
     this.xrouterService.GetServiceNodeList(this.query)
       .subscribe(result => {  
+        console.log(result)
         this.selectedSpvWallets = new Array<string>(result.items.length);     
         this.selectedXCloudServices = new Array<string>(result.items.length);
         this.initializeSpvWalletDropdowns(result)
@@ -129,6 +131,7 @@ export class ServiceNodeListComponent implements OnInit {
       page: 1,
       pageSize: this.PAGE_SIZE,
     };
+    this.searchSNode.nativeElement.value= ""
     this.populateServiceNodes();
   }
 

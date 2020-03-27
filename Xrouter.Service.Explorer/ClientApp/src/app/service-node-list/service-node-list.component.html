@@ -1,23 +1,28 @@
-<div *ngIf="loading else loaded">
+<div [class.show]="loading" [class.hide]="!loading">
         Fetching data...
 </div>
             
-<ng-template #loaded>
+<div [class.show]="!loading" [class.hide]="loading">
     <h2>Service Node List</h2>
     <h4>
-        <span class="badge badge-secondary">{{ serviceNodes?.totalItems}} Servicenodes</span>
-        <!-- <span class="badge badge-secondary" style="margin-left: 10px;">{{ spvWallets?.totalItems}} Coins</span>
-        <span class="badge badge-secondary" style="margin-left: 10px;">{{ xCloudServices?.totalItems}} XCloud Services</span> -->
+        <span class="badge badge-secondary" *ngIf="serviceNodes?.totalItems == 1; else manyNodes">{{ serviceNodes?.totalItems}} Servicenode</span>
+        <ng-template #manyNodes><span class="badge badge-secondary">{{ serviceNodes?.totalItems}} Servicenodes</span></ng-template>
+        <span class="badge badge-secondary ml-1" *ngIf="serviceNodes?.totalSpvWallets == 1; else manySpv">{{ serviceNodes?.totalSpvWallets}} SPV Wallet</span>
+        <ng-template #manySpv><span class="badge badge-secondary ml-1">{{ serviceNodes?.totalSpvWallets}} SPV Wallets</span></ng-template>
+        <span class="badge badge-secondary ml-1"*ngIf="serviceNodes?.totalXCloudServices == 1; else manyXCloud">{{ serviceNodes?.totalXCloudServices}} XCloud Service</span>
+        <ng-template #manyXCloud><span class="badge badge-secondary ml-1">{{ serviceNodes?.totalXCloudServices}} XCloud Services</span></ng-template>
     </h4>
     <div class="form-row align-items-center mb-2">
-        <div class="col-auto">
+        <div class="col-md">
             <div class="input-group ">
                 <div class="input-group-prepend">
                   <span class="input-group-text">Search</span>
                 </div>
-                <input class="form-control" placeholder="Search" #input>
+                <input class="form-control" placeholder="Search by Key or Address" #searchSNode>
               </div>
         </div>
+    </div>
+    <div class="form-row align-items-center mb-2">
         <div class="col-auto">
             <div class="input-group">
                 <div class="input-group-prepend">
@@ -29,7 +34,7 @@
                 </select>  
             </div>
         </div>
-        <div class="col-auto">
+        <div class="col-md">
             <div class="input-group">
                 <div class="input-group-prepend">
                     <label class="input-group-text" for="xCloudService">XCloud Service</label>
@@ -45,7 +50,7 @@
         </div>
     </div>
 
-    <div class="table-responsive">
+    <div class="table-responsive table-overflow mb-1">
         <table class="table">
             <thead>
                 <tr>
@@ -116,8 +121,8 @@
                 </select> 
             </div>   
         </div>
-        <div class="col-auto">
+        <div class="col-auto ml-auto">
             <ngb-pagination [collectionSize]="serviceNodes?.totalItems" [maxSize]="5" [pageSize]="query.pageSize" [(page)]="query.page" (pageChange)="onPageChange($event)"></ngb-pagination>
         </div>
     </div>
-</ng-template>
+</div>
