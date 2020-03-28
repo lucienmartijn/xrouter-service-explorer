@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using BitcoinLib.RPC.RequestResponse;
 using Newtonsoft.Json;
 
-namespace BitcoinLib.Services.Coins.Blocknet.Xrouter
+namespace BitcoinLib.Services.Coins.Blocknet.Xrouter.Ethereum
 {
     public class GetBlocksResponse : JsonRpcXrError
     {

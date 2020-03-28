@@ -94,7 +94,7 @@ export class ViewSpvWalletComponent implements OnInit, OnDestroy {
           this.spvWalletCommandResult = JSON.stringify(result, undefined, 2);
         },
         error => {
-          this.spvWalletCommandResult = error;
+          this.spvWalletCommandResult = JSON.stringify(error, undefined, 2);
         });
   }
 
@@ -155,7 +155,6 @@ export class ViewSpvWalletComponent implements OnInit, OnDestroy {
 
   onSelectTryItOut(command:string){
     this.selectedSpvCommand = this.result.spvConfig.commands.find(c => c.command == command).command;
-    // this.tab.select('try-it-out');
 
     this.onCommandSelectedSubject.next({title: 'Try it out', command: this.selectedSpvCommand})
   }

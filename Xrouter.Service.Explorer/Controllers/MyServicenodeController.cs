@@ -83,7 +83,7 @@ namespace Xrouter.Service.Explorer.Controllers
             {
                 var allServiceNodes = blocknetService.serviceNodeList();
 
-                ServiceNodeResponse response;
+                ServiceNodeInfoResponse response;
                 foreach (var serviceNode in myServiceNodes)
                 {
                     response = allServiceNodes.Find(sn => sn.Address == serviceNode.Address);

@@ -2,8 +2,9 @@ using System.Collections.Generic;
 using BitcoinLib.RPC.RequestResponse;
 using Newtonsoft.Json;
 using Xrouter.Service.Explorer.BitcoinLib.Services.Coins.Blocknet.XRouter;
+using BitcoinLib.Services.Coins.Blocknet;
 
-namespace BitcoinLib.Services.Coins.Blocknet.Xrouter
+namespace BitcoinLib.Services.Coins.Blocknet.Xrouter.Ethereum
 {
     public class GetBlockCountResponse : ResponseBase
     {
@@ -11,7 +12,7 @@ namespace BitcoinLib.Services.Coins.Blocknet.Xrouter
         public string Uuid { get; set; }
         
         [JsonProperty("allreplies")]
-		public List<ServiceNodeResponse<int>> AllReplies { get; set; }
+		public List<ServiceNodeResponse<string>> AllReplies { get; set; }
     }
 
     

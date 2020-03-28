@@ -5,6 +5,8 @@ using System.Linq;
 using BitcoinLib.CoinParameters.Blocknet;
 using BitcoinLib.RPC.Specifications;
 using BitcoinLib.Services.Coins.Blocknet.Xrouter;
+using BitcoinLib.Services.Coins.Blocknet.Xrouter.BitcoinBased;
+using BitcoinLib.Services.Coins.Blocknet.Xrouter.Ethereum;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -67,9 +69,9 @@ namespace BitcoinLib.Services.Coins.Blocknet
         //{
         //    return HandleRequest(request, xrGetBlockCountImpl);            
         //}
-        public GetBlockCountResponse xrGetBlockCount(string blockchain, int node_count)
+        public T xrGetBlockCount<T>(string blockchain, int node_count)
         {
-            return _rpcConnector.MakeRequest<GetBlockCountResponse>(RpcMethods.xrGetBlockCount, blockchain, node_count);
+            return _rpcConnector.MakeRequest<T>(RpcMethods.xrGetBlockCount, blockchain, node_count);
         }
 
         public ConnectResponse xrConnect(string service, int node_count = 1)
@@ -77,24 +79,24 @@ namespace BitcoinLib.Services.Coins.Blocknet
             return _rpcConnector.MakeRequest<ConnectResponse>(RpcMethods.xrConnect, service, node_count);
         }
 
-        public DecodeRawTransactionResponse xrDecodeRawTransaction(string blockchain, string tx_hex, int node_count)
+        public T xrDecodeRawTransaction<T>(string blockchain, string tx_hex, int node_count)
         {
-            return _rpcConnector.MakeRequest<DecodeRawTransactionResponse>(RpcMethods.xrDecodeRawTransaction, blockchain, tx_hex, node_count);
+            return _rpcConnector.MakeRequest<T>(RpcMethods.xrDecodeRawTransaction, blockchain, tx_hex, node_count);
         }
 
-        public GetBlockHashResponse xrGetBlockHash(string blockchain, string block_number, int node_count)
+        public T xrGetBlockHash<T>(string blockchain, string block_number, int node_count)
         {
-            return _rpcConnector.MakeRequest<GetBlockHashResponse>(RpcMethods.xrGetBlockHash, blockchain, block_number, node_count);
+            return _rpcConnector.MakeRequest<T>(RpcMethods.xrGetBlockHash, blockchain, block_number, node_count);
         }
 
-        public GetBlockResponse xrGetBlock(string blockchain, string block_hash, int node_count)
+        public T xrGetBlock<T>(string blockchain, string block_hash, int node_count)
         {
-            return _rpcConnector.MakeRequest<GetBlockResponse>(RpcMethods.xrGetBlock, blockchain, block_hash, node_count);
+            return _rpcConnector.MakeRequest<T>(RpcMethods.xrGetBlock, blockchain, block_hash, node_count);
         }
 
-        public GetBlocksResponse xrGetBlocks(string blockchain, string block_hashes, int node_count)
+        public T xrGetBlocks<T>(string blockchain, string block_hashes, int node_count)
         {
-            return _rpcConnector.MakeRequest<GetBlocksResponse>(RpcMethods.xrGetBlocks, blockchain, block_hashes, node_count);
+            return _rpcConnector.MakeRequest<T>(RpcMethods.xrGetBlocks, blockchain, block_hashes, node_count);
         }
 
         public GetConnectedNodesResponse xrConnectedNodes()
@@ -112,19 +114,19 @@ namespace BitcoinLib.Services.Coins.Blocknet
             return _rpcConnector.MakeRequest<GetStatusResponse>(RpcMethods.xrGetStatus);
         }
 
-        public GetTransactionResponse xrGetTransaction(string blockchain, string txid, int node_count)
+        public T xrGetTransaction<T>(string blockchain, string txid, int node_count)
         {
-            return _rpcConnector.MakeRequest<GetTransactionResponse>(RpcMethods.xrGetTransaction, blockchain, txid, node_count);
+            return _rpcConnector.MakeRequest<T>(RpcMethods.xrGetTransaction, blockchain, txid, node_count);
         }
 
-        public GetTransactionsResponse xrGetTransactions(string blockchain, string txids, int node_count)
+        public T xrGetTransactions<T>(string blockchain, string txids, int node_count)
         {
-            return _rpcConnector.MakeRequest<GetTransactionsResponse>(RpcMethods.xrGetTransactions, blockchain, txids, node_count);
+            return _rpcConnector.MakeRequest<T>(RpcMethods.xrGetTransactions, blockchain, txids, node_count);
         }
 
-        public SendTransactionResponse xrSendTransaction(string blockchain, string signed_tx)
+        public T xrSendTransaction<T>(string blockchain, string signed_tx)
         {
-            return _rpcConnector.MakeRequest<SendTransactionResponse>(RpcMethods.xrSendTransaction, blockchain, signed_tx);
+            return _rpcConnector.MakeRequest<T>(RpcMethods.xrSendTransaction, blockchain, signed_tx);
         }
 
         public List<ShowConfigsResponse> xrShowConfigs()
@@ -156,10 +158,10 @@ namespace BitcoinLib.Services.Coins.Blocknet
             return _rpcConnector.MakeRequest<GetNetworkServicesResponse>(RpcMethods.xrGetNetworkServices);
         }
 
-        public List<ServiceNodeResponse> serviceNodeList()
+        public List<ServiceNodeInfoResponse> serviceNodeList()
         {
             var query = _rpcConnector.MakeRequest<List<ServiceNode>>(RpcMethods.servicenodelist);
-            return query.Select(sn => new ServiceNodeResponse
+            return query.Select(sn => new ServiceNodeInfoResponse
             {
                 Tier = sn.Tier,
                 Score = sn.Score,

@@ -54,7 +54,7 @@ import { Subscription, Observable } from 'rxjs';
     @ContentChildren(TabComponent) tabs: QueryList<TabComponent>;
 
     private eventSubscription:Subscription;
-    @Input() onNewTab:Observable<any>;
+    @Input() onNewTab:Observable<any> = new Observable<any>();
 
     // contentChildren are set
     ngAfterContentInit() {
@@ -76,18 +76,14 @@ import { Subscription, Observable } from 'rxjs';
     }
 
     ngOnInit(){
-        if(this.eventSubscription != undefined){
-            this.eventSubscription = this.onNewTab.subscribe(res => {
-                let tab = this.tabs.toArray().find(t => t.title === res.title)
-                this.selectTab(tab)
-            })
-        }
+        this.eventSubscription = this.onNewTab.subscribe(res => {
+            let tab = this.tabs.toArray().find(t => t.title === res.title)
+            this.selectTab(tab)
+        })
     }
 
     ngOnDestroy(){
-        if(this.eventSubscription != undefined){
-            this.eventSubscription.unsubscribe();
-        }
+        this.eventSubscription.unsubscribe();
     }
   }
   

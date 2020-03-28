@@ -4,7 +4,7 @@ using BitcoinLib.RPC.RequestResponse;
 
 namespace BitcoinLib.Services.Coins.Blocknet
 {
-	public class ServiceNodeResponse
+	public class ServiceNodeInfoResponse
 	{
 		public string SNodeKey { get; set; }
         public int Score { get; set; }

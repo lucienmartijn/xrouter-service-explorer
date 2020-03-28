@@ -87,8 +87,7 @@ export class ViewXrServiceComponent implements OnInit, OnDestroy {
         this.serviceResult = JSON.stringify(result, undefined, 2);
       },
       error => {
-        this.serviceResult = error;
-        // this.router.navigate(['/error'], {queryParams: error})
+        this.serviceResult = JSON.stringify(error, undefined, 2);
       });    
   }
 

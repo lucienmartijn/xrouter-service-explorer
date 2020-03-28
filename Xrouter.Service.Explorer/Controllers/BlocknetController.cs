@@ -16,6 +16,8 @@ using Newtonsoft.Json;
 using Xrouter.Service.Explorer.Controllers.ViewModels;
 using Xrouter.Service.Explorer.Extensions;
 using Xrouter.Service.Explorer.Core.Models;
+using BitcoinLib.Services.Coins.Blocknet.Xrouter.BitcoinBased;
+using BitcoinLib.Services.Coins.Blocknet.Xrouter.Ethereum;
 
 namespace blocknet_xrouter.Controllers
 {
@@ -40,13 +42,15 @@ namespace blocknet_xrouter.Controllers
 
         #region XRouter
         [HttpGet("Xrouter/[action]")]
-        public ConnectResponse Connect(string service, int node_count = 1){
+        public ConnectResponse Connect(string service, int node_count = 1)
+        {
             var resp = _blocknetService.xrConnect(service, node_count);
             return resp;
         }
         
         [HttpGet("Xrouter/[action]")]
-        public IActionResult GetSpvWalletInfo(string service, string nodePubKey = null, int node_count = 1){
+        public IActionResult GetSpvWalletInfo(string service, string nodePubKey = null, int node_count = 1)
+        {
             ConnectedNodeResponse serviceNode;
             List<ConnectedNodeResponse> otherNodes;
 
@@ -120,7 +124,8 @@ namespace blocknet_xrouter.Controllers
         }
 
         [HttpGet("Xrouter/[action]")]
-        public IActionResult GetServiceInfo(string service, string nodePubKey = null, int node_count = 1){
+        public IActionResult GetServiceInfo(string service, string nodePubKey = null, int node_count = 1)
+        {
             //TODO: refactor this into a class so it becomes a thin controller.
 
             ConnectedNodeResponse serviceNode;
@@ -229,7 +234,8 @@ namespace blocknet_xrouter.Controllers
         }
 
         [HttpGet("Xrouter/[action]")]
-        public IActionResult GetNodeInfo(string nodePubKey, string service = null, int node_count = 1){
+        public IActionResult GetNodeInfo(string nodePubKey, string service = null, int node_count = 1)
+        {
             if (string.IsNullOrWhiteSpace(nodePubKey))
                 return BadRequest("NodePubKey was not supplied");
 
@@ -359,14 +365,17 @@ namespace blocknet_xrouter.Controllers
         }
 
         [HttpGet("Xrouter/[action]")]
-        public IActionResult GetBlockCount([FromQuery(Name = "blockchain")]string blockchain,[FromQuery(Name = "node_count")] int node_count = 1){
+        public IActionResult GetBlockCount([FromQuery(Name = "blockchain")]string blockchain,[FromQuery(Name = "node_count")] int node_count = 1)
+        {
             if(string.IsNullOrEmpty(blockchain)) 
                 return BadRequest("No blockchain parameter supplied");
 
-            GetBlockCountResponse response;
             try
             {
-                response = _blocknetService.xrGetBlockCount(blockchain, node_count);
+                if(blockchain == "xr::ETH"){
+                    return Ok(_blocknetService.xrGetBlockCount<BitcoinLib.Services.Coins.Blocknet.Xrouter.Ethereum.GetBlockCountResponse>(blockchain, node_count));
+                }
+                return Ok(_blocknetService.xrGetBlockCount<BitcoinLib.Services.Coins.Blocknet.Xrouter.BitcoinBased.GetBlockCountResponse>(blockchain, node_count));
             }
             catch (RpcInternalServerErrorException e)
             {
@@ -387,18 +396,21 @@ namespace blocknet_xrouter.Controllers
                     Error = e.Message,
                 });                
             }
-            return Ok(response);
+            
         }
 
         [HttpGet("Xrouter/[action]")]
-        public IActionResult DecodeRawTransaction(string blockchain, string tx_hex, int node_count = 1){
+        public IActionResult DecodeRawTransaction(string blockchain, string tx_hex, int node_count = 1)
+        {
             if(string.IsNullOrEmpty(blockchain)) 
                 return BadRequest("No blockchain parameter supplied");
             
-            DecodeRawTransactionResponse response;
             try
             {
-                response = _blocknetService.xrDecodeRawTransaction(blockchain, tx_hex, node_count);
+                if(blockchain == "xr::ETH"){
+                    return Ok(_blocknetService.xrDecodeRawTransaction<BitcoinLib.Services.Coins.Blocknet.Xrouter.Ethereum.GetDecodeRawTransactionResponse>(blockchain, tx_hex, node_count));
+                }
+                return Ok(_blocknetService.xrDecodeRawTransaction<BitcoinLib.Services.Coins.Blocknet.Xrouter.BitcoinBased.GetDecodeRawTransactionResponse>(blockchain, tx_hex, node_count));
             }
             catch (RpcInternalServerErrorException e)
             {
@@ -413,15 +425,17 @@ namespace blocknet_xrouter.Controllers
                     Error = e.Message,
                 });                
             }
-            return Ok(response);
         }
 
         [HttpGet("Xrouter/[action]")]
-        public IActionResult GetBlockHash(string blockchain, string block_number, int node_count = 1){
-            GetBlockHashResponse response;
+        public IActionResult GetBlockHash(string blockchain, string block_number, int node_count = 1)
+        {
             try
             {
-                response = _blocknetService.xrGetBlockHash(blockchain, block_number, node_count);
+                if(blockchain == "xr::ETH"){
+                    return Ok(_blocknetService.xrGetBlockHash<BitcoinLib.Services.Coins.Blocknet.Xrouter.Ethereum.GetBlockHashResponse>(blockchain, block_number, node_count));
+                }
+                return Ok(_blocknetService.xrGetBlockHash<BitcoinLib.Services.Coins.Blocknet.Xrouter.BitcoinBased.GetBlockHashResponse>(blockchain, block_number, node_count));
             }
             catch (RpcInternalServerErrorException e)
             {
@@ -436,41 +450,17 @@ namespace blocknet_xrouter.Controllers
                     Error = e.Message,
                 });                
             }
-            return Ok(response);
         }
 
         [HttpGet("Xrouter/[action]")]
-        public IActionResult GetBlock(string blockchain, string block_hash, int node_count = 1){
-            GetBlockResponse response;
-
+        public IActionResult GetBlock(string blockchain, string block_hash, int node_count = 1)
+        {
             try
             {
-                response =  _blocknetService.xrGetBlock(blockchain, block_hash, node_count);
-            }
-            catch (RpcInternalServerErrorException e)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, new JsonRpcXrError{
-                    Error = e.Message,
-                    Code = (int) e.RpcErrorCode.Value
-                });
-            }
-            catch (RpcRequestTimeoutException e)
-            {
-                return StatusCode(StatusCodes.Status408RequestTimeout, new JsonRpcXrError{
-                    Error = e.Message,
-                });                
-            }
-            return Ok(response);
-        }
-
-        [HttpGet("Xrouter/[action]")]
-        public IActionResult GetBlocks(string blockchain, [FromQuery(Name = "block_hashes")] string block_hashes, int node_count = 1){
-            GetBlocksResponse response;
-
-            try
-            {
-                var result = JsonConvert.DeserializeObject<List<string>>(block_hashes);
-                response = _blocknetService.xrGetBlocks(blockchain, string.Join(",", result), node_count);
+                if(blockchain == "xr::ETH"){
+                    return Ok(_blocknetService.xrGetBlock<BitcoinLib.Services.Coins.Blocknet.Xrouter.Ethereum.GetBlockResponse>(blockchain, block_hash, node_count));
+                }
+                return Ok(_blocknetService.xrGetBlock<BitcoinLib.Services.Coins.Blocknet.Xrouter.BitcoinBased.GetBlockResponse>(blockchain, block_hash, node_count));
             }
             catch (RpcInternalServerErrorException e)
             {
@@ -486,15 +476,19 @@ namespace blocknet_xrouter.Controllers
                 });                
             }
             
-            return Ok(response);
         }
 
         [HttpGet("Xrouter/[action]")]
-        public IActionResult GetTransaction([FromQuery(Name = "blockchain")]string blockchain, string txid, int node_count = 1){
-            GetTransactionResponse response;
+        public IActionResult GetBlocks(string blockchain, [FromQuery(Name = "block_hashes")] string block_hashes, int node_count = 1)
+        {
+
+            var result = JsonConvert.DeserializeObject<List<string>>(block_hashes);
             try
             {
-                response = _blocknetService.xrGetTransaction(blockchain, txid, node_count);
+                if(blockchain == "xr::ETH"){
+                    return Ok(_blocknetService.xrGetBlock<BitcoinLib.Services.Coins.Blocknet.Xrouter.Ethereum.GetBlocksResponse>(blockchain, string.Join(",",result), node_count));
+                }
+                return Ok(_blocknetService.xrGetBlocks<BitcoinLib.Services.Coins.Blocknet.Xrouter.BitcoinBased.GetBlocksResponse>(blockchain, string.Join(",", result), node_count));
             }
             catch (RpcInternalServerErrorException e)
             {
@@ -509,18 +503,17 @@ namespace blocknet_xrouter.Controllers
                     Error = e.Message,
                 });                
             }
-
-            return Ok(response);
         }
 
         [HttpGet("Xrouter/[action]")]
-        public IActionResult GetTransactions([FromQuery(Name = "blockchain")]string blockchain, [FromQuery(Name = "txids")] string txids, int node_count = 1){  
-            GetTransactionsResponse response;
-
+        public IActionResult GetTransaction([FromQuery(Name = "blockchain")]string blockchain, string txid, int node_count = 1)
+        {
             try
             {
-                var result = JsonConvert.DeserializeObject<List<string>>(txids);        
-                response = _blocknetService.xrGetTransactions(blockchain, string.Join(",",result), node_count);
+                if(blockchain == "xr::ETH"){
+                    return Ok(_blocknetService.xrGetTransaction<BitcoinLib.Services.Coins.Blocknet.Xrouter.Ethereum.GetTransactionResponse>(blockchain, txid, node_count));
+                }
+                return Ok(_blocknetService.xrGetTransaction<BitcoinLib.Services.Coins.Blocknet.Xrouter.BitcoinBased.GetTransactionResponse>(blockchain, txid, node_count));
             }
             catch (RpcInternalServerErrorException e)
             {
@@ -535,16 +528,43 @@ namespace blocknet_xrouter.Controllers
                     Error = e.Message,
                 });                
             }
+        }
 
-            return Ok(response);
+        [HttpGet("Xrouter/[action]")]
+        public IActionResult GetTransactions([FromQuery(Name = "blockchain")]string blockchain, [FromQuery(Name = "txids")] string txids, int node_count = 1)
+        {  
+            var result = JsonConvert.DeserializeObject<List<string>>(txids);        
+            try
+            {
+                if(blockchain == "xr::ETH"){
+                    return Ok(_blocknetService.xrGetTransactions<BitcoinLib.Services.Coins.Blocknet.Xrouter.Ethereum.GetTransactionsResponse>(blockchain, string.Join(",",result), node_count));
+                }
+                return Ok(_blocknetService.xrGetTransactions<BitcoinLib.Services.Coins.Blocknet.Xrouter.BitcoinBased.GetTransactionsResponse>(blockchain, string.Join(",",result), node_count));
+            }
+            catch (RpcInternalServerErrorException e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new JsonRpcXrError{
+                    Error = e.Message,
+                    Code = (int) e.RpcErrorCode.Value
+                });
+            }
+            catch (RpcRequestTimeoutException e)
+            {
+                return StatusCode(StatusCodes.Status408RequestTimeout, new JsonRpcXrError{
+                    Error = e.Message,
+                });                
+            }
         }
 
         [HttpPost("Xrouter/[action]")]
-        public IActionResult SendTransaction(string blockchain, string signed_tx){
-            SendTransactionResponse response;
+        public IActionResult SendTransaction(string blockchain, string signed_tx)
+        {
             try
             {
-                response = _blocknetService.xrSendTransaction(blockchain, signed_tx);
+                if(blockchain == "xr::ETH"){
+                    return Ok(_blocknetService.xrSendTransaction<BitcoinLib.Services.Coins.Blocknet.Xrouter.Ethereum.SendTransactionResponse>(blockchain, signed_tx));
+                }
+                return Ok(_blocknetService.xrSendTransaction<BitcoinLib.Services.Coins.Blocknet.Xrouter.BitcoinBased.SendTransactionResponse>(blockchain, signed_tx));
             }
             catch (RpcInternalServerErrorException e)
             {
@@ -559,26 +579,29 @@ namespace blocknet_xrouter.Controllers
                     Error = e.Message,
                 });                
             }
-            return Ok(response);
         }
 
         [HttpGet("Xrouter/[action]")]
-        public GetReplyResponse GetReply(string uuid){
+        public GetReplyResponse GetReply(string uuid)
+        {
             return _blocknetService.xrGetReply(uuid);
         }
 
         [HttpGet("Xrouter/[action]")]
-        public List<ShowConfigsResponse> ShowConfigs(){
+        public List<ShowConfigsResponse> ShowConfigs()
+        {
             return _blocknetService.xrShowConfigs();
         }
 
         [HttpPost("Xrouter/[action]")]
-        public UpdateConfigsResponse UpdateConfigs(bool force_check = false){
+        public UpdateConfigsResponse UpdateConfigs(bool force_check = false)
+        {
             return _blocknetService.xrUpdateConfigs(force_check);
         }
 
         [HttpGet("Xrouter/[action]")]
-        public IActionResult GetAllServices(){
+        public IActionResult GetAllServices()
+        {
             var response = _blocknetService.xrGetNetworkServices();
             var services = response.Reply.NodeCounts
                 .Select(s => new ServiceViewModel{
@@ -592,7 +615,8 @@ namespace blocknet_xrouter.Controllers
             });
         }
         [HttpGet("Xrouter/[action]")]
-        public IActionResult GetNetworkServices(){
+        public IActionResult GetNetworkServices()
+        {
             var response = _blocknetService.xrGetNetworkServices();
             var services = response.Reply.NodeCounts
                 .Join(response.Reply.Services, m => m.Key, m => m.ToString(), 
@@ -610,7 +634,8 @@ namespace blocknet_xrouter.Controllers
         }
 
         [HttpGet("Xrouter/[action]")]
-        public IActionResult GetNetworkSpvWallets(){
+        public IActionResult GetNetworkSpvWallets()
+        {
             var response = _blocknetService.xrGetNetworkServices();
             var services = response.Reply.NodeCounts
                 .Join(response.Reply.SpvWallets, m => m.Key, m => m.ToString(), 
@@ -628,7 +653,8 @@ namespace blocknet_xrouter.Controllers
         }
 
         [HttpGet("Xrouter/[action]")]
-        public GetConnectedNodesResponse GetConnectedNodes(){
+        public GetConnectedNodesResponse GetConnectedNodes()
+        {
             return _blocknetService.xrConnectedNodes();
         }
 
@@ -636,7 +662,8 @@ namespace blocknet_xrouter.Controllers
         #endregion
         #region XCloud
         [HttpPost("Xrouter/[action]")]
-        public IActionResult Service([FromBody]ServiceRequest request){
+        public IActionResult Service([FromBody]ServiceRequest request)
+        {
             if(request == null)
                 return BadRequest("No service request supplied");
             return Ok(_blocknetService.xrService(request.Service, request.Parameters));
@@ -652,7 +679,7 @@ namespace blocknet_xrouter.Controllers
         [HttpGet("Xrouter/[action]")]
         public IActionResult GetServiceNodeList([FromQuery]ServiceNodeQueryViewModel filterViewModel)
         {
-            var result = new ServiceNodeQueryResult<ServiceNodeResponse>();
+            var result = new ServiceNodeQueryResult<ServiceNodeInfoResponse>();
             var query = _blocknetService.serviceNodeList().AsQueryable();
             if(filterViewModel.Page != null && filterViewModel.PageSize != null)
             {

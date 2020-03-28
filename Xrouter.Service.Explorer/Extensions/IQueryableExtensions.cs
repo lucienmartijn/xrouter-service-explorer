@@ -9,7 +9,7 @@ namespace Xrouter.Service.Explorer.Extensions
 {
     public static class IQueryableExtensions
     {
-        public static IQueryable<ServiceNodeResponse> ApplyServiceNodeFiltering(this IQueryable<ServiceNodeResponse> query, ServiceNodeQuery queryObj)
+        public static IQueryable<ServiceNodeInfoResponse> ApplyServiceNodeFiltering(this IQueryable<ServiceNodeInfoResponse> query, ServiceNodeQuery queryObj)
         {
             if(!string.IsNullOrWhiteSpace(queryObj.Search))
             {

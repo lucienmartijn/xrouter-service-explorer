@@ -2,15 +2,15 @@ using System.Collections.Generic;
 using BitcoinLib.RPC.RequestResponse;
 using Newtonsoft.Json;
 
-namespace BitcoinLib.Services.Coins.Blocknet.Xrouter
+namespace BitcoinLib.Services.Coins.Blocknet.Xrouter.Ethereum
 {
     public class GetBlockHashResponse : JsonRpcXrError
     {
-        public string Reply { get; set; }
+        public BlockHashResponse Reply { get; set; }
         public string Uuid { get; set; }
         
         [JsonProperty("allreplies")]
-		public List<ServiceNodeResponse<string>> AllReplies { get; set; }
+		public List<ServiceNodeResponse<BlockHashResponse>> AllReplies { get; set; }
     }
 
     

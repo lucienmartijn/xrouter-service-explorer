@@ -135,7 +135,7 @@ export class XrouterApiService extends BaseService{
 
   DecodeRawTransaction(blockchain:string, txHex:string, node_count:number = 1){
     let url = this.baseEndpoint + this.apiEndpoint + '/DecodeRawTransaction?blockchain=' + blockchain;
-    url += '&txHex=' + txHex;
+    url += '&tx_hex=' + txHex;
     url += '&node_count=' + node_count;
     return this.http.get(url);
   }

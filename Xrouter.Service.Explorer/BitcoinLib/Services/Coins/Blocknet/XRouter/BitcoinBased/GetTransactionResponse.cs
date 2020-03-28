@@ -1,10 +1,11 @@
 using System.Collections.Generic;
+using BitcoinLib.Responses;
 using BitcoinLib.RPC.RequestResponse;
 using Newtonsoft.Json;
 
-namespace BitcoinLib.Services.Coins.Blocknet.Xrouter
+namespace BitcoinLib.Services.Coins.Blocknet.Xrouter.BitcoinBased
 {
-    public class DecodeRawTransactionResponse : JsonRpcXrError
+    public class GetTransactionResponse : JsonRpcXrError
     {
         public RawTransactionResponse Reply { get; set; }
         public string Uuid { get; set; }

@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using BitcoinLib.Responses;
 using BitcoinLib.Responses.SharedComponents;
 
-namespace BitcoinLib.Services.Coins.Blocknet.Xrouter
+namespace BitcoinLib.Services.Coins.Blocknet.Xrouter.BitcoinBased
 {
     public class BlockResponse: Responses.GetBlockResponse
     {

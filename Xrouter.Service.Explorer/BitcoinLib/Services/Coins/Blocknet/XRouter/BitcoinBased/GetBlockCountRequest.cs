@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Xrouter.Service.Explorer.BitcoinLib.Services.Coins.Blocknet.XRouter
+namespace Xrouter.Service.Explorer.BitcoinLib.Services.Coins.Blocknet.XRouter.BitcoinBased
 {
     public class GetBlockCountRequest:RequestBase
     {
