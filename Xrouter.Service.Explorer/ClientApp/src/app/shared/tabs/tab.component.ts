@@ -25,9 +25,9 @@ export class TabComponent {
   
   @Output('tab-changed') tabChanged = new EventEmitter();
   
-  onselectTab(e){
-      console.log(e)
-    this.tabChanged.emit(this);
+  onSelectTab(e){
+    console.log(e)
+    // this.tabChanged.emit(this);
   }
 
 }

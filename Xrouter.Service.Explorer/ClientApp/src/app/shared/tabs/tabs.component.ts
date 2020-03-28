@@ -12,10 +12,15 @@ import {
     ComponentFactoryResolver,
     ViewContainerRef,
     Output,
-    EventEmitter
+    EventEmitter,
+    Input,
+    OnChanges,
+    OnDestroy,
+    OnInit
   } from '@angular/core';
   
-  import { TabComponent } from './tab.component';
+import { TabComponent } from './tab.component';
+import { Subscription, Observable } from 'rxjs';
   
   @Component({
     selector: 'my-tabs',
@@ -45,9 +50,12 @@ import {
       `
     ]
   })
-  export class TabsComponent implements AfterContentInit {
+  export class TabsComponent implements AfterContentInit, OnInit, OnDestroy {
     @ContentChildren(TabComponent) tabs: QueryList<TabComponent>;
-    
+
+    private eventSubscription:Subscription;
+    @Input() onNewTab:Observable<any>;
+
     // contentChildren are set
     ngAfterContentInit() {
       // get all active tabs
@@ -60,7 +68,6 @@ import {
     }
     
     selectTab(tab){
-        console.log(tab)
       // deactivate all tabs
       this.tabs.toArray().forEach(tab => tab.active = false);
       
@@ -68,8 +75,19 @@ import {
       tab.active = true;
     }
 
-    selectTabTest(e){
-        console.log(e)
+    ngOnInit(){
+        if(this.eventSubscription != undefined){
+            this.eventSubscription = this.onNewTab.subscribe(res => {
+                let tab = this.tabs.toArray().find(t => t.title === res.title)
+                this.selectTab(tab)
+            })
+        }
+    }
+
+    ngOnDestroy(){
+        if(this.eventSubscription != undefined){
+            this.eventSubscription.unsubscribe();
+        }
     }
   }
   

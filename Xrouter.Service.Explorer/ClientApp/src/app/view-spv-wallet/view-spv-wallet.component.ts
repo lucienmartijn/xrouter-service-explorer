@@ -29,10 +29,10 @@ export class ViewSpvWalletComponent implements OnInit, OnDestroy {
   snodeVerified:boolean;
   
   active = 1;
-  @Output('tab-changed') commandSelected = new EventEmitter();
+  selectedSpvCommand:string;
+  onCommandSelectedSubject: Subject<any> = new Subject<any>();
 
   @ViewChild('f') f: NgForm;
-  selectedSpvCommand:string;
   blockHashes:string[] = [""];
   txIds:string[] = [""];
   
@@ -156,7 +156,8 @@ export class ViewSpvWalletComponent implements OnInit, OnDestroy {
   onSelectTryItOut(command:string){
     this.selectedSpvCommand = this.result.spvConfig.commands.find(c => c.command == command).command;
     // this.tab.select('try-it-out');
-    this.commandSelected.emit('Try it out')
+
+    this.onCommandSelectedSubject.next({title: 'Try it out', command: this.selectedSpvCommand})
   }
 
   ngOnInit() {}
