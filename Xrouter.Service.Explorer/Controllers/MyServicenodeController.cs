@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using BitcoinLib.ExceptionHandling.Rpc;
-using BitcoinLib.RPC.RequestResponse;
-using BitcoinLib.Services.Coins.Blocknet;
+using BlocknetLib.ExceptionHandling.Rpc;
+using BlocknetLib.RPC.RequestResponse;
+using BlocknetLib.Services.Coins.Blocknet;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -83,11 +83,11 @@ namespace Xrouter.Service.Explorer.Controllers
             {
                 var allServiceNodes = blocknetService.serviceNodeList();
 
-                ServiceNodeInfoResponse response;
-                foreach (var serviceNode in myServiceNodes)
-                {
-                    response = allServiceNodes.Find(sn => sn.Address == serviceNode.Address);
-                }
+                // ServiceNodeInfoResponse response;
+                // foreach (var serviceNode in myServiceNodes)
+                // {
+                //     response = allServiceNodes.Find(sn => sn.Address == serviceNode.Address);
+                // }
 
                 unitOfWork.Complete();
 

@@ -1,15 +1,14 @@
+﻿using System;
 using System.Collections.Generic;
-using BitcoinLib.RPC.RequestResponse;
-using Newtonsoft.Json;
+using System.Linq;
+using System.Threading.Tasks;
 
-namespace BitcoinLib.Services.Coins.Blocknet.Xrouter
+namespace Xrouter.Service.Explorer.Controllers.ViewModels
 {
-    public class ServiceRequest
+    public class ServiceRequestViewModel
     {
         public string Service { get; set; }
         public object[] Parameters { get; set; }
         public int NodeCount { get; set; }
     }
-
-    
 }

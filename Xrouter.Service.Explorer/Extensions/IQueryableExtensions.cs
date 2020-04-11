@@ -1,9 +1,9 @@
-using BitcoinLib.Services.Coins.Blocknet;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using Xrouter.Service.Explorer.Core.Models;
 
 namespace Xrouter.Service.Explorer.Extensions
 {
@@ -17,13 +17,17 @@ namespace Xrouter.Service.Explorer.Extensions
             }
             if (queryObj.AtleastOneSpvWallet)
             {
-                query = query.Where(sn => sn.SpvWallets.Count > 0 );
+                query = query.Where(sn => sn.SpvWallets.Count > 0);
             }
             if (!string.IsNullOrWhiteSpace(queryObj.SpvWallet))
+            {
                 query = query.Where(sn => sn.SpvWallets.Contains(queryObj.SpvWallet));
+            }
 
-            if (!string.IsNullOrWhiteSpace(queryObj.XCloudService))
+            if (!string.IsNullOrWhiteSpace(queryObj.XCloudService)) 
+            {
                 query = query.Where(sn => sn.XCloudServices.Contains(queryObj.XCloudService));
+            }
             return query;
         }
 

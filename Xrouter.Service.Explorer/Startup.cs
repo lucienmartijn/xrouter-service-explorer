@@ -2,11 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using BitcoinLib.CoinConfig;
-using BitcoinLib.Services;
-using BitcoinLib.Services.Coins.Base;
-using BitcoinLib.Services.Coins.Bitcoin;
-using BitcoinLib.Services.Coins.Blocknet;
+using BlocknetLib.CoinConfig;
+using BlocknetLib.Services;
+using BlocknetLib.Services.Coins.Base;
+using BlocknetLib.Services.Coins.Blocknet;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OAuth;
@@ -116,7 +115,6 @@ namespace Xrouter.Service.Explorer
 
             services.AddTransient<ICustomUserValidator<ApplicationUser>, CustomUserValidator<ApplicationUser>>();
             services.AddTransient<ICoinService, CoinService>();
-            services.AddTransient<IBitcoinService, BitcoinService>();
             services.AddTransient<IBlocknetService>(service => 
                 new BlocknetService(
                     //rpcSettings.Blocknet.DaemonUrl_testnet, 
