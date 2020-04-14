@@ -131,7 +131,7 @@ export class ViewSpvWalletComponent implements OnInit, OnDestroy {
         break;
       }
       case "xrSendTransaction":{
-        this.callXrouterCommand(this.xrouterApiService.SendTransaction(this.spvWalletName, this.f.value.signedTx));
+        this.callXrouterCommand(this.xrouterApiService.SendTransaction({blockchain: this.spvWalletName, signedTx: this.f.value.signedTx, nodeCount: nodecount}));
         break;
       }
     }

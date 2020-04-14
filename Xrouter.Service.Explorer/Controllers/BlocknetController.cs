@@ -556,14 +556,14 @@ namespace blocknet_xrouter.Controllers
         }
 
         [HttpPost("Xrouter/[action]")]
-        public IActionResult SendTransaction(string blockchain, string signed_tx)
+        public IActionResult SendTransaction([FromBody]SendTransactionRequestViewModel viewModel)
         {
             try
             {
-                if(blockchain == "xr::ETH"){
-                    return Ok(_blocknetService.xrSendTransaction<BlocknetLib.Services.Coins.Blocknet.Xrouter.Ethereum.SendTransactionResponse>(blockchain, signed_tx));
+                if(viewModel.Blockchain == "xr::ETH"){
+                    return Ok(_blocknetService.xrSendTransaction<BlocknetLib.Services.Coins.Blocknet.Xrouter.Ethereum.SendTransactionResponse>(viewModel.Blockchain, viewModel.SignedTx, viewModel.NodeCount));
                 }
-                return Ok(_blocknetService.xrSendTransaction<BlocknetLib.Services.Coins.Blocknet.Xrouter.BitcoinBased.SendTransactionResponse>(blockchain, signed_tx));
+                return Ok(_blocknetService.xrSendTransaction<BlocknetLib.Services.Coins.Blocknet.Xrouter.BitcoinBased.SendTransactionResponse>(viewModel.Blockchain, viewModel.SignedTx, viewModel.NodeCount));
             }
             catch (RpcInternalServerErrorException e)
             {
@@ -577,6 +577,13 @@ namespace blocknet_xrouter.Controllers
                 return StatusCode(StatusCodes.Status408RequestTimeout, new JsonRpcXrError{
                     Error = e.Message,
                 });                
+            }
+            catch(RpcResponseDeserializationException e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new JsonRpcXrError
+                {
+                    Error = e.Message,
+                });
             }
         }
 

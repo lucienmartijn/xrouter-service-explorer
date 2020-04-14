@@ -140,10 +140,9 @@ export class XrouterApiService extends BaseService{
     return this.http.get(url);
   }
 
-  SendTransaction(blockchain:string, signedTx:string){
-    let url = this.baseEndpoint + this.apiEndpoint + '/SendTransaction?blockchain=' + blockchain;
-    url += '&signedTx=' + signedTx;
-    return this.http.get(url);
+  SendTransaction(request:any){
+    let url = this.baseEndpoint + this.apiEndpoint + '/SendTransaction';
+    return this.http.post(url, request);
   }
 
 
