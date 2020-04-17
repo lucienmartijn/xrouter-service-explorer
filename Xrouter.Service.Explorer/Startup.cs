@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.IO;
 using BlocknetLib.CoinConfig;
 using BlocknetLib.Services;
 using BlocknetLib.Services.Coins.Base;
@@ -172,7 +173,7 @@ namespace Xrouter.Service.Explorer
                 // To learn more about options for serving an Angular SPA from ASP.NET Core,
                 // see https://go.microsoft.com/fwlink/?linkid=864501
 
-                spa.Options.SourcePath = "ClientApp";
+                spa.Options.SourcePath = Path.Join(env.ContentRootPath, env.ApplicationName, "ClientApp");
 
                 if (env.IsDevelopment())
                 {
