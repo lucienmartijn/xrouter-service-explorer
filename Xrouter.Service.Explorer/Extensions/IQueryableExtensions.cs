@@ -15,10 +15,6 @@ namespace Xrouter.Service.Explorer.Extensions
             {
                 query = query.Where(sn => sn.Address.Contains(queryObj.Search) || sn.SNodeKey.Contains(queryObj.Search));
             }
-            if (queryObj.AtleastOneSpvWallet)
-            {
-                query = query.Where(sn => sn.SpvWallets.Count > 0);
-            }
             if (!string.IsNullOrWhiteSpace(queryObj.SpvWallet))
             {
                 query = query.Where(sn => sn.SpvWallets.Contains(queryObj.SpvWallet));
@@ -27,6 +23,11 @@ namespace Xrouter.Service.Explorer.Extensions
             if (!string.IsNullOrWhiteSpace(queryObj.XCloudService)) 
             {
                 query = query.Where(sn => sn.XCloudServices.Contains(queryObj.XCloudService));
+            }
+
+            if (!string.IsNullOrWhiteSpace(queryObj.Type)) 
+            {
+                query = query.Where(sn => sn.Type.Equals(queryObj.Type));
             }
             return query;
         }

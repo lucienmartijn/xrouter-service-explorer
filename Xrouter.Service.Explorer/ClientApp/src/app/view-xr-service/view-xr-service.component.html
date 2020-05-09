@@ -4,6 +4,7 @@
 
 <ng-template #loaded>
     <h1>XCloud Service</h1>
+    <h5>{{ serviceName }}</h5>
     <my-tabs>
       <div class="row">
         <div class="col-9">
@@ -29,8 +30,13 @@
           <my-tab tabTitle="Try it out">
             <h3>Try it out</h3>
             <hr>
+            <div *ngIf="result.service.helpDescription">
+              <h6>Help</h6>
+              <p>{{result.service.helpDescription}}</p>
+            </div>
+            <hr>
             <div class="row">
-              <div class="col-md-3 col-sm-12">
+              <div class="col-12">
                 <h4>Request</h4>
                 <form (ngSubmit)="onSubmit()" #serviceForm="ngForm">
                   <div *ngFor="let p of result.service.parametersList; let i = index">
@@ -47,11 +53,12 @@
                         </div> 
                     </div>
                   </div>
-                  <br>
                   <button type="submit" class="btn btn-outline-primary" [disabled]="serviceForm.form.invalid">Submit</button>
                 </form> 
               </div>
-              <div class="col-md-9 col-sm-12">
+            </div>
+            <div class="row">
+              <div class="col-12">
                 <h4>Response</h4>
                   <pre>
                     <code>
@@ -65,6 +72,7 @@
                   </pre>
               </div>
             </div>
+            
           </my-tab>
           <my-tab tabTitle="Configuration">
             <h3>Configuration [{{serviceName}}] in xrouter.conf</h3>
@@ -87,8 +95,8 @@
             <p>
               <a class="truncate fw6" href="https://chainz.cryptoid.info/block/address.dws?{{result.node.paymentAddress}}">{{result.node.paymentAddress}}</a>
             </p>
-            <h4 class="black-50 f5">Score</h4>
-            <p class="black-80 fw6">{{result.node.score}}</p>
+            <h4 class="black-50 f5">Type</h4>
+            <p class="black-80 fw6"> {{result.node.type }}</p>
             <h4 class="black-50 f5">Default Fee</h4>
             <p class="black-80 fw6">{{result.node.feeDefault}} BLOCK</p>
           </div>

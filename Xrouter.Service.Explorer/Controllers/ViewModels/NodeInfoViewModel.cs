@@ -6,7 +6,10 @@ namespace blocknet_xrouter.Controllers.ViewModels
 {
     public class NodeInfoViewModel
     {
+        public string Type { get; set; }
         public string NodePubKey { get; set; }
+        public string Host { get; set; }
+        public string Port { get; set; }
         public int Score { get; set; }
         public bool Banned { get; set; }
         public string PaymentAddress { get; set; }

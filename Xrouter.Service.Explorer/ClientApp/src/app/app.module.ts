@@ -15,7 +15,7 @@ import { HomeComponent } from './home/home.component';
 import { ServiceListComponent } from './service-list/service-list.component';
 import { XrServicesComponent } from './xr-services/xr-services.component';
 import { SpvWalletsComponent } from './spv-wallets/spv-wallets.component';
-import { XrouterApiService } from './shared/services/xrouter.service';
+import { XrouterService } from './shared/services/xrouter.service';
 import { ViewXrServiceComponent } from './view-xr-service/view-xr-service.component';
 import { ViewSnodeComponent } from './view-snode/view-snode.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
@@ -44,6 +44,11 @@ import { CommentNewComponent } from './comment-new/comment-new.component';
 import { CommentComponent } from './comment/comment.component';
 import { TabsComponent } from './shared/tabs/tabs.component';
 import { TabComponent } from './shared/tabs/tab.component';
+import { EnterpriseXRouterService } from './shared/services/enterprise.xrouter.service';
+import { StatisticsService } from './shared/services/stats.service';
+import { ServiceNodeService } from './shared/services/snode.service';
+import { EnterpriseXCloudService } from './shared/services/enterprise.xcloud.service';
+import { XCloudService } from './shared/services/xcloud.service';
 
 
 
@@ -111,13 +116,18 @@ const appInitializerFn = (appConfig: ConfigurationService) => {
     })
   ],
   providers: [
-    XrouterApiService, 
+    XrouterService, 
+    XCloudService,
+    EnterpriseXRouterService,
+    EnterpriseXCloudService,
     MyServiceNodesService,
     CommentService,
     SearchService,
     AccountService,
     NavigatorService,
     ResponseTimeService,
+    StatisticsService,
+    ServiceNodeService,
     // {
       //   provide: HTTP_INTERCEPTORS,
       //   useClass: HttpErrorInterceptor,

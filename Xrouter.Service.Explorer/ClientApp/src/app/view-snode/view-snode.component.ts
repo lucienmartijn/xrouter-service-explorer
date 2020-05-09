@@ -1,11 +1,12 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Location } from '@angular/common';
-import { XrouterApiService } from '../shared/services/xrouter.service';
+import { XrouterService } from '../shared/services/xrouter.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { isNullOrUndefined } from 'util';
 import { takeUntil } from 'rxjs/operators';
 import { Subject, forkJoin, Observable } from 'rxjs';
 import { MyServiceNodesService } from '../shared/services/myservicenodes.service';
+import { ServiceNodeService } from '../shared/services/snode.service';
 
 @Component({
   selector: 'app-view-snode',
@@ -17,11 +18,11 @@ export class ViewSnodeComponent implements OnInit, OnDestroy {
 
   protected ngUnsubscribe: Subject<void> = new Subject<void>();
   loading:boolean;
-  config:any;
+
   nodePubKey:string;
   service:string;
   xCloudServices:any;
-  result:any;
+  serviceNodeInfo:any;
   snodeVerified:boolean;
 
   query:any = {
@@ -30,11 +31,11 @@ export class ViewSnodeComponent implements OnInit, OnDestroy {
   };
 
   constructor(
-    private xrouterApiService:XrouterApiService,
     private router:Router,
     private route:ActivatedRoute, 
-    private location:Location,
+    private xrouterApiService:XrouterService,
     private myServiceNodesService: MyServiceNodesService,
+    private serviceNodeService: ServiceNodeService
   ) 
   { 
     route.params.subscribe(p => {
@@ -50,12 +51,12 @@ export class ViewSnodeComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     var observableIsServiceNodeVerified: Observable<boolean> = this.myServiceNodesService.isServiceNodeVerified(this.nodePubKey);
-    var observableServiceNodeInfo: Observable<any> = this.xrouterApiService.GetNodeInfo(this.nodePubKey, this.service);
+    var observableServiceNodeInfo: Observable<any> = this.serviceNodeService.GetNodeInfo(this.nodePubKey, this.service);
 
     forkJoin([observableIsServiceNodeVerified, observableServiceNodeInfo]).pipe(takeUntil(this.ngUnsubscribe)).subscribe(([verified, nodeInfo]) =>{
       this.loading = false;
       this.snodeVerified = verified;
-      this.result = nodeInfo;
+      this.serviceNodeInfo = nodeInfo;
     }, err => {
       if(err.status == 404)
       this.router.navigate(['/error'], {queryParams: err});
@@ -70,7 +71,7 @@ export class ViewSnodeComponent implements OnInit, OnDestroy {
   }
 
   private populateXCloudServices(){
-    this.xrouterApiService.FilterXCloudServiceServiceNode(this.query)
+    this.serviceNodeService.FilterXCloudServiceServiceNode(this.query)
       .subscribe(result => {        
         this.xCloudServices = result;
       });

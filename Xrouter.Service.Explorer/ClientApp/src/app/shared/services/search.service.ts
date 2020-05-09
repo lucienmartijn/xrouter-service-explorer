@@ -5,7 +5,7 @@ import { BaseService } from './base.service';
 
 @Injectable()
 export class SearchService extends BaseService {
-    private readonly apiEndpoint = 'blocknet/xrouter';
+    private readonly apiEndpoint = 'search';
     private baseEndpoint = '/api/';
 
     constructor(private http: HttpClient) { 

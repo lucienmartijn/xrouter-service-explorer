@@ -1,6 +1,6 @@
 import { Component, OnInit, EventEmitter, Output, ViewChild, Input } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { XrouterApiService } from '../shared/services/xrouter.service';
+import { XrouterService } from '../shared/services/xrouter.service';
 import { forkJoin, Observable } from 'rxjs';
 import {FormBuilder, FormGroup, Validators, NgForm} from '@angular/forms';
 import { MyServiceNodesService } from '../shared/services/myservicenodes.service';
@@ -8,6 +8,7 @@ import { isNullOrUndefined } from 'util';
 import { MyServiceNode } from '../shared/models/myservicenode.model';
 import { NgbModal, ModalDismissReasons, NgbModalRef, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ServiceNode } from '../shared/models/servicenode.model';
+import { ServiceNodeService } from '../shared/services/snode.service';
 
 
 @Component({
@@ -192,7 +193,8 @@ export class MyServiceNodesComponent implements OnInit {
   constructor(private router: Router, 
     private route:ActivatedRoute,
     private myServiceNodesService: MyServiceNodesService, 
-    private xrouterApiService: XrouterApiService,
+    private serviceNodeService : ServiceNodeService,
+    private xrouterApiService: XrouterService,
     private modalService: NgbModal
     ) { 
       route.params.subscribe(p => {
@@ -208,7 +210,7 @@ export class MyServiceNodesComponent implements OnInit {
 
   ngOnInit() {
     var observableMyServiceNodes: Observable<MyServiceNode[]> = this.myServiceNodesService.GetServiceNodes(this.applicationUserId);
-    var observableAllServiceNodes: Observable<any> = this.xrouterApiService.GetServiceNodeList();
+    var observableAllServiceNodes: Observable<any> = this.serviceNodeService.GetServiceNodeList();
 
     forkJoin([observableMyServiceNodes, observableAllServiceNodes]).subscribe(([mySn, allSn]) =>{
       this.loading = false;

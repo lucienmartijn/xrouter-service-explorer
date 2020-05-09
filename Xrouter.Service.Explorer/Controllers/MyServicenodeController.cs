@@ -20,13 +20,17 @@ namespace Xrouter.Service.Explorer.Controllers
     {
         private readonly IServicenodeRepository repository;
         private readonly IUnitOfWork unitOfWork;
-        private readonly IBlocknetService blocknetService;
+        private readonly IServicenodeService servicenodeService;
         private readonly IAuthorizationService authorizationService;
 
-        public MyServicenodeController(IServicenodeRepository repository, IBlocknetService blocknetService,  IUnitOfWork unitOfWork, IAuthorizationService authorizationService)
+        public MyServicenodeController(
+            IServicenodeRepository repository, 
+            IServicenodeService servicenodeService,  
+            IUnitOfWork unitOfWork, 
+            IAuthorizationService authorizationService)
         {
             this.repository = repository;
-            this.blocknetService = blocknetService;
+            this.servicenodeService = servicenodeService;
             this.unitOfWork = unitOfWork;
             this.authorizationService = authorizationService;
         }
@@ -81,7 +85,7 @@ namespace Xrouter.Service.Explorer.Controllers
 
             if (authorizationResult.Succeeded)
             {
-                var allServiceNodes = blocknetService.serviceNodeList();
+                var allServiceNodes = servicenodeService.serviceNodeList();
 
                 // ServiceNodeInfoResponse response;
                 // foreach (var serviceNode in myServiceNodes)
@@ -159,7 +163,7 @@ namespace Xrouter.Service.Explorer.Controllers
             bool result;
             try
             {
-                result = blocknetService.VerifyMessage(address, signature, message);
+                result = servicenodeService.VerifyMessage(address, signature, message);
             }
             catch (RpcInternalServerErrorException e)
             {

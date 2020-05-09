@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, ViewChild, ViewContainerRef, ComponentFactoryResolver, ElementRef, Renderer2, ViewChildren, QueryList, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
-import { XrouterApiService } from '../shared/services/xrouter.service';
+import { XrouterService } from '../shared/services/xrouter.service';
 import { CommentService } from '../shared/services/comment.service';
 import { NewComment } from '../shared/models/newComment.model';
 import { Comment } from '../shared/models/comment.model';

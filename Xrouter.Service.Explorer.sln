@@ -5,6 +5,8 @@ VisualStudioVersion = 16.0.29503.13
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xrouter.Service.Explorer", "Xrouter.Service.Explorer\Xrouter.Service.Explorer.csproj", "{E2E4C7DB-92DF-4ABE-9EF5-A5B5C2403509}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlocknetLib", "BlocknetLib\BlocknetLib.csproj", "{1D093979-F8D4-486F-B55A-5624095692E5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,14 @@ Global
 		{E2E4C7DB-92DF-4ABE-9EF5-A5B5C2403509}.Release|Any CPU.Build.0 = Release|Any CPU
 		{E2E4C7DB-92DF-4ABE-9EF5-A5B5C2403509}.Staging|Any CPU.ActiveCfg = Release|Any CPU
 		{E2E4C7DB-92DF-4ABE-9EF5-A5B5C2403509}.Staging|Any CPU.Build.0 = Release|Any CPU
+		{1D093979-F8D4-486F-B55A-5624095692E5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1D093979-F8D4-486F-B55A-5624095692E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1D093979-F8D4-486F-B55A-5624095692E5}.QA|Any CPU.ActiveCfg = Debug|Any CPU
+		{1D093979-F8D4-486F-B55A-5624095692E5}.QA|Any CPU.Build.0 = Debug|Any CPU
+		{1D093979-F8D4-486F-B55A-5624095692E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1D093979-F8D4-486F-B55A-5624095692E5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1D093979-F8D4-486F-B55A-5624095692E5}.Staging|Any CPU.ActiveCfg = Debug|Any CPU
+		{1D093979-F8D4-486F-B55A-5624095692E5}.Staging|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

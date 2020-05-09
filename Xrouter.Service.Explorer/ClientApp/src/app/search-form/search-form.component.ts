@@ -5,7 +5,7 @@ import { MatAutocompleteModule, MatAutocompleteSelectedEvent } from '@angular/ma
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { NavigatorService } from '../shared/services/navigator.service.';
-import { XrouterApiService } from '../shared/services/xrouter.service';
+import { XrouterService } from '../shared/services/xrouter.service';
 
 import { debounceTime, tap, switchMap, finalize } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
@@ -27,7 +27,7 @@ export class SearchFormComponent extends BaseService implements OnInit {
 
   constructor(
     private http: HttpClient,
-    private xrouterService: XrouterApiService,
+    private xrouterService: XrouterService,
     private navigatorService: NavigatorService,
     private searchService: SearchService
   ) {

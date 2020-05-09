@@ -11,8 +11,6 @@
         <my-tab tabTitle="Readme">
           <h3>{{ spvWalletName }}</h3>
           <hr>
-          <h4>Description</h4>
-          Introduction text of SPV Wallet here...
           <h4>Commands</h4>
                 <div class="table-responsive">
                   <table class="table">
@@ -43,7 +41,7 @@
           <h3>Try out a {{ spvWalletName }} command</h3>
             <hr>
             <div class="row">
-              <div class="col-md-3 col-sm-12">
+              <div class="col-12">
                 <h4>Request</h4>
                 <form (ngSubmit)="onSubmit()" #f="ngForm">
                   <label for="spvCommand">Spv Command</label>
@@ -85,10 +83,10 @@
                       <h4>Block hash inputs</h4>
                       <button type="button" (click)="addBlockHash()" class="btn btn-primary btn-sm">Add</button> 
                       <hr>
-                      <div *ngFor="let bh of blockHashes; let i = index;">
+                      <div *ngFor="let bh of blockHashes; let i = index;trackBy:trackByFn">
                         <div class="form-group">
                           <label for="blockHash-{{i}}">Blockhash-{{i}}</label>
-                          <input type="text" class="form-control" id="blockHash-{{i}}" [(ngModel)]="blockHashes[i]" name="blockHash-{{i}}" #blockHashes="ngModel" required>
+                          <input type="text" class="form-control" id="blockHash-{{i}}" [(ngModel)]="blockHashes[i]" name="blockHash-{{i}}" required>
                         </div>
                         <div class="form-group">
                           <div *ngIf="blockHashes.invalid && (blockHashes.dirty || blockHashes.touched)"
@@ -120,7 +118,7 @@
                       <h4>TxId inputs</h4>
                       <button type="button" (click)="addTxId()" class="btn btn-primary btn-sm">Add</button> 
                       <hr>
-                        <div *ngFor="let txid of txIds; let i = index;">
+                        <div *ngFor="let txid of txIds; let i = index;trackBy:trackByFn">
                           <div class="form-group">
                             <label for="txid-{{i}}">txid-{{i}}</label>
                             <input type="text" class="form-control" id="txid-{{i}}" [(ngModel)]="txIds[i]" name="txid-{{i}}" #txids="ngModel" required>
@@ -166,20 +164,23 @@
                       </div>
                     </div>
                   </div> 
-                  <div class="form-group">
-                    <label for="nodeCount">Node count</label>
-                    <input type="number" class="form-control" id="nodeCount"  [(ngModel)]="nodeCount" name="nodeCount" [customMin]="minNodeCount" #nodecount="ngModel" required>
+                  <div *ngIf="result.node.type != 'Enterprise'">
+                    <div class="form-group">
+                      <label for="nodeCount">Node count</label>
+                      <input type="number" class="form-control" id="nodeCount"  [(ngModel)]="nodeCount" name="nodeCount" [customMin]="minNodeCount" #nodecount="ngModel" required>
+                    </div>
+                    <div class="form-group">
+                      <div *ngIf="nodecount.errors?.customMin" class="alert alert-danger"> 
+                        Minimum node count is {{minNodeCount}}.
+                      </div>   
+                    </div>
                   </div>
-                  <div class="form-group">
-                    <div *ngIf="nodecount.errors?.customMin" class="alert alert-danger"> 
-                      Minimum node count is {{minNodeCount}}.
-                    </div>   
-                  </div>
-                  <br>
                   <button type="submit" class="btn btn-outline-primary" [disabled]="f.form.invalid">Submit</button>
                 </form>
               </div>
-              <div class="col-md-9 col-sm-12">
+            </div>
+            <div class="row">
+              <div class="col-12">
                 <h4>Response</h4>
                 <pre>
                   <code>
@@ -206,13 +207,13 @@
                 <thead>
                   <tr>
                     <th>Snode Key</th>
-                    <th>Score</th>
+                    <th>Type</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr *ngFor="let s of result.otherNodes">
-                    <td class="ellipsis"><a [routerLink]="['/xrouter-snodes', s.nodePubKey]">{{s.nodePubKey}}</a></td>
-                    <td>{{s.score}}</td>
+                    <td class="ellipsis"><a [routerLink]="['/spv-wallets', spvWalletName, s.nodePubKey]">{{s.nodePubKey}}</a></td>
+                    <td>{{s.type}}</td>
                   </tr>
                 </tbody>
               </table>
@@ -233,8 +234,8 @@
           <p>
             <a class="truncate fw6" href="https://chainz.cryptoid.info/block/address.dws?{{result.node.paymentAddress}}">{{result.node.paymentAddress}}</a>
           </p>
-          <h4 class="black-50 f5">Score</h4>
-          <p class="black-80 fw6">{{result.node.score}}</p>
+          <h4 class="black-50 f5">Type</h4>
+          <p class="black-80 fw6"> {{result.node.type }}</p>
           <h4 class="black-50 f5">Default Fee</h4>
           <p class="black-80 fw6">{{result.node.feeDefault}} BLOCK</p>
         </div>

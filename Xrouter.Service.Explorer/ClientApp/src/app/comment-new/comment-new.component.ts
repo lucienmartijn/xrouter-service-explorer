@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, ViewChild, Output, EventEmitter, OnDestroy, Inject } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { Router, Route, ActivatedRoute } from '@angular/router';
-import { XrouterApiService } from '../shared/services/xrouter.service';
+import { XrouterService } from '../shared/services/xrouter.service';
 import { CommentService } from '../shared/services/comment.service';
 import { NewComment } from '../shared/models/newComment.model';
 import { Comment } from '../shared/models/comment.model';

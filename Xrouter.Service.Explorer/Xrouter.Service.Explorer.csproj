@@ -43,9 +43,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="BlocknetLib">
-      <HintPath>ExternalLibraries\BlocknetLib\netcoreapp3.0\BlocknetLib.dll</HintPath>
-    </Reference>
+    <ProjectReference Include="..\BlocknetLib\BlocknetLib.csproj" />
   </ItemGroup>
 
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">

@@ -1,12 +1,16 @@
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { Location } from '@angular/common';
-import { XrouterApiService } from '../shared/services/xrouter.service';
+import { XrouterService } from '../shared/services/xrouter.service';
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { isNullOrUndefined } from 'util';
 import { NgForm } from '@angular/forms';
 import { finalize, takeUntil } from 'rxjs/operators';
 import { Subject, Observable, forkJoin } from 'rxjs';
 import { MyServiceNodesService } from '../shared/services/myservicenodes.service';
+import { EnterpriseXRouterService } from '../shared/services/enterprise.xrouter.service';
+import { ServiceNodeService } from '../shared/services/snode.service';
+import { XCloudService } from '../shared/services/xcloud.service';
+import { EnterpriseXCloudService } from '../shared/services/enterprise.xcloud.service';
 
 @Component({
   selector: 'app-view-xr-service',
@@ -29,11 +33,15 @@ export class ViewXrServiceComponent implements OnInit, OnDestroy {
   resultLoading:boolean;
 
   constructor(
-    private xrouterApiService:XrouterApiService,
+    private xrouterService:XrouterService,
+    private xcloudService:XCloudService,
+    private enterpriseXrouterService:EnterpriseXRouterService,
+    private enterpriseXCloudService:EnterpriseXCloudService,
     private router:Router,
     private route:ActivatedRoute, 
     private location:Location,
     private myServiceNodesService: MyServiceNodesService,
+    private serviceNodeService: ServiceNodeService
     ) 
     { 
       this.router.routeReuseStrategy.shouldReuseRoute = () => false;
@@ -55,7 +63,7 @@ export class ViewXrServiceComponent implements OnInit, OnDestroy {
 
   private initializeData(){
     var observableIsServiceNodeVerified: Observable<boolean> = this.myServiceNodesService.isServiceNodeVerified(this.nodePubKey);
-    var observableServiceNodeInfo: Observable<any> = this.xrouterApiService.GetServiceInfo(this.serviceName);
+    var observableServiceNodeInfo: Observable<any> = this.serviceNodeService.GetServiceInfo(this.serviceName);
 
     forkJoin([observableIsServiceNodeVerified, observableServiceNodeInfo]).pipe(takeUntil(this.ngUnsubscribe)).subscribe(([verified, serviceInfo]) =>{
       this.snodeVerified = verified;
@@ -78,17 +86,30 @@ export class ViewXrServiceComponent implements OnInit, OnDestroy {
 
   onSubmit() {  
     this.resultLoading = true; 
-    this.xrouterApiService.Service(new ServiceRequest(this.serviceName, this.parametervalues, 1))
-    .pipe(
-      finalize(() => {
-        this.resultLoading = false;
-    }))  
-    .subscribe(result => {
-        this.serviceResult = JSON.stringify(result, undefined, 2);
-      },
-      error => {
-        this.serviceResult = JSON.stringify(error, undefined, 2);
-      });    
+    if(this.result.node.type === "Enterprise")
+      this.enterpriseXCloudService.Service(this.serviceName, this.parametervalues, 'http://' + this.result.node.host + ':' + this.result.node.port)
+      .pipe(
+        finalize(() => {
+          this.resultLoading = false;
+      }))  
+      .subscribe(result => {
+          this.serviceResult = JSON.stringify(result, undefined, 2);
+        },
+        error => {
+          this.serviceResult = JSON.stringify(error, undefined, 2);
+        });    
+    else
+      this.xcloudService.Service(new ServiceRequest(this.serviceName, this.parametervalues, 1))
+      .pipe(
+        finalize(() => {
+          this.resultLoading = false;
+      }))  
+      .subscribe(result => {
+          this.serviceResult = JSON.stringify(result, undefined, 2);
+        },
+        error => {
+          this.serviceResult = JSON.stringify(error, undefined, 2);
+        });    
   }
 
   ngOnDestroy(){

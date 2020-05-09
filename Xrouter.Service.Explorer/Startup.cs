@@ -116,8 +116,41 @@ namespace Xrouter.Service.Explorer
 
             services.AddTransient<ICustomUserValidator<ApplicationUser>, CustomUserValidator<ApplicationUser>>();
             services.AddTransient<ICoinService, CoinService>();
-            services.AddTransient<IBlocknetService>(service => 
-                new BlocknetService(
+            services.AddTransient<IXRouterService>(service => 
+                new XRouterService(
+                    //rpcSettings.Blocknet.DaemonUrl_testnet, 
+                    rpcSettings.Blocknet.DaemonUrl,
+                    rpcSettings.Blocknet.RpcUserName, 
+                    rpcSettings.Blocknet.RpcPassword, 
+                    rpcSettings.Blocknet.WalletPassword,
+                    rpcSettings.Blocknet.RpcRequestTimeoutInSeconds
+                    )
+            );
+
+            services.AddTransient<IXRouterEthereumService>(service => 
+                new XRouterEthereumService(
+                    //rpcSettings.Blocknet.DaemonUrl_testnet, 
+                    rpcSettings.Blocknet.DaemonUrl,
+                    rpcSettings.Blocknet.RpcUserName, 
+                    rpcSettings.Blocknet.RpcPassword, 
+                    rpcSettings.Blocknet.WalletPassword,
+                    rpcSettings.Blocknet.RpcRequestTimeoutInSeconds
+                    )
+            );
+
+            services.AddTransient<IXCloudService>(service => 
+                new XCloudService(
+                    //rpcSettings.Blocknet.DaemonUrl_testnet, 
+                    rpcSettings.Blocknet.DaemonUrl,
+                    rpcSettings.Blocknet.RpcUserName, 
+                    rpcSettings.Blocknet.RpcPassword, 
+                    rpcSettings.Blocknet.WalletPassword,
+                    rpcSettings.Blocknet.RpcRequestTimeoutInSeconds
+                    )
+            );
+
+            services.AddTransient<IServicenodeService>(service => 
+                new ServicenodeService(
                     //rpcSettings.Blocknet.DaemonUrl_testnet, 
                     rpcSettings.Blocknet.DaemonUrl,
                     rpcSettings.Blocknet.RpcUserName, 
@@ -173,7 +206,7 @@ namespace Xrouter.Service.Explorer
                 // To learn more about options for serving an Angular SPA from ASP.NET Core,
                 // see https://go.microsoft.com/fwlink/?linkid=864501
 
-                spa.Options.SourcePath = Path.Join(env.ContentRootPath, env.ApplicationName, "ClientApp");
+                spa.Options.SourcePath = Path.Join(env.ContentRootPath, env.ApplicationName,"ClientApp");
 
                 if (env.IsDevelopment())
                 {

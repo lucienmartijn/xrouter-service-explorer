@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy, ViewChild, ElementRef, Output, EventEmitter } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Location } from '@angular/common';
-import { XrouterApiService } from '../shared/services/xrouter.service';
+import { XrouterService } from '../shared/services/xrouter.service';
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { isNullOrUndefined } from 'util';
 import { finalize, takeUntil } from 'rxjs/operators';
@@ -10,6 +10,8 @@ import { forkJoin, Observable, Subject } from 'rxjs';
 import { ResponseTimeService } from '../shared/services/responsetime.service';
 import { NgbTabset } from "@ng-bootstrap/ng-bootstrap";
 import { MyServiceNodesService } from '../shared/services/myservicenodes.service';
+import { EnterpriseXRouterService } from '../shared/services/enterprise.xrouter.service';
+import { ServiceNodeService } from '../shared/services/snode.service';
 
 @Component({
   selector: 'app-view-spv-wallet',
@@ -27,6 +29,7 @@ export class ViewSpvWalletComponent implements OnInit, OnDestroy {
   minNodeCount:number = 1;
   result:any;
   snodeVerified:boolean;
+  enterprise:boolean = false;
   
   active = 1;
   selectedSpvCommand:string;
@@ -41,11 +44,13 @@ export class ViewSpvWalletComponent implements OnInit, OnDestroy {
   responseTime:number;
 
   constructor(
-    private xrouterApiService:XrouterApiService,
+    private xrouterApiService:XrouterService,
+    private enterpriseXrouterApiService:EnterpriseXRouterService,
     private router:Router,
     private route:ActivatedRoute, 
     private location:Location,
     private myServiceNodesService: MyServiceNodesService,
+    private serviceNodeService : ServiceNodeService
     ) 
     { 
       route.params.subscribe(p => {
@@ -68,7 +73,7 @@ export class ViewSpvWalletComponent implements OnInit, OnDestroy {
 
   private initializeData(){
     var observableIsServiceNodeVerified: Observable<boolean> = this.myServiceNodesService.isServiceNodeVerified(this.nodePubKey);
-    var observableServiceNodeInfo: Observable<any> = this.xrouterApiService.GetSpvWalletInfo(this.spvWalletName, this.nodePubKey);
+    var observableServiceNodeInfo: Observable<any> = this.serviceNodeService.GetSpvWalletInfo(this.spvWalletName, this.nodePubKey);
 
     forkJoin([observableIsServiceNodeVerified, observableServiceNodeInfo]).pipe(takeUntil(this.ngUnsubscribe)).subscribe(([verified, spvInfo]) =>{
       this.loading = false;
@@ -80,8 +85,8 @@ export class ViewSpvWalletComponent implements OnInit, OnDestroy {
       this.resultLoading = false;
 
     }, err => {
-      if(err.status == 404)
-      this.router.navigate(['/error'], {queryParams: err});
+      // if(err.status == 404)
+        this.router.navigate(['/error'], {queryParams: err});
     });
   }
 
@@ -103,35 +108,59 @@ export class ViewSpvWalletComponent implements OnInit, OnDestroy {
     let nodecount = this.f.value.nodeCount;
     switch(this.f.value.selectedSpvCommand){
       case "xrGetBlockCount":{  
-        this.callXrouterCommand(this.xrouterApiService.GetBlockCount(this.spvWalletName, nodecount));
+        if(this.enterprise) 
+          this.callXrouterCommand(this.enterpriseXrouterApiService.GetBlockCount(this.spvWalletName, 'http://' + this.result.node.host + ':' + this.result.node.port));
+        else
+          this.callXrouterCommand(this.xrouterApiService.GetBlockCount(this.spvWalletName, nodecount));
         break;    
       }
       case "xrGetBlockHash":{
-        this.callXrouterCommand(this.xrouterApiService.GetBlockHash(this.spvWalletName, this.f.value.blockNumber, nodecount));        
+        if(this.enterprise) 
+          this.callXrouterCommand(this.enterpriseXrouterApiService.GetBlockHash(this.spvWalletName, this.f.value.blockNumber, 'http://' + this.result.node.host + ':' + this.result.node.port));
+        else 
+          this.callXrouterCommand(this.xrouterApiService.GetBlockHash(this.spvWalletName, this.f.value.blockNumber, nodecount));        
         break;
       }
       case "xrGetBlock":{
-        this.callXrouterCommand(this.xrouterApiService.GetBlock(this.spvWalletName, this.f.value.blockHash, nodecount));
+        if(this.enterprise) 
+          this.callXrouterCommand(this.enterpriseXrouterApiService.GetBlock(this.spvWalletName, this.f.value.blockHash, 'http://' + this.result.node.host + ':' + this.result.node.port));
+        else
+          this.callXrouterCommand(this.xrouterApiService.GetBlock(this.spvWalletName, this.f.value.blockHash, nodecount));
         break;
       }
       case "xrGetBlocks":{
-        this.callXrouterCommand(this.xrouterApiService.GetBlocks(this.spvWalletName, this.blockHashes, nodecount));
+        if(this.enterprise) 
+          this.callXrouterCommand(this.enterpriseXrouterApiService.GetBlocks(this.spvWalletName, this.blockHashes, 'http://' + this.result.node.host + ':' + this.result.node.port));
+        else
+          this.callXrouterCommand(this.xrouterApiService.GetBlocks(this.spvWalletName, this.blockHashes, nodecount));
         break;
       }
       case "xrGetTransaction":{
-        this.callXrouterCommand(this.xrouterApiService.GetTransaction(this.spvWalletName, this.f.value.txid, nodecount));
+        if(this.enterprise) 
+          this.callXrouterCommand(this.enterpriseXrouterApiService.GetTransaction(this.spvWalletName, this.f.value.txid, 'http://' + this.result.node.host + ':' + this.result.node.port));
+        else
+          this.callXrouterCommand(this.xrouterApiService.GetTransaction(this.spvWalletName, this.f.value.txid, nodecount));
         break;
       }
       case "xrGetTransactions":{
-        this.callXrouterCommand(this.xrouterApiService.GetTransactions(this.spvWalletName, this.txIds, nodecount));
+        if(this.enterprise) 
+          this.callXrouterCommand(this.enterpriseXrouterApiService.GetTransactions(this.spvWalletName, this.txIds, 'http://' + this.result.node.host + ':' + this.result.node.port));
+        else
+          this.callXrouterCommand(this.xrouterApiService.GetTransactions(this.spvWalletName, this.txIds, nodecount));
         break;
       }
       case "xrDecodeRawTransaction":{
-        this.callXrouterCommand(this.xrouterApiService.DecodeRawTransaction(this.spvWalletName, this.f.value.txHex, nodecount))        
+        if(this.enterprise) 
+          this.callXrouterCommand(this.enterpriseXrouterApiService.DecodeRawTransaction(this.spvWalletName, this.f.value.txHex, 'http://' + this.result.node.host + ':' + this.result.node.port));
+        else
+          this.callXrouterCommand(this.xrouterApiService.DecodeRawTransaction(this.spvWalletName, this.f.value.txHex, nodecount))        
         break;
       }
       case "xrSendTransaction":{
-        this.callXrouterCommand(this.xrouterApiService.SendTransaction({blockchain: this.spvWalletName, signedTx: this.f.value.signedTx, nodeCount: nodecount}));
+        if(this.enterprise) 
+          this.callXrouterCommand(this.enterpriseXrouterApiService.SendTransaction(this.spvWalletName, this.f.value.signedTx, 'http://' + this.result.node.host + ':' + this.result.node.port));
+        else
+          this.callXrouterCommand(this.xrouterApiService.SendTransaction({blockchain: this.spvWalletName, signedTx: this.f.value.signedTx, nodeCount: nodecount}));
         break;
       }
     }
@@ -170,6 +199,10 @@ export class ViewSpvWalletComponent implements OnInit, OnDestroy {
     // This completes the subject properlly.
     this.ngUnsubscribe.complete();
   }
+
+  trackByFn(index: any, item: any) {
+    return index;
+ }
 }
 
 

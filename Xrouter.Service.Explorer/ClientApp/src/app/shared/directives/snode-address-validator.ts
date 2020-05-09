@@ -1,6 +1,6 @@
 import { Directive, OnInit, Input } from '@angular/core';
 import { AbstractControl, NG_VALIDATORS, Validator, ValidationErrors } from '@angular/forms';
-import { XrouterApiService } from '../services/xrouter.service';
+import { XrouterService } from '../services/xrouter.service';
 
 @Directive({
   selector: '[servicenodeAddressValidator][ngModel]',

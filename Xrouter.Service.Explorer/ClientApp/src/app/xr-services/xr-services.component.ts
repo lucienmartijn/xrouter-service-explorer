@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { XrouterApiService } from '../shared/services/xrouter.service';
+import { XrouterService } from '../shared/services/xrouter.service';
 
 @Component({
   selector: 'app-services',
@@ -21,7 +21,7 @@ export class XrServicesComponent implements OnInit {
   }; 
   loading: boolean;
 
-  constructor(private router: Router, private xrouterService: XrouterApiService) { 
+  constructor(private router: Router, private xrouterService: XrouterService) { 
     this.loading = true;
   }
 

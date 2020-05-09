@@ -1,28 +1,36 @@
 import { Component, OnInit } from '@angular/core';
-import { XrouterApiService } from '../shared/services/xrouter.service';
+import { XrouterService } from '../shared/services/xrouter.service';
 import { forkJoin } from 'rxjs';
 import { Router } from '@angular/router';
+import { StatisticsService } from '../shared/services/stats.service';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
 })
 export class HomeComponent implements OnInit{
-  constructor(private router: Router,private xrouterService: XrouterApiService){}
+  constructor(
+    private router: Router, 
+    private xrouterService: XrouterService,
+    private statsService: StatisticsService){}
   networkServiceCount:any;
   xCloudServices:any;
   spvWallets:any;
+  enterpriseXRouterNodeCount:any;
+
   ngOnInit(): void {
    var sources = [
-     this.xrouterService.GetServiceNodeCount(),
+     this.statsService.GetServiceNodeCount(),
      this.xrouterService.GetNetworkServices(),
-     this.xrouterService.GetNetworkSpvWallets()
+     this.xrouterService.GetNetworkSpvWallets(),
+     this.statsService.GetEnterpriseXRouterCount()
    ];
 
    forkJoin(sources).subscribe(data =>{
       this.networkServiceCount = data[0];
       this.xCloudServices = data[1];
       this.spvWallets = data[2];
+      this.enterpriseXRouterNodeCount = data[3];
     }, err => {
       if(err.status == 404)
         this.router.navigate(['']);

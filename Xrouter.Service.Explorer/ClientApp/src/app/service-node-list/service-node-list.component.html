@@ -26,6 +26,18 @@
         <div class="col-auto">
             <div class="input-group">
                 <div class="input-group-prepend">
+                    <label class="input-group-text" for="type">Type</label>
+                </div>
+                <select id="type" class="form-control" [(ngModel)]="query.type" (change)="onFilterChange()">
+                    <option value=""></option>
+                    <option value="Regular">Regular</option>
+                    <option value="Enterprise">Enterprise</option>
+                </select>  
+            </div>
+        </div>
+        <div class="col-auto">
+            <div class="input-group">
+                <div class="input-group-prepend">
                     <label class="input-group-text" for="spvWallet">Spv Wallet</label>
                 </div>
                 <select id="spvWallet" class="custom-select" [(ngModel)]="query.spvWallet" (change)="onFilterChange()">
@@ -64,19 +76,14 @@
                 <ng-template #queried>
                     <tr *ngFor="let sn of serviceNodes?.items; let i = index">
                         <td>
-                            <div *ngIf="sn.spvWallets?.length > 0; else noSpv">
-                                <a [routerLink]="[sn.sNodeKey]">{{sn.sNodeKey}}</a>
-                            </div>
-                            <ng-template #noSpv>
-                                {{sn.sNodeKey}}
-                            </ng-template>
+                            <a [routerLink]="[sn.sNodeKey]">{{sn.sNodeKey}}</a>
                         </td>
                         <td>
                             <a href="https://chainz.cryptoid.info/block/address.dws?{{sn.address}}">
                                 {{sn.address}}
                             </a>    
                         </td>
-                        <td>{{sn.score}}</td>
+                        <td>{{sn.type}}</td>
                         <td>{{sn.status}}</td>
                         <td>
                             <div *ngIf="sn.spvWallets?.length > 0">
@@ -93,8 +100,8 @@
                         <td>
                             <div *ngIf = "sn.xCloudServices.length > 0">
                                 <div class="input-group">
-                                    <select id="xcloudServices-{{i}}" class="custom-select">
-                                        <option *ngFor="let s of sn.xCloudServices; let k = index" [value]="s" (click)="onXCloudServiceClick()">{{ s }} </option>
+                                    <select id="xcloudServices-{{i}}" [(ngModel)]="selectedXCloudServices[i]" name="xcloudServices-{{i}}" class="custom-select">
+                                        <option *ngFor="let s of sn.xCloudServices; let k = index" [value]="s">{{ s }} </option>
                                     </select>
                                     <div class="input-group-append">
                                         <button class="btn btn-outline-secondary" type="button" (click)="onXCloudServiceClick(i)">View</button>

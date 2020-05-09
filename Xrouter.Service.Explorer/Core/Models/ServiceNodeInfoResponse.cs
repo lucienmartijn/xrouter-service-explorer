@@ -12,6 +12,7 @@ namespace Xrouter.Service.Explorer.Core.Models
         public string Status { get; set; }
         public string Address { get; set; }
         public int Score { get; set; }
+        public string Type { get; set; }
         public DateTime TimeLastSeenStr { get; set; }
         public long TimeLastSeen { get; set; }
         public List<string> SpvWallets { get; set; }

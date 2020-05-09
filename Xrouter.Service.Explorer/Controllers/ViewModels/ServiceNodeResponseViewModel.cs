@@ -7,6 +7,7 @@ namespace blocknet_xrouter.Controllers.ViewModels
 {
     public class ServiceNodeViewModel
     {
+		public string Type { get; set; }
 		public string SNodeKey { get; set; }
 		public string Tier { get; set; }
 		public string Status { get; set; }

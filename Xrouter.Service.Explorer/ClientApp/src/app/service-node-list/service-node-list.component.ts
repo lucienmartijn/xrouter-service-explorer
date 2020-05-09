@@ -1,8 +1,9 @@
 import { Component, OnInit, ElementRef, AfterViewInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { XrouterApiService } from '../shared/services/xrouter.service';
+import { XrouterService } from '../shared/services/xrouter.service';
 import { fromEvent, forkJoin } from 'rxjs';
 import { debounceTime, distinctUntilChanged, tap, filter } from 'rxjs/operators';
+import { ServiceNodeService } from '../shared/services/snode.service';
 
 @Component({
   selector: 'app-service-node-list',
@@ -28,7 +29,7 @@ export class ServiceNodeListComponent implements OnInit, AfterViewInit {
   columns:any=[
     {title: 'SNode Key', key: 'snodeKey'},
     {title: 'Address', key: 'address'},
-    {title: 'Score', key: 'score'},
+    {title: 'Type', key: 'type'},
     {title: 'Status', key: 'status'},
     {title: 'Spv Wallets', key: 'spvWallets'},
     {title: 'XCloud Services', key: 'xCloudServices'},
@@ -37,7 +38,11 @@ export class ServiceNodeListComponent implements OnInit, AfterViewInit {
   loading:boolean;
   querying:boolean;
 
-  constructor(private router: Router, private xrouterService: XrouterApiService) { 
+  constructor(
+    private router: Router, 
+    private xrouterService: XrouterService,
+    private serviceNodeService: ServiceNodeService
+    ) { 
     this.loading = true;
     this.querying = true;
   }
@@ -74,9 +79,8 @@ export class ServiceNodeListComponent implements OnInit, AfterViewInit {
 
   private populateServiceNodes(){
     this.querying = true;
-    this.xrouterService.GetServiceNodeList(this.query)
+    this.serviceNodeService.GetServiceNodeList(this.query)
       .subscribe(result => {  
-        console.log(result)
         this.selectedSpvWallets = new Array<string>(result.items.length);     
         this.selectedXCloudServices = new Array<string>(result.items.length);
         this.initializeSpvWalletDropdowns(result)

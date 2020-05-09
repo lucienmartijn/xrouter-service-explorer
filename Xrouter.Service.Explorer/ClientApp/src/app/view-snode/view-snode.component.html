@@ -13,18 +13,27 @@
         <tr>
           <td>Payment Address</td>
           <td>
-            <a href="https://chainz.cryptoid.info/block/address.dws?{{result.paymentAddress}}">
-              {{result?.paymentAddress}}
+            <a href="https://chainz.cryptoid.info/block/address.dws?{{serviceNodeInfo.paymentAddress}}">
+              {{serviceNodeInfo?.paymentAddress}}
           </a>
         </td>
         </tr>
         <tr>
-          <td>Score</td>
-          <td>{{result?.score}}</td>
+          <td>Type</td>
+          <td>{{serviceNodeInfo?.type}}</td>
         </tr>
         <tr>
-          <td>Fee Default</td>
-          <td>{{result?.feeDefault}} BLOCK</td>
+          <td>XRouter Endpoint</td>
+          <div *ngIf="serviceNodeInfo.port; else noPort">
+            <td>http://{{ serviceNodeInfo?.host }}:{{serviceNodeInfo?.port}}</td>
+          </div>
+          <ng-template #noPort> 
+            <td>http://{{ serviceNodeInfo?.host }}</td>
+          </ng-template>
+        </tr>
+        <tr>
+          <td>Default Fee</td>
+          <td>{{serviceNodeInfo?.feeDefault}} BLOCK</td>
         </tr>
       </tbody>
     </table>
@@ -33,31 +42,18 @@
             <ng-template ngbTabContent>
                 <h3>xrouter.conf</h3>
                 <pre>
-                  <code>{{result?.config}}</code>
+                  <code>{{serviceNodeInfo?.config}}</code>
                 </pre>
                 <!-- <div class="well overflow-visible" style="white-space: pre-line"> -->
                 <!-- </div>             -->
             </ng-template>
-        </ngb-tab>
-        <ngb-tab title="Fees">
-            <ng-template ngbTabContent>
-                <h3>Fees</h3>
-                <table class="table">
-                  <tbody>
-                    <tr *ngFor="let fee of result.fees | keyvalue">
-                      <td>{{fee.key}}</td>
-                      <td>{{fee.value}} BLOCK</td>
-                    </tr>
-                  </tbody>
-                </table>
-            </ng-template>
-          </ngb-tab>
+        </ngb-tab>        
         <ngb-tab title="Spv Wallets">
             <ng-template ngbTabContent>
               <h3>Spv Wallets offered by this Service Node</h3>  
                 <table class="table table-striped">
                     <tbody>
-                      <tr *ngFor="let s of result?.spvWallets">
+                      <tr *ngFor="let s of serviceNodeInfo?.spvWallets">
                         <td><a [routerLink]="['/spv-wallets', 'xr::' + s, nodePubKey]">{{s}}</a></td>
                       </tr>
                     </tbody>
@@ -68,7 +64,7 @@
             <ng-template ngbTabContent>
                 <h3>XCloud Services offered by this Service Node</h3>
 
-                <div *ngIf="result?.services.length == 0 else notEmpty">
+                <div *ngIf="serviceNodeInfo?.services.length == 0 else notEmpty">
                     This service node doesn't offer XCloud Services.
                   </div>
                   
@@ -80,15 +76,27 @@
                             </tr>
                         </thead>
                         <tbody>
-                          <tr *ngFor="let s of result?.services">
+                          <tr *ngFor="let s of serviceNodeInfo?.services">
                             <td><a [routerLink]="['/xcloud-services', 'xrs::' + s]">{{s}}</a></td>
                           </tr>
                         </tbody>
                     </table>
                     <!-- <ngb-pagination [collectionSize]="serviceNodes?.totalItems" [pageSize]="query.pageSize" [(page)]="query.page" (pageChange)="pageChange($event)"></ngb-pagination> -->
                   </ng-template>  
-              </ng-template>
-            
+              </ng-template>            
+        </ngb-tab>
+        <ngb-tab title="Fees">
+          <ng-template ngbTabContent>
+              <h3>Fees</h3>
+              <table class="table">
+                <tbody>
+                  <tr *ngFor="let fee of serviceNodeInfo.fees | keyvalue">
+                    <td>{{fee.key}}</td>
+                    <td>{{fee.value}} BLOCK</td>
+                  </tr>
+                </tbody>
+              </table>
+          </ng-template>
         </ngb-tab>
     </ngb-tabset>
   </ng-template>
