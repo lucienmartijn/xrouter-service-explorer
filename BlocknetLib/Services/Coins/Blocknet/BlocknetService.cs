@@ -30,10 +30,5 @@ namespace BlocknetLib.Services.Coins.Blocknet
 
 
 		public BlocknetConstants.Constants Constants => BlocknetConstants.Constants.Instance;
-
-        public List<ServiceNodeInfoResponse> serviceNodeList()
-        {
-            return _rpcConnector.MakeRequest<List<ServiceNodeInfoResponse>>(RpcMethods.servicenodelist);
-        }
     }
 }

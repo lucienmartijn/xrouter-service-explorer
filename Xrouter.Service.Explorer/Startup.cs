@@ -24,11 +24,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
-using Xrouter.Service.Explorer.Authorization;
-using Xrouter.Service.Explorer.Core;
-using Xrouter.Service.Explorer.Core.Models;
-using Xrouter.Service.Explorer.Persistence;
-using Xrouter.Service.Explorer.Validators;
 
 namespace Xrouter.Service.Explorer
 {
@@ -74,101 +69,20 @@ namespace Xrouter.Service.Explorer
                 configuration.RootPath = "ClientApp/dist";
             });
 
-            services.AddAuthorization(options =>
-            {
-                options.AddPolicy("CanCrudOwnServicenode", policy =>
-                    policy.Requirements.Add(new SameUserServiceNodeRequirement()));
-                options.AddPolicy("CanCrudOwnComment", policy => 
-                    policy.Requirements.Add(new SameUserCommentRequirement()));
-            });
-
-            services.AddDbContext<ApplicationDbContext>(options => options.UseSqlite($"Data Source={_appEnv.ContentRootPath}/serviceexplorer.sqlite",
-                            sqliteOptions => sqliteOptions.MigrationsAssembly("Xrouter.Service.Explorer")));
-            services.AddIdentity<ApplicationUser, IdentityRole>(options =>{
-                options.User.AllowedUserNameCharacters="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+#";
-            })
-            .AddEntityFrameworkStores<ApplicationDbContext>()
-            .AddDefaultTokenProviders()
+            //services.AddDbContext<ApplicationDbContext>(options => options.UseSqlite($"Data Source={_appEnv.ContentRootPath}/serviceexplorer.sqlite",
+            //                sqliteOptions => sqliteOptions.MigrationsAssembly("Xrouter.Service.Explorer")));
+            //services.AddIdentity<ApplicationUser, IdentityRole>(options =>{
+            //    options.User.AllowedUserNameCharacters="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+#";
+            //})
+            //.AddEntityFrameworkStores<ApplicationDbContext>()
+            //.AddDefaultTokenProviders()
             //.AddUserManager<CustomUserManager<ApplicationUser>>()
             ;
-
-            services.AddAuthentication(options =>
-            {
-                options.DefaultSignOutScheme = IdentityConstants.ApplicationScheme;
-            })
-            .AddDiscord(options =>
-            {
-                options.ClientId = "663786064569303047";
-                options.ClientSecret = "awXcE0AsfxUWYySUi9VlzvUsq4st-0q2";
-                //options.SaveTokens = true;
-                options.Events = new OAuthEvents
-                {
-                    OnRemoteFailure = (RemoteFailureContext context) =>
-                    {
-                        context.Response.Redirect("/");
-                        context.HandleResponse();
-                        return Task.CompletedTask;
-                    }
-                };
-            });
-
-            var rpcSettings = Configuration.GetSection("CoinConfig").Get<CoinRpcConfig>();
-
-            services.AddTransient<ICustomUserValidator<ApplicationUser>, CustomUserValidator<ApplicationUser>>();
-            services.AddTransient<ICoinService, CoinService>();
-            services.AddTransient<IXRouterService>(service => 
-                new XRouterService(
-                    //rpcSettings.Blocknet.DaemonUrl_testnet, 
-                    rpcSettings.Blocknet.DaemonUrl,
-                    rpcSettings.Blocknet.RpcUserName, 
-                    rpcSettings.Blocknet.RpcPassword, 
-                    rpcSettings.Blocknet.WalletPassword,
-                    rpcSettings.Blocknet.RpcRequestTimeoutInSeconds
-                    )
-            );
-
-            services.AddTransient<IXRouterEthereumService>(service => 
-                new XRouterEthereumService(
-                    //rpcSettings.Blocknet.DaemonUrl_testnet, 
-                    rpcSettings.Blocknet.DaemonUrl,
-                    rpcSettings.Blocknet.RpcUserName, 
-                    rpcSettings.Blocknet.RpcPassword, 
-                    rpcSettings.Blocknet.WalletPassword,
-                    rpcSettings.Blocknet.RpcRequestTimeoutInSeconds
-                    )
-            );
-
-            services.AddTransient<IXCloudService>(service => 
-                new XCloudService(
-                    //rpcSettings.Blocknet.DaemonUrl_testnet, 
-                    rpcSettings.Blocknet.DaemonUrl,
-                    rpcSettings.Blocknet.RpcUserName, 
-                    rpcSettings.Blocknet.RpcPassword, 
-                    rpcSettings.Blocknet.WalletPassword,
-                    rpcSettings.Blocknet.RpcRequestTimeoutInSeconds
-                    )
-            );
-
-            services.AddTransient<IServicenodeService>(service => 
-                new ServicenodeService(
-                    //rpcSettings.Blocknet.DaemonUrl_testnet, 
-                    rpcSettings.Blocknet.DaemonUrl,
-                    rpcSettings.Blocknet.RpcUserName, 
-                    rpcSettings.Blocknet.RpcPassword, 
-                    rpcSettings.Blocknet.WalletPassword,
-                    rpcSettings.Blocknet.RpcRequestTimeoutInSeconds
-                    )
-            );
-
-            services.AddScoped<IServicenodeRepository, ServicenodeRepository>();
-            services.AddScoped<ICommentRepository, CommentRepository>();
-            services.AddScoped<IUnitOfWork, UnitOfWork>();
-            services.AddScoped<IAuthorizationHandler, ServicenodeAuthorizationHandler>();
-            services.AddScoped<IAuthorizationHandler, CommentAuthorizationHandler>();
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ApplicationDbContext context)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {

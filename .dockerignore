@@ -1,7 +1,11 @@
-bin\
-obj\
-*/node_modules
+.dockerignore
+.env
 .git
-*Dockerfile
-**docker-compose
-*node_modules
+.gitignore
+.vs
+.vscode
+*/bin
+*/obj
+**/.toolstarget
+.idea
+Xrouter.Service.Explorer/*

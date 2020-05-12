@@ -17,7 +17,7 @@ namespace BlocknetLib.Services.Coins.Blocknet
 	/// Mostly the same functionality as <see cref="BitcoinService"/>, just adds a bunch more features
 	/// for handling InstantSend and PrivateSend, plus better raw tx generation support.
 	/// </summary>
-	public class XRouterEthereumService : CoinService, IXRouterEthereumService
+	public class XRouterEthereumService : BlocknetService, IXRouterEthereumService
 	{
 		public XRouterEthereumService(bool useTestnet = false) : base(useTestnet) { }
 
@@ -27,9 +27,6 @@ namespace BlocknetLib.Services.Coins.Blocknet
 		public XRouterEthereumService(string daemonUrl, string rpcUsername, string rpcPassword,
 			string walletPassword, short rpcRequestTimeoutInSeconds) : base(daemonUrl, rpcUsername,
 			rpcPassword, walletPassword, rpcRequestTimeoutInSeconds) { }
-
-
-		public BlocknetConstants.Constants Constants => BlocknetConstants.Constants.Instance;
 
         public GetDecodeRawTransactionResponse xrDecodeRawTransaction(string blockchain, string tx_hex, int node_count)
         {

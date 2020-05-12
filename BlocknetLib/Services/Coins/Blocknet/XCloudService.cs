@@ -17,7 +17,7 @@ namespace BlocknetLib.Services.Coins.Blocknet
 	/// Mostly the same functionality as <see cref="BitcoinService"/>, just adds a bunch more features
 	/// for handling InstantSend and PrivateSend, plus better raw tx generation support.
 	/// </summary>
-	public class XCloudService : CoinService, IXCloudService
+	public class XCloudService : BlocknetService, IXCloudService
 	{
 		public XCloudService(bool useTestnet = false) : base(useTestnet) { }
 
@@ -27,10 +27,6 @@ namespace BlocknetLib.Services.Coins.Blocknet
 		public XCloudService(string daemonUrl, string rpcUsername, string rpcPassword,
 			string walletPassword, short rpcRequestTimeoutInSeconds) : base(daemonUrl, rpcUsername,
 			rpcPassword, walletPassword, rpcRequestTimeoutInSeconds) { }
-
-
-		public BlocknetConstants.Constants Constants => BlocknetConstants.Constants.Instance;
-
 
         public ConnectResponse xrConnect(string service, int node_count = 1)
         {
