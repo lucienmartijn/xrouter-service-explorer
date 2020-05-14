@@ -19,10 +19,10 @@ node_modules/
 *.launch
 .settings/
 *.sublime-workspace
-.vs
+**/.vs
 
 # IDE - VSCode
-.vscode
+**/.vscode
 .vscode/*
 !.vscode/settings.json
 !.vscode/tasks.json
