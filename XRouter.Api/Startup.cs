@@ -46,7 +46,9 @@ namespace XRouter.Api
 
             });
 
-            services.AddControllers();
+            services.AddControllers()
+                .AddNewtonsoftJson();
+            //.AddJsonOptions(options => { options.JsonSerializerOptions.IgnoreNullValues = true; });
 
             var rpcSettings = Configuration.GetSection("CoinConfig").Get<CoinRpcConfig>();
 

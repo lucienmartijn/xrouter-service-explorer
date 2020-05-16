@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 
 namespace XRouter.Api.Controllers.ViewModels
 {
-    public class TransactionsRequestViewModel: BaseXRouterRequestViewModel
+    public class TransactionsRequestViewModel: XRouterBaseRequestViewModel
     {
         public string[] TxIds { get; set; }
     }

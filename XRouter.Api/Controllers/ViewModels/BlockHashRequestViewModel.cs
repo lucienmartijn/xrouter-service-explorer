@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 
 namespace XRouter.Api.Controllers.ViewModels
 {
-    public class BlockHashRequestViewModel: BaseXRouterRequestViewModel
+    public class BlockHashRequestViewModel: XRouterBaseRequestViewModel
     {
         public string BlockNumber { get; set; }
     }

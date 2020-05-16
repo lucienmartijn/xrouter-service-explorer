@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 
 namespace XRouter.Api.Controllers.ViewModels
 {
-    public class DecodeRawTransactionRequestViewModel: BaseXRouterRequestViewModel
+    public class DecodeRawTransactionRequestViewModel: XRouterBaseRequestViewModel
     {
         public string TxHex { get; set; }
     }

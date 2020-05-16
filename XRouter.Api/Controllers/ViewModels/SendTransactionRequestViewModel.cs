@@ -6,7 +6,7 @@ using XRouter.Api.Controllers.ViewModels;
 
 namespace Xrouter.Service.Explorer.Controllers.ViewModels
 {
-    public class SendTransactionRequestViewModel : BaseXRouterRequestViewModel
+    public class SendTransactionRequestViewModel : XRouterBaseRequestViewModel
     {
         public string SignedTx { get; set; }
     }

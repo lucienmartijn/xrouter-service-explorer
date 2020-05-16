@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using BlocknetLib.Responses;
 using BlocknetLib.Responses.SharedComponents;
+using Newtonsoft.Json;
 
 namespace BlocknetLib.Responses
 {

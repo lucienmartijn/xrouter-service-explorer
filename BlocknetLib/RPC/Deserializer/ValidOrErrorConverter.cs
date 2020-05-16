@@ -101,65 +101,6 @@ namespace BlocknetLib.RPC.Deserializer
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
             throw new NotImplementedException();
-
         }
     }
-    // public class ValidOrErrorConverter<T> : JsonConverter
-    // {
-    //     public override bool CanConvert(Type objectType)
-    //     {
-    //         return objectType == typeof(List<string>);
-    //     }
-
-    //     public override bool CanWrite
-    //     {
-    //         get { return false; }
-    //     }
-
-    //     public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
-    //     {
-    //         object instance = Activator.CreateInstance(objectType);
-    //         var props = objectType.GetTypeInfo().GetProperties().ToList();
-
-    //         JObject jo = JObject.Load(reader);
-    //         foreach (JProperty jp in jo.Properties())
-    //         {
-    //             PropertyInfo prop = props.FirstOrDefault(pi =>
-    //                 pi.CanWrite && pi.GetCustomAttribute<JsonPropertyAttribute>().PropertyName == jp.Name);
-
-    //             var val = jp.Value.ToObject(prop?.PropertyType, serializer);
-    //             prop?.SetValue(instance, val);
-    //         }
-
-    //         return instance;
-    //     }
-
-    //     public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
-    //     {
-    //         JToken t = JToken.FromObject(value);
-    //         if(t.Type != JTokenType.Object)
-    //         {
-    //             t.WriteTo(writer);
-    //         }
-    //         else
-    //         {
-    //             JObject jo = new JObject();
-    //             Type type = value.GetType();
-
-    //             foreach (var prop in type.GetProperties())
-    //             {
-    //                 if (prop.CanRead)
-    //                 {
-    //                     object propVal = prop.GetValue(value, null);
-    //                     if (propVal != null)
-    //                     {
-    //                         jo.Add(prop.Name, JToken.FromObject(propVal, serializer));
-    //                     }
-    //                 }
-    //             }
-    //             jo.WriteTo(writer);
-    //         }
-            
-    //     }
-    // }
 }
