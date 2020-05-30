@@ -2,8 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BlocknetLib.CoinConfig;
 using BlocknetLib.Services;
 using BlocknetLib.Services.Coins.Base;
+using BlocknetLib.Services.Coins.Blocknet;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -41,7 +43,19 @@ namespace BlocknetWallet.Api
 
             });
 
+            var rpcSettings = Configuration.GetSection("CoinConfig").Get<CoinRpcConfig>();
+
             services.AddTransient<ICoinService, CoinService>();
+            services.AddTransient<IBlocknetService>(service =>
+                new BlocknetService(
+                    //rpcSettings.Blocknet.DaemonUrl_testnet, 
+                    rpcSettings.Blocknet.DaemonUrl,
+                    rpcSettings.Blocknet.RpcUserName,
+                    rpcSettings.Blocknet.RpcPassword,
+                    rpcSettings.Blocknet.WalletPassword,
+                    rpcSettings.Blocknet.RpcRequestTimeoutInSeconds
+                    )
+            );
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

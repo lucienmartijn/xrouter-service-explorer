@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BlocknetLib\BlocknetLib.csproj" />
+    <ProjectReference Include="..\XRouter.Api\XRouter.Api.csproj" />
   </ItemGroup>
 
   <ItemGroup>

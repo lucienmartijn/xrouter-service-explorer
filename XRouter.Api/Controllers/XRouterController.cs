@@ -203,6 +203,14 @@ namespace XRouter.Api.Controllers
 
                 var blocksResponse = xrouterService.xrGetBlocks(viewModel.Token, string.Join(",", viewModel.BlockHashes), viewModel.NodeCount);
 
+                if (blocksResponse.Error != null)
+                    return Ok(new ErrorResponseViewModel
+                    {
+                        Error = blocksResponse.Error,
+                        Code = blocksResponse.Code,
+                    });
+
+
                 return Ok(new BlocksResponseViewModel
                 {
                     Reply = blocksResponse.Reply,
@@ -271,6 +279,14 @@ namespace XRouter.Api.Controllers
                     return Ok(xrouterEthereumService.xrGetTransactions(viewModel.Token, string.Join(",", viewModel.TxIds), viewModel.NodeCount));
 
                 var transactionsResponse = xrouterService.xrGetTransactions(viewModel.Token, string.Join(",", viewModel.TxIds), viewModel.NodeCount);
+
+                if (transactionsResponse.Error != null)
+                    return Ok(new ErrorResponseViewModel
+                    {
+                        Error = transactionsResponse.Error,
+                        Code = transactionsResponse.Code,
+                    });
+
                 return Ok(new TransactionsResponseViewModel
                 {
                     Reply = transactionsResponse.Reply,
@@ -357,92 +373,111 @@ namespace XRouter.Api.Controllers
         }
 
         [HttpGet("[action]")]
-        public IActionResult GetAllServices()
-        {
-            var response = xrouterService.xrGetNetworkServices();
-            var services = response.Reply.NodeCounts
-                .Select(s => new ServiceViewModel{
-                    Name = s.Key,
-                    NodeCount = s.Value
-                }).OrderByDescending(c => c.NodeCount).ToList();
-
-            return Ok(new NetworkServicesResponseViewModel{
-                Items = services,
-                TotalItems = services.Count
-            });
-        }
-        [HttpGet("[action]")]
         public IActionResult GetNetworkServices()
         {
             var response = xrouterService.xrGetNetworkServices();
-            var services = response.Reply.NodeCounts
-                .Join(response.Reply.Services, m => m.Key, m => m.ToString(), 
-                    (s, sn) => new ServiceViewModel{
-                        Name = s.Key,
-                        NodeCount = s.Value
-                    }).ToList();
-                
-            var viewModel = new NetworkServicesResponseViewModel
-            {
-                Items = services,
-                TotalItems = services.Count
-            };
-            return Ok(viewModel);
-        }
+            //var services = response.Reply.NodeCounts
+            //    .Select(s => new ServiceViewModel{
+            //        Name = s.Key,
+            //        NodeCount = s.Value
+            //    }).OrderByDescending(c => c.NodeCount).ToList();
 
-        [HttpGet("[action]")]
-        public IActionResult GetNetworkSpvWallets()
-        {
-            var response = xrouterService.xrGetNetworkServices();
-            var services = response.Reply.NodeCounts
-                .Join(response.Reply.SpvWallets, m => m.Key, m => m.ToString(), 
-                    (s, sn) => new ServiceViewModel{
-                        Name = s.Key,
-                        NodeCount = s.Value
-                    }).OrderByDescending(s => s.NodeCount).ToList();
-                
-            var viewModel = new NetworkServicesResponseViewModel
+            //return Ok(new NetworkServicesResponseViewModel{
+            //    Items = services,
+            //    TotalItems = services.Count
+            //});
+
+            return Ok(new NetworkServicesResponseViewModel
             {
-                Items = services,
-                TotalItems = services.Count                                   
-            };
-            return Ok(viewModel);
+                SpvWallets = response.Reply.SpvWallets,
+                Services = response.Reply.Services,
+                NodeCounts = response.Reply.NodeCounts.OrderByDescending(s => s.Value).ToDictionary(x => x.Key, x => x.Value)
+            });
         }
+        //[HttpGet("[action]")]
+        //public IActionResult GetNetworkServices()
+        //{
+        //    var response = xrouterService.xrGetNetworkServices();
+        //    var services = response.Reply.NodeCounts
+        //        .Join(response.Reply.Services, m => m.Key, m => m.ToString(), 
+        //            (s, sn) => new ServiceViewModel{
+        //                Name = s.Key,
+        //                NodeCount = s.Value
+        //            }).ToList();
+                
+        //    var viewModel = new NetworkServicesResponseViewModel
+        //    {
+        //        Items = services,
+        //        TotalItems = services.Count
+        //    };
+        //    return Ok(viewModel);
+        //}
+
+        //[HttpGet("[action]")]
+        //public IActionResult GetNetworkSpvWallets()
+        //{
+        //    var response = xrouterService.xrGetNetworkServices();
+        //    var services = response.Reply.NodeCounts
+        //        .Join(response.Reply.SpvWallets, m => m.Key, m => m.ToString(), 
+        //            (s, sn) => new ServiceViewModel{
+        //                Name = s.Key,
+        //                NodeCount = s.Value
+        //            }).OrderByDescending(s => s.NodeCount).ToList();
+                
+        //    var viewModel = new NetworkServicesResponseViewModel
+        //    {
+        //        Items = services,
+        //        TotalItems = services.Count                                   
+        //    };
+        //    return Ok(viewModel);
+        //}
 
         [HttpGet]
         public IActionResult Index(string searchString)
         {
             var response = xrouterService.xrGetNetworkServices();
 
-            var services = response.Reply.NodeCounts
-                .Join(response.Reply.Services, m => m.Key, m => m.ToString(),
-                    (s, sn) => new ServiceViewModel
-                    {
-                        Name = s.Key,
-                        NodeCount = s.Value
-                    }).ToList();
+            //var services = response.Reply.NodeCounts
+            //    .Join(response.Reply.Services, m => m.Key, m => m.ToString(),
+            //        (s, sn) => new ServiceViewModel
+            //        {
+            //            Name = s.Key,
+            //            NodeCount = s.Value
+            //        }).ToList();
 
-            var spvWallets = response.Reply.NodeCounts
-                .Join(response.Reply.SpvWallets, m => m.Key, m => m.ToString(),
-                    (s, sn) => new ServiceViewModel
-                    {
-                        Name = s.Key,
-                        NodeCount = s.Value
-                    }).ToList();
+            //var spvWallets = response.Reply.NodeCounts
+            //    .Join(response.Reply.SpvWallets, m => m.Key, m => m.ToString(),
+            //        (s, sn) => new ServiceViewModel
+            //        {
+            //            Name = s.Key,
+            //            NodeCount = s.Value
+            //        }).ToList();
 
-            var allServices = services.Union(spvWallets).ToList();
+            //var allServices = services.Union(spvWallets).ToList();
 
             if (!String.IsNullOrEmpty(searchString))
-                allServices = allServices.Where(s => s.Name
+                response.Reply.NodeCounts = response.Reply.NodeCounts.Where(s => s.Key
                     .IndexOf(searchString, StringComparison.OrdinalIgnoreCase) != -1)
-                    .ToList();
+                    .ToDictionary(x => x.Key, x => x.Value);
 
-            var viewModel = new NetworkServicesResponseViewModel
+            //var viewModel = new SearchResponseViewModel
+            //{
+            //    Items = allServices,
+            //    TotalItems = allServices.Count
+            //};
+            return Ok(new NetworkServicesResponseViewModel
             {
-                Items = allServices,
-                TotalItems = allServices.Count
-            };
-            return Ok(viewModel);
+                SpvWallets = response.Reply.SpvWallets,
+                Services = response.Reply.Services,
+                NodeCounts = response.Reply.NodeCounts.OrderByDescending(s => s.Value).ToDictionary(x => x.Key, x => x.Value)
+            });
+            
+        }
+
+        [HttpGet("[action]")]
+        public IActionResult Health()
+        {
+            return Ok("Working");
         }
     }
 }

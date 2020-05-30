@@ -38,6 +38,29 @@ namespace BlocknetLib.RPC.Deserializer
         {
             var token = JToken.Load(reader);
 
+            if (objectType == typeof(ServiceResponse))
+            {
+                var instance = new ServiceResponse();
+                var error = token.SelectToken("error");
+
+                if (error != null)
+                {
+
+                    var errorMessage = error.SelectToken("message");
+                    if (errorMessage != null)
+                    {
+                        serializer.Populate(token.CreateReader(), instance);
+                        return instance;
+                    }
+
+                    instance.Error = new JsonRpcError { Message = error.ToObject<string>(), Code = (RpcErrorCode)token.SelectToken("code").ToObject<int>() };
+                    return instance;
+                }
+
+                serializer.Populate(token.CreateReader(), instance);
+                return instance;
+
+            }
             if (objectType == typeof(GetBlockCountResponse))
             {
                 var instance = new GetBlockCountResponse();
@@ -52,7 +75,20 @@ namespace BlocknetLib.RPC.Deserializer
             {
                 var instance = new GetBlockHashResponse();
                 var error = token.SelectToken("error");
-                var errors = token.SelectTokens("$.reply.error").ToList();
+
+                if (error != null)
+                {
+
+                    var errorMessage = error.SelectToken("message");
+                    if (errorMessage != null)
+                    {
+                        serializer.Populate(token.CreateReader(), instance);
+                        return instance;
+                    }
+
+                    instance.Error = new JsonRpcError { Message = error.ToObject<string>(), Code = (RpcErrorCode)token.SelectToken("code").ToObject<int>() };
+                    return instance;
+                }
 
                 serializer.Populate(token.CreateReader(), instance);
                 return instance;
@@ -62,7 +98,23 @@ namespace BlocknetLib.RPC.Deserializer
             if (objectType == typeof(Services.Coins.Blocknet.Xrouter.BitcoinBased.GetBlockResponse))
             {
                 var instance = new Services.Coins.Blocknet.Xrouter.BitcoinBased.GetBlockResponse();
+                var error = token.SelectToken("error");
 
+                if(error != null)
+                {
+
+                    var errorMessage = error.SelectToken("message");
+                    if(errorMessage != null)
+                    {
+                        serializer.Populate(token.CreateReader(), instance);
+                        return instance;
+                    }
+                    
+                    instance.Error = new JsonRpcError { Message = error.ToObject<string>(), Code = (RpcErrorCode) token.SelectToken("code").ToObject<int>() };
+                    return instance;
+                }
+
+                
                 serializer.Populate(token.CreateReader(), instance);
                 return instance;
             }
@@ -71,28 +123,118 @@ namespace BlocknetLib.RPC.Deserializer
             {
                 var instance = new Services.Coins.Blocknet.Xrouter.BitcoinBased.GetTransactionResponse();
 
+                var error = token.SelectToken("error");
+                if (error != null)
+                {
+
+                    var errorMessage = error.SelectToken("message");
+                    if (errorMessage != null)
+                    {
+                        serializer.Populate(token.CreateReader(), instance);
+                        return instance;
+                    }
+
+                    instance.Error = new JsonRpcError { Message = error.ToObject<string>(), Code = (RpcErrorCode)token.SelectToken("code").ToObject<int>() };
+                    return instance;
+                }
+
                 serializer.Populate(token.CreateReader(), instance);
                 return instance;
             }
 
             if (objectType == typeof(GetBlocksResponse))
             {
-                var error = token.SelectToken("$.error");
-                //var errors = token.SelectTokens("$.[*].error").ToList();
                 var instance = new GetBlocksResponse();
+
+                var error = token.SelectToken("$.error");
+
+                if (error != null)
+                {
+
+                    var errorMessage = error.SelectToken("message");
+                    if (errorMessage != null)
+                    {
+                        serializer.Populate(token.CreateReader(), instance);
+                        return instance;
+                    }
+
+                    instance.Error = new JsonRpcError { Message = error.ToObject<string>(), Code = (RpcErrorCode)token.SelectToken("code").ToObject<int>() };
+                    return instance;
+                }
 
                 serializer.Populate(token.CreateReader(), instance);
                 return instance;
             }
+
             if (objectType == typeof(GetTransactionsResponse))
-            {
-                var error = token.SelectToken("$.error");
-                //var errors = token.SelectTokens("$.allreplies[*].reply.error").ToList();
+            {                
                 var instance = new GetTransactionsResponse();
+
+                var error = token.SelectToken("$.error");
+
+                if (error != null)
+                {
+
+                    var errorMessage = error.SelectToken("message");
+                    if (errorMessage != null)
+                    {
+                        serializer.Populate(token.CreateReader(), instance);
+                        return instance;
+                    }
+
+                    instance.Error = new JsonRpcError { Message = error.ToObject<string>(), Code = (RpcErrorCode)token.SelectToken("code").ToObject<int>() };
+                    return instance;
+                }
 
                 serializer.Populate(token.CreateReader(), instance);
                 return instance;
                 
+            }
+
+            if (objectType == typeof(GetDecodeRawTransactionResponse))
+            {
+                var instance = new GetDecodeRawTransactionResponse();
+
+                var error = token.SelectToken("error");
+                if (error != null)
+                {
+
+                    var errorMessage = error.SelectToken("message");
+                    if (errorMessage != null)
+                    {
+                        serializer.Populate(token.CreateReader(), instance);
+                        return instance;
+                    }
+
+                    instance.Error = new JsonRpcError { Message = error.ToObject<string>(), Code = (RpcErrorCode)token.SelectToken("code").ToObject<int>() };
+                    return instance;
+                }
+
+                serializer.Populate(token.CreateReader(), instance);
+                return instance;
+            }
+
+            if (objectType == typeof(SendTransactionResponse))
+            {
+                var instance = new SendTransactionResponse();
+
+                var error = token.SelectToken("error");
+                if (error != null)
+                {
+
+                    var errorMessage = error.SelectToken("message");
+                    if (errorMessage != null)
+                    {
+                        serializer.Populate(token.CreateReader(), instance);
+                        return instance;
+                    }
+
+                    instance.Error = new JsonRpcError { Message = error.ToObject<string>(), Code = (RpcErrorCode)token.SelectToken("code").ToObject<int>() };
+                    return instance;
+                }
+
+                serializer.Populate(token.CreateReader(), instance);
+                return instance;
             }
 
             throw new NotImplementedException();

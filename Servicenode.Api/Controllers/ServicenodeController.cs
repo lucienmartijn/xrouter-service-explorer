@@ -16,6 +16,8 @@ using BlocknetLib.Services.Coins.Blocknet.Xrouter.Ethereum;
 using Servicenode.Api.Controllers.ViewModels;
 using Servicenode.Api.Core.Models;
 using Servicenode.Api.Extensions;
+using System.Text;
+using Servicenode.Api.Helpers;
 
 namespace Servicenode.Api.Controllers
 {
@@ -104,7 +106,8 @@ namespace Servicenode.Api.Controllers
                         Disabled = c.Disabled,
                         Fee = c.Fee,
                         PaymentAddress = c.PaymentAddress,
-                        RequestLimit = c.RequestLimit
+                        RequestLimit = c.RequestLimit,
+                        FetchLimit = c.FetchLimit
                     }).ToList()
                 },
                 Node = new NodeInfoViewModel
@@ -199,11 +202,57 @@ namespace Servicenode.Api.Controllers
                 serviceNodePort = serviceNodeConfigElements.FirstOrDefault(e => e[0] == "port")[1];
             }
             
-            var serviceName = service.Replace("xrs::", "");
-            var serv = serviceNode.Services[serviceName];
-            
             string help = string.Empty;
-            string xcloudConfig = string.Empty;
+
+            var serviceName = service.Replace("xrs::", "");
+            var serviceConfig = serviceNode.Services[serviceName];
+
+            var configReader = new ConfigReader(serviceNodeConfig.Config);
+
+            var mainSectionSettings = configReader.EnumSection("Main");
+            
+            var sb = new StringBuilder();
+
+            if(!string.IsNullOrEmpty(serviceConfig.Parameters))
+                sb.Append("parameters=").Append(serviceConfig.Parameters).AppendLine();
+
+            var mainFee = configReader.GetSetting("Main", "fee");
+            if (!string.IsNullOrEmpty(mainFee))
+            {
+                if (serviceConfig.Fee != double.Parse(mainFee))
+                    sb.Append("fee=").Append(serviceConfig.Fee).AppendLine();
+            }
+            else
+            {
+                sb.Append("fee=").Append(serviceConfig.Fee).AppendLine();
+            }
+                
+            if(serviceConfig.Disabled)
+                sb.Append("disabled=").Append(Convert.ToByte(serviceConfig.Disabled)).AppendLine();
+
+            var mainFetchLimit = configReader.GetSetting("Main", "fetchlimit");
+            if (!string.IsNullOrEmpty(mainFetchLimit))
+            {
+                if (serviceConfig.FetchLimit != int.Parse(mainFetchLimit))
+                    sb.Append("fetchlimit=").Append(serviceConfig.FetchLimit).AppendLine();
+            }
+            else
+            {
+                sb.Append("fetchlimit=").Append(serviceConfig.FetchLimit).AppendLine();
+            }
+
+            var mainClientRequestLimit = configReader.GetSetting("Main", "clientrequestlimit");
+            if (!string.IsNullOrEmpty(mainClientRequestLimit))
+            {
+                if (serviceConfig.RequestLimit != int.Parse(mainClientRequestLimit))
+                    sb.Append("clientrequestlimit=").Append(serviceConfig.RequestLimit).AppendLine();
+            }
+            else
+            {
+                sb.Append("clientrequestlimit=").Append(serviceConfig.RequestLimit).AppendLine();
+            }
+
+            string xcloudConfig = sb.ToString();
 
 
             // if(serviceNodeConfig?.Plugins.Count > 0){
@@ -233,13 +282,13 @@ namespace Servicenode.Api.Controllers
                 Service = new XCloudServiceViewModel
                 {
                     HelpDescription = help,
-                    Disabled = serv.Disabled,
-                    Fee = serv.Fee,
-                    FetchLimit = serv.FetchLimit,
-                    Parameters = serv.Parameters,
-                    ParametersList = serv.Parameters != string.Empty ? serv.Parameters.Split(',').ToList() : null,
-                    PaymentAddress = serv.PaymentAddress,
-                    RequestLimit = serv.RequestLimit,
+                    Disabled = serviceConfig.Disabled,
+                    Fee = serviceConfig.Fee,
+                    FetchLimit = serviceConfig.FetchLimit,
+                    Parameters = serviceConfig.Parameters,
+                    ParametersList = serviceConfig.Parameters != string.Empty ? serviceConfig.Parameters.Split(',').ToList() : null,
+                    PaymentAddress = serviceConfig.PaymentAddress,
+                    RequestLimit = serviceConfig.RequestLimit,
                     Config = xcloudConfig
                 },
                 Node = new NodeInfoViewModel

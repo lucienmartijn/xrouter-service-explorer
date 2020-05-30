@@ -10,12 +10,16 @@ namespace BlocknetLib.Responses
         public uint Version { get; set; }
         public string Subversion { get; set; }
         public uint ProtocolVersion { get; set; }
+        public uint XBridgeProtocolVersion { get; set; }
+        public uint XRouterProtocolVersion { get; set; }
         public string LocalServices { get; set; }
         public int TimeOffset { get; set; }
         public uint Connections { get; set; }
         public IList<Network> Networks { get; set; }
         public decimal RelayFee { get; set; }
+        public decimal IncrementalFee { get; set; }
         public IList<LocalAddress> LocalAddresses { get; set; }
+        public string Warnings { get; set; }
     }
 
     public class LocalAddress

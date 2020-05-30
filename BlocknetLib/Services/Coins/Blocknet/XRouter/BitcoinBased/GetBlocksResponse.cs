@@ -8,7 +8,7 @@ using Newtonsoft.Json;
 namespace BlocknetLib.Services.Coins.Blocknet.Xrouter.BitcoinBased
 {
     [JsonConverter(typeof(ValidOrErrorConverter))]
-    public class GetBlocksResponse
+    public class GetBlocksResponse : ErrorResponse
     {
         [JsonProperty("reply")]
         public List<BlockResponse> Reply { get; set; }

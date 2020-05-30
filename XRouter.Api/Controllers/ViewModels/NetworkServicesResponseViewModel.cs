@@ -7,7 +7,11 @@ namespace XRouter.Api.Controllers.ViewModels
 {
     public class NetworkServicesResponseViewModel
     {
-        public List<ServiceViewModel> Items { get; set; }
-        public int TotalItems { get; set; }
+        //public List<ServiceViewModel> Items { get; set; }
+        //public int TotalItems { get; set; }
+
+        public List<string> SpvWallets { get; set; }
+        public List<string> Services { get; set; }
+        public Dictionary<string, int> NodeCounts { get; set; }
     }
 }

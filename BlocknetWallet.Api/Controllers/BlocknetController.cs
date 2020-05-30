@@ -5,29 +5,45 @@ using BlocknetLib.ExceptionHandling.Rpc;
 using BlocknetLib.RPC.RequestResponse;
 using BlocknetLib.Services.Coins.Base;
 using BlocknetLib.Services.Coins.Blocknet.Xrouter;
+using BlocknetWallet.Api.Controllers.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
 namespace BlocknetWallet.Api.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/blocknet")]
     public class BlocknetController : ControllerBase 
     {
-        private readonly ICoinService coinService;
-        public BlocknetController(ICoinService coinService){
-            this.coinService = coinService;
+        private readonly IBlocknetService blocknetService;
+        public BlocknetController(IBlocknetService blocknetService)
+        {
+            this.blocknetService = blocknetService;
         }
 
-        [HttpGet("[action]")]
-        public IActionResult BlockCount(){
-            return Ok(coinService.GetBlockCount());
-        }
+        //[HttpGet("[action]")]
+        //public IActionResult BlockCount(){
+        //    return Ok(coinService.GetBlockCount());
+        //}
 
         [HttpGet("[action]")]
         public IActionResult VerifyMessage(string address, string signature, string message)
         {
-            return Ok(coinService.VerifyMessage(address, signature, message));
+            return Ok(blocknetService.VerifyMessage(address, signature, message));
+        }
+
+        [HttpGet("[action]")]
+        public IActionResult GetNetworkInfo()
+        {
+            var networkInfoResponse = blocknetService.GetNetworkInfo();
+            return Ok(new GetNetworkResponseViewModel
+            {
+                ProtocolVersion = networkInfoResponse.ProtocolVersion,
+                Subversion = networkInfoResponse.Subversion,
+                Version = networkInfoResponse.Version,
+                XBridgeProtocolVersion = networkInfoResponse.XBridgeProtocolVersion,
+                XRouterProtocolVersion = networkInfoResponse.XRouterProtocolVersion
+            });
         }
     }
 }

@@ -8,6 +8,7 @@ namespace Servicenode.Api.Controllers.ViewModels
     {
         public double Fee { get; set; }
         public int RequestLimit { get; set; }
+        public int FetchLimit { get; set; }
         public string PaymentAddress { get; set; }
         public bool Disabled { get; set; }
     }
