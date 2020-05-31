@@ -31,7 +31,64 @@ namespace Servicenode.Api.Controllers
             this.servicenodeService = servicenodeService;
         }
 
-    
+        [HttpGet("[action]")]
+        public IActionResult GetNodesByService(string service, int node_count = 1)
+        {
+            ConnectResponse connectResponse;
+            try
+            {
+                connectResponse = xrouterService.xrConnect(service, node_count);
+            }
+            catch (RpcRequestTimeoutException e)
+            {
+                return StatusCode(StatusCodes.Status408RequestTimeout, new JsonRpcXrError
+                {
+                    Error = e.Message
+                });
+            }
+            var connectReply = connectResponse.Reply;
+
+            var configReply = xrouterService.xrShowConfigs();
+
+            if(service.Contains("xrs::"))
+            {
+                connectReply = connectReply.Where(cr => cr.Services.Keys.Contains(service.Replace("xrs::",""))).ToList();
+            }
+            else
+            {
+                connectReply = connectReply.Where(cr => cr.SpvWallets.Contains(service.Replace("xr::", ""))).ToList();
+            }
+            
+            var nodes = connectReply.Select(cr => 
+            {
+                var serviceNodeConfig = configReply.Find(c => c.NodePubKey == cr.NodePubKey);
+                var cfg = configReply.Find(c => c.NodePubKey == cr.NodePubKey);
+
+                var cfgElements = new List<string[]>();
+                if (cfg != null)
+                {
+                    cfgElements = cfg.Config.Split(new string[] { "\n", "\r\n" }, StringSplitOptions.RemoveEmptyEntries)
+                        .Select(value => value.Split('=')).ToList();
+                }
+
+                string port = null;
+                if (cfgElements.Any(lc => lc[0] == "port"))
+                {
+                    port = cfgElements.FirstOrDefault(e => e[0] == "port")[1];
+                }
+
+                return new NodeInfoViewModel
+                {
+                    Type = (port == "41412" || string.IsNullOrEmpty(port)) ? "Regular" : "Enterprise",
+                    Banned = cr.Banned,
+                    NodePubKey = cr.NodePubKey,
+                    PaymentAddress = cr.PaymentAddress,
+                    Score = cr.Score
+                };
+            }).ToList();
+            return Ok(nodes);
+        }
+
         [HttpGet("[action]")]
         public IActionResult GetSpvWalletInfo(string service, string nodePubKey = null, int node_count = 1)
         {
@@ -123,8 +180,12 @@ namespace Servicenode.Api.Controllers
                 OtherNodes = otherNodes.Select(n => {
                     var cfg = configReply.Find(c => c.NodePubKey == n.NodePubKey);
 
-                    var cfgElements = cfg.Config.Split(new string[] { "\n", "\r\n" }, StringSplitOptions.RemoveEmptyEntries)
-                        .Select(value => value.Split('='));
+                    var cfgElements = new List<string[]>();
+                    if(cfg != null)
+                    {
+                        cfgElements = cfg.Config.Split(new string[] { "\n", "\r\n" }, StringSplitOptions.RemoveEmptyEntries)
+                            .Select(value => value.Split('=')).ToList();
+                    }
 
                     string port = null;
                     if(cfgElements.Any(lc => lc[0] == "port"))
