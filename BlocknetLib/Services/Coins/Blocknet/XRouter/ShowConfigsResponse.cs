@@ -9,7 +9,6 @@ namespace BlocknetLib.Services.Coins.Blocknet.Xrouter
         public string NodePubKey { get; set; }
         public string PaymentAddress { get; set; }
         public string Config { get; set; }
-        // public Dictionary<string,string> Plugins { get; set; }    
-        public List<string> Plugins { get; set; }   
+        public Dictionary<string, string> Plugins { get; set; }
     }
 }

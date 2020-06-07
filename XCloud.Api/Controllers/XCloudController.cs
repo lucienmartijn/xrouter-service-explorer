@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using XCloud.Api.Controllers.ViewModel;
 using XCloud.Api.Controllers.ViewModels;
 using XRouter.Api.Controllers.ViewModels;
+using XRouter.Api.Controllers.ViewModels.BitcoinBased;
 
 namespace XCloud.Api.Controllers
 {

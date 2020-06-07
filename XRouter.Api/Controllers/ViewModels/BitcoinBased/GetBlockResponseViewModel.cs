@@ -1,14 +1,13 @@
-// Copyright (c) 2014 - 2016 George Kimionis
-// See the accompanying file LICENSE for the Software License Aggrement
-
+﻿using System;
 using System.Collections.Generic;
-using BlocknetLib.Services.Coins.Blocknet.Xrouter;
+using System.Linq;
+using System.Threading.Tasks;
 
-namespace BlocknetLib.Responses
+namespace XRouter.Api.Controllers.ViewModels.BitcoinBased
 {
-    public class GetBlockResponse : ErrorResponse
+    public class GetBlockResponseViewModel
     {
-        public GetBlockResponse()
+        public GetBlockResponseViewModel()
         {
             Tx = new List<string>();
         }

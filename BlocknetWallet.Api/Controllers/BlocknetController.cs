@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using BlocknetLib.ExceptionHandling.Rpc;
+using BlocknetLib.Responses;
 using BlocknetLib.RPC.RequestResponse;
 using BlocknetLib.Services.Coins.Base;
 using BlocknetLib.Services.Coins.Blocknet.Xrouter;
@@ -35,7 +36,26 @@ namespace BlocknetWallet.Api.Controllers
         [HttpGet("[action]")]
         public IActionResult GetNetworkInfo()
         {
-            var networkInfoResponse = blocknetService.GetNetworkInfo();
+            GetNetworkInfoResponse networkInfoResponse;
+            try
+            {
+                networkInfoResponse = blocknetService.GetNetworkInfo();
+            }
+            catch (RpcInternalServerErrorException e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new JsonRpcXrError
+                {
+                    Error = e.Message,
+                    Code = (int)e.RpcErrorCode.Value
+                });
+            }
+            catch (RpcRequestTimeoutException e)
+            {
+                return StatusCode(StatusCodes.Status408RequestTimeout, new JsonRpcXrError
+                {
+                    Error = e.Message,
+                });
+            }
             return Ok(new GetNetworkResponseViewModel
             {
                 ProtocolVersion = networkInfoResponse.ProtocolVersion,

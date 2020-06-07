@@ -5,7 +5,10 @@ using System.Linq.Expressions;
 using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
+using BlocknetLib.ExceptionHandling.Rpc;
+using BlocknetLib.RPC.RequestResponse;
 using BlocknetLib.Services.Coins.Blocknet.Xrouter;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Statistics.Api.Controllers
@@ -26,55 +29,56 @@ namespace Statistics.Api.Controllers
         [HttpGet("[action]")]
         public IActionResult GetServiceNodeCount()
         {
-
-            var servicenodes = servicenodeService.serviceNodeList();
-            var configs = xrouterService.xrShowConfigs();
+            List<ServiceNodeInfoResponse> servicenodes;
+            List<ShowConfigsResponse> configs;
+            try
+            {
+                servicenodes = servicenodeService.serviceNodeList();
+                configs = xrouterService.xrShowConfigs();
+            }
+            catch (RpcInternalServerErrorException e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new JsonRpcXrError
+                {
+                    Error = e.Message,
+                    Code = (int)e.RpcErrorCode.Value
+                });
+            }
+            catch (RpcRequestTimeoutException e)
+            {
+                return StatusCode(StatusCodes.Status408RequestTimeout, new JsonRpcXrError
+                {
+                    Error = e.Message,
+                });
+            }
             var xrouterEnabledServicenodes = servicenodes.Where(sn => configs.Any(c => c.NodePubKey.Equals(sn.SNodeKey))).ToList();
 
             return Ok(xrouterEnabledServicenodes.Count());
-            //var serviceNodeClient = clientFactory.CreateClient("servicenode");
-            //var snRequest = new HttpRequestMessage(HttpMethod.Get, "GetServiceNodeList");
-            //var snResponse = await serviceNodeClient.SendAsync(snRequest);
-
-            //if (snResponse.IsSuccessStatusCode)
-            //{
-            //    using var responseStream = await snResponse.Content.ReadAsStreamAsync();
-            //    var options = new JsonSerializerOptions()
-            //    {
-            //        PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-            //    };
-            //    var servicenodes = await JsonSerializer.DeserializeAsync<ServiceNodeQueryResultViewModel<ServiceNodeViewModel>>(responseStream, options);
-
-
-            //    return Ok(servicenodes.TotalItems);
-
-            //}
-            //return StatusCode(500, "Something went wrong");
         }
 
         [HttpGet("[action]")]
         public IActionResult GetEnterpriseXRouterServiceNodeCount()
         {
-
-            //var xrouterClient = clientFactory.CreateClient("xrouter");
-            //var xrRequest = new HttpRequestMessage(HttpMethod.Get, "ShowConfigs");
-            //var xrResponse = await xrouterClient.SendAsync(xrRequest);
-
-            //if (xrResponse.IsSuccessStatusCode)
-            //{
-            //    using var responseStream = await xrResponse.Content.ReadAsStreamAsync();
-            //    var options = new JsonSerializerOptions()
-            //    {
-            //        PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-            //    };
-            //    var servicenodes = await JsonSerializer.DeserializeAsync<List<ShowConfigsResponse>>(responseStream, options);
-
-
-            //    return Ok(servicenodes.Count());
-
-            //}
-            //return StatusCode(500, "Something went wrong");
-            var configs = xrouterService.xrShowConfigs();
+            List<ShowConfigsResponse> configs;
+            try
+            {
+                configs = xrouterService.xrShowConfigs();
+            }
+            catch (RpcInternalServerErrorException e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new JsonRpcXrError
+                {
+                    Error = e.Message,
+                    Code = (int)e.RpcErrorCode.Value
+                });
+            }
+            catch (RpcRequestTimeoutException e)
+            {
+                return StatusCode(StatusCodes.Status408RequestTimeout, new JsonRpcXrError
+                {
+                    Error = e.Message,
+                });
+            }
 
             var enterpriseServiceNodes = configs.Where(c =>
             {
@@ -87,7 +91,6 @@ namespace Statistics.Api.Controllers
                 }
                 return false;
             });
-
 
             return Ok(enterpriseServiceNodes.Count());
         }

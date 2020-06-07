@@ -2,10 +2,10 @@ using System.Collections.Generic;
 using BlocknetLib.Responses;
 using Newtonsoft.Json;
 
-namespace XRouter.Api.Controllers.ViewModels
+namespace XRouter.Api.Controllers.ViewModels.BitcoinBased
 {
     public class DecodeRawTransactionResponseViewModel: XRouterBaseResponseViewModel
     {
-        public RawTransactionResponse Reply { get; set; }
+        public RawTransactionResponseViewModel Reply { get; set; }
     }
 }

@@ -3,10 +3,10 @@ using BlocknetLib.Responses;
 using BlocknetLib.RPC.RequestResponse;
 using Newtonsoft.Json;
 
-namespace XRouter.Api.Controllers.ViewModels
+namespace XRouter.Api.Controllers.ViewModels.BitcoinBased
 {
     public class BlockResponseViewModel : XRouterBaseResponseViewModel
     {
-        public BlockResponse Reply { get; set; }
+        public BlockViewModel Reply { get; set; }
     }
 }

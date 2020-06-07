@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using XRouter.Api.Controllers.ViewModels;
 
-namespace Xrouter.Service.Explorer.Controllers.ViewModels
+namespace XRouter.Api.Controllers.ViewModels
 {
     public class SendTransactionRequestViewModel : XRouterBaseRequestViewModel
     {

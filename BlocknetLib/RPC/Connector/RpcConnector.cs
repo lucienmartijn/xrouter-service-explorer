@@ -45,10 +45,8 @@ namespace BlocknetLib.RPC.Connector
                         else
                             foreach (var p in (IEnumerable) param) 
                                 parameterList.Add(p);
-                            
                     }
                 }
-
                 parameters = parameterList.ToArray();
             }
             
@@ -80,7 +78,9 @@ namespace BlocknetLib.RPC.Connector
             try
             {
                 string json;
-
+                Console.WriteLine("Executing RPC Call: " + rpcMethod.ToString());
+                var timer = new Stopwatch();
+                timer.Start();
                 using (var webResponse = webRequest.GetResponse())
                 {
                     using (var stream = webResponse.GetResponseStream())
@@ -92,7 +92,9 @@ namespace BlocknetLib.RPC.Connector
                             json = result;
                         }
                     }
-                }        
+                }
+                timer.Stop();
+                Console.WriteLine("Rpc Call Time Elapsed: {0} ms", timer.ElapsedMilliseconds); 
 
                 var rpcResponse = JsonConvert.DeserializeObject<JsonRpcResponse<T>>(json);
                 return rpcResponse.Result;

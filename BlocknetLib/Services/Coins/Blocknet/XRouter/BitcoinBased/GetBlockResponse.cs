@@ -9,7 +9,7 @@ using Xrouter.Service.Explorer.BitcoinLib.Services.Coins.Blocknet.XRouter;
 namespace BlocknetLib.Services.Coins.Blocknet.Xrouter.BitcoinBased
 {
     [JsonConverter(typeof(ValidOrErrorConverter))]
-    public class GetBlockResponse:ErrorResponse
+    public class GetBlockResponse : ErrorResponse
     {
         [JsonProperty("reply")]
         public BlockResponse Reply { get; set; }

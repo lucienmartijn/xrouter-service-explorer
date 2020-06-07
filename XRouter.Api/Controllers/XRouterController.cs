@@ -1,21 +1,28 @@
 using System;
 using System.Linq;
+using AutoMapper;
 using BlocknetLib.ExceptionHandling.Rpc;
 using BlocknetLib.RPC.RequestResponse;
 using BlocknetLib.Services.Coins.Blocknet.Xrouter;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Xrouter.Service.Explorer.Controllers.ViewModels;
 using XRouter.Api.Controllers.ViewModels;
+using XRouter.Api.Controllers.ViewModels.BitcoinBased;
 
 namespace XRouter.Api.Controllers
 {
     [Route("api/xr")]
     public class XRouterController : ControllerBase 
     {
+        private readonly IMapper mapper;
+
         private readonly IXRouterService xrouterService;
         private readonly IXRouterEthereumService xrouterEthereumService;
-        public XRouterController(IXRouterService xrouterService, IXRouterEthereumService xrouterEthereumService){
+        public XRouterController(
+            IMapper mapper,
+            IXRouterService xrouterService, 
+            IXRouterEthereumService xrouterEthereumService){
+            this.mapper = mapper;
             this.xrouterService = xrouterService;
             this.xrouterEthereumService = xrouterEthereumService;
         }
@@ -94,11 +101,8 @@ namespace XRouter.Api.Controllers
                         Code = decodeRawTransactionResponse.Code,
                         Id = decodeRawTransactionResponse.Id
                     });
-                return Ok(new DecodeRawTransactionResponseViewModel
-                {
-                    Reply = decodeRawTransactionResponse.Reply,
-                    Uuid = decodeRawTransactionResponse.Uuid
-                });              
+
+                return Ok(mapper.Map<DecodeRawTransactionResponseViewModel>(decodeRawTransactionResponse));
             }
             catch (RpcInternalServerErrorException e)
             {
@@ -170,11 +174,7 @@ namespace XRouter.Api.Controllers
                         Id = blockResponse.Id
                     });
 
-                return Ok(new BlockResponseViewModel 
-                {
-                    Reply = blockResponse.Reply,
-                    Uuid = blockResponse.Uuid
-                });
+                return Ok(mapper.Map<BlockResponseViewModel>(blockResponse));
 
             }
             catch (RpcInternalServerErrorException e)
@@ -210,12 +210,7 @@ namespace XRouter.Api.Controllers
                         Code = blocksResponse.Code,
                     });
 
-
-                return Ok(new BlocksResponseViewModel
-                {
-                    Reply = blocksResponse.Reply,
-                    Uuid = blocksResponse.Uuid
-                });
+                return Ok(mapper.Map<BlocksResponseViewModel>(blocksResponse));
             }
             catch (RpcInternalServerErrorException e)
             {
@@ -249,11 +244,8 @@ namespace XRouter.Api.Controllers
                         Code = transactionResponse.Code,
                         Id = transactionResponse.Id
                     });
-                return Ok(new TransactionResponseViewModel 
-                {
-                    Reply = transactionResponse.Reply,
-                    Uuid = transactionResponse.Uuid
-                });
+
+                return Ok(mapper.Map<TransactionResponseViewModel>(transactionResponse));
             }
             catch (RpcInternalServerErrorException e)
             {
@@ -287,11 +279,7 @@ namespace XRouter.Api.Controllers
                         Code = transactionsResponse.Code,
                     });
 
-                return Ok(new TransactionsResponseViewModel
-                {
-                    Reply = transactionsResponse.Reply,
-                    Uuid = transactionsResponse.Uuid
-                });
+                return Ok(mapper.Map<TransactionsResponseViewModel>(transactionsResponse));
             }
             catch (RpcInternalServerErrorException e)
             {
@@ -326,11 +314,7 @@ namespace XRouter.Api.Controllers
                         Id = sendTransactionResponse.Id
                     });
 
-                return Ok(new SendTransactionResponseViewModel
-                {
-                    Reply = sendTransactionResponse.Reply,
-                    Uuid = sendTransactionResponse.Uuid
-                });               
+                return Ok(mapper.Map<SendTransactionRequestViewModel>(sendTransactionResponse));               
             }
             catch (RpcInternalServerErrorException e)
             {
@@ -375,103 +359,47 @@ namespace XRouter.Api.Controllers
         [HttpGet("[action]")]
         public IActionResult GetNetworkServices()
         {
-            var response = xrouterService.xrGetNetworkServices();
-            //var services = response.Reply.NodeCounts
-            //    .Select(s => new ServiceViewModel{
-            //        Name = s.Key,
-            //        NodeCount = s.Value
-            //    }).OrderByDescending(c => c.NodeCount).ToList();
-
-            //return Ok(new NetworkServicesResponseViewModel{
-            //    Items = services,
-            //    TotalItems = services.Count
-            //});
-
-            return Ok(new NetworkServicesResponseViewModel
+            GetNetworkServicesResponse networkServices;
+            try
             {
-                SpvWallets = response.Reply.SpvWallets,
-                Services = response.Reply.Services,
-                NodeCounts = response.Reply.NodeCounts.OrderByDescending(s => s.Value).ToDictionary(x => x.Key, x => x.Value)
-            });
+                networkServices = xrouterService.xrGetNetworkServices();
+            }
+            catch (RpcInternalServerErrorException e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new JsonRpcXrError
+                {
+                    Error = e.Message,
+                    Code = (int)e.RpcErrorCode.Value
+                });
+            }
+            catch (RpcRequestTimeoutException e)
+            {
+                return StatusCode(StatusCodes.Status408RequestTimeout, new JsonRpcXrError
+                {
+                    Error = e.Message,
+                });
+            }
+            var model = mapper.Map<GetNetworkServicesResponseViewModel>(networkServices);
+            model.Reply.NodeCounts = model.Reply.NodeCounts.OrderByDescending(s => s.Value).ToDictionary(x => x.Key, x => x.Value);
+            return Ok(model);
         }
-        //[HttpGet("[action]")]
-        //public IActionResult GetNetworkServices()
-        //{
-        //    var response = xrouterService.xrGetNetworkServices();
-        //    var services = response.Reply.NodeCounts
-        //        .Join(response.Reply.Services, m => m.Key, m => m.ToString(), 
-        //            (s, sn) => new ServiceViewModel{
-        //                Name = s.Key,
-        //                NodeCount = s.Value
-        //            }).ToList();
-                
-        //    var viewModel = new NetworkServicesResponseViewModel
-        //    {
-        //        Items = services,
-        //        TotalItems = services.Count
-        //    };
-        //    return Ok(viewModel);
-        //}
-
-        //[HttpGet("[action]")]
-        //public IActionResult GetNetworkSpvWallets()
-        //{
-        //    var response = xrouterService.xrGetNetworkServices();
-        //    var services = response.Reply.NodeCounts
-        //        .Join(response.Reply.SpvWallets, m => m.Key, m => m.ToString(), 
-        //            (s, sn) => new ServiceViewModel{
-        //                Name = s.Key,
-        //                NodeCount = s.Value
-        //            }).OrderByDescending(s => s.NodeCount).ToList();
-                
-        //    var viewModel = new NetworkServicesResponseViewModel
-        //    {
-        //        Items = services,
-        //        TotalItems = services.Count                                   
-        //    };
-        //    return Ok(viewModel);
-        //}
 
         [HttpGet]
         public IActionResult Index(string searchString)
         {
             var response = xrouterService.xrGetNetworkServices();
 
-            //var services = response.Reply.NodeCounts
-            //    .Join(response.Reply.Services, m => m.Key, m => m.ToString(),
-            //        (s, sn) => new ServiceViewModel
-            //        {
-            //            Name = s.Key,
-            //            NodeCount = s.Value
-            //        }).ToList();
-
-            //var spvWallets = response.Reply.NodeCounts
-            //    .Join(response.Reply.SpvWallets, m => m.Key, m => m.ToString(),
-            //        (s, sn) => new ServiceViewModel
-            //        {
-            //            Name = s.Key,
-            //            NodeCount = s.Value
-            //        }).ToList();
-
-            //var allServices = services.Union(spvWallets).ToList();
-
             if (!String.IsNullOrEmpty(searchString))
                 response.Reply.NodeCounts = response.Reply.NodeCounts.Where(s => s.Key
                     .IndexOf(searchString, StringComparison.OrdinalIgnoreCase) != -1)
                     .ToDictionary(x => x.Key, x => x.Value);
-
-            //var viewModel = new SearchResponseViewModel
-            //{
-            //    Items = allServices,
-            //    TotalItems = allServices.Count
-            //};
+            
             return Ok(new NetworkServicesResponseViewModel
             {
                 SpvWallets = response.Reply.SpvWallets,
                 Services = response.Reply.Services,
                 NodeCounts = response.Reply.NodeCounts.OrderByDescending(s => s.Value).ToDictionary(x => x.Key, x => x.Value)
             });
-            
         }
 
         [HttpGet("[action]")]
