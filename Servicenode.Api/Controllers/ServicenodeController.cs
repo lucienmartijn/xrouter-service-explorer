@@ -369,27 +369,27 @@ namespace Servicenode.Api.Controllers
 
             string xcloudConfig = sb.ToString();
 
-            if (serviceNodeConfig?.Plugins.Count > 0)
-            {
-                // Try get help key from config string
-                var listConfig = serviceNodeConfig.Plugins[serviceName]
-                        .Split(new string[] { "\n", "\r\n" }, StringSplitOptions.RemoveEmptyEntries)
-                        .Select(value => value.Split('=')).ToList();
+            //if (serviceNodeConfig?.Plugins.Count > 0)
+            //{
+            //    // Try get help key from config string
+            //    var listConfig = serviceNodeConfig.Plugins[serviceName]
+            //            .Split(new string[] { "\n", "\r\n" }, StringSplitOptions.RemoveEmptyEntries)
+            //            .Select(value => value.Split('=')).ToList();
 
-                if (listConfig.Any(lc => lc[0] == "help"))
-                {
-                    int i = 0;
-                    foreach (var config in listConfig)
-                    {
-                        if (config[0] == "help")
-                            break;
-                        i++;
-                    }
-                    help = listConfig[i][1];
+            //    if (listConfig.Any(lc => lc[0] == "help"))
+            //    {
+            //        int i = 0;
+            //        foreach (var config in listConfig)
+            //        {
+            //            if (config[0] == "help")
+            //                break;
+            //            i++;
+            //        }
+            //        help = listConfig[i][1];
 
-                    xcloudConfig = serviceNodeConfig.Plugins[serviceName];
-                }
-            }
+            //        xcloudConfig = serviceNodeConfig.Plugins[serviceName];
+            //    }
+            //}
 
             //TODO: Add AutoMapper to replace      
             var viewModel = new XCloudServiceResultViewModel
@@ -537,42 +537,6 @@ namespace Servicenode.Api.Controllers
 
             return Ok(viewModel);
         }
-
-        //[HttpGet("[action]")]
-        //public IActionResult FilterXCloudServiceServiceNode(XCloudServiceQueryViewModel filterViewModel)
-        //{
-        //    var connectedResponse = xrouterService.xrConnectedNodes();
-
-        //    var serviceNode = connectedResponse.Reply.Find(c => c.NodePubKey == filterViewModel.NodePubKey);
-
-        //    if(serviceNode == null){
-        //        return StatusCode(StatusCodes.Status500InternalServerError, new JsonRpcXrError
-        //        {
-        //            Error = "Servicenode info cannot be retrieved." + Environment.NewLine + "Node Public Key: " + filterViewModel.NodePubKey,
-        //        });
-        //    }
-
-        //    var result = new QueryResult<string>();
-        //    var query = serviceNode.Services.Select(s => s.Key).AsQueryable();
-        //    var queryObj = new XCloudQuery
-        //    {
-        //        Page = (int) filterViewModel.Page,
-        //        PageSize = (byte) filterViewModel.PageSize,
-        //    };
-        //    result.TotalItems = query.Count();
-
-        //    query = query.ApplyPaging(queryObj);
-
-        //    result.Items = query.ToList();
-
-        //    var viewModel = new QueryResultViewModel<string>
-        //    {
-        //        Items = result.Items,
-        //        TotalItems = result.TotalItems
-        //    };
-
-        //    return Ok(viewModel);
-        //}
 
         [HttpGet("[action]")]
         public IActionResult GetServiceNodeList([FromQuery]ServiceNodeQueryViewModel filterViewModel)

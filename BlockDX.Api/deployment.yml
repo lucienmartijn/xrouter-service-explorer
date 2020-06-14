@@ -4,8 +4,8 @@ items:
   kind: Deployment
   metadata:
     labels:
-      run: servicenode-api
-    name: servicenode-api
+      run: blockdx-api
+    name: blockdx-api
     namespace: luciendev
   spec:
     progressDeadlineSeconds: 600
@@ -13,7 +13,7 @@ items:
     revisionHistoryLimit: 10
     selector:
       matchLabels:
-        run: servicenode-api
+        run: blockdx-api
     strategy:
       rollingUpdate:
         maxSurge: 25%
@@ -23,14 +23,14 @@ items:
       metadata:
         creationTimestamp: null
         labels:
-          run: servicenode-api
+          run: blockdx-api
       spec:
         containers:
-        - image: lucienmartijn/servicenode.api:v1.1.10
+        - image: lucienmartijn/blockdx.api:v1.1.1
           imagePullPolicy: Always
-          name: servicenode-api
+          name: blockdx-api
           ports:
-          - containerPort: 8084
+          - containerPort: 8086
             protocol: TCP
           resources: {}
           terminationMessagePath: /dev/termination-log
@@ -43,15 +43,15 @@ items:
 - apiVersion: v1
   kind: Service
   metadata:
-    name: servicenode-api
+    name: blockdx-api
     namespace: luciendev
   spec:
     ports:
-    - port: 8084
+    - port: 8086
       protocol: TCP
-      targetPort: 8084
+      targetPort: 8086
     selector:
-      run: servicenode-api
+      run: blockdx-api
     sessionAffinity: None
     type: ClusterIP
   status:

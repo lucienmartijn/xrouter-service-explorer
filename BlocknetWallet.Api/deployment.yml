@@ -26,7 +26,7 @@ items:
           run: blocknetwallet-api
       spec:
         containers:
-        - image: lucienmartijn/blocknetwallet.api:v1.1.4
+        - image: lucienmartijn/blocknetwallet.api:v1.1.7
           imagePullPolicy: Always
           name: blocknetwallet-api
           ports:

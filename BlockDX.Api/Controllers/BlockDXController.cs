@@ -28,12 +28,6 @@ namespace BlockDX.Api.Controllers
         }
 
         [HttpGet("[action]")]
-        public async Task<IActionResult> GetOneDayTradedPairs()
-        {
-            return Ok();
-        }
-
-        [HttpGet("[action]")]
         public async Task<IActionResult> GetOneDayTotalTradesCount()
         {
             var assetWhiteList = await GetBlockDXAssets();
@@ -58,6 +52,89 @@ namespace BlockDX.Api.Controllers
         }
 
         [HttpGet("[action]")]
+        public async Task<IActionResult> GetOneDayTotalVolumePerCoin([FromQuery]List<string> units)
+        {
+            if (units.Count == 0)
+                return BadRequest("No units specified");
+
+            return Ok(await getOneDayTotalVolumePerCoin(units));
+        }
+
+        private async Task<List<TokenTradeStatistics>> getOneDayTotalVolumePerCoin(List<string> units)
+        {
+            var assetWhiteList = await GetBlockDXAssets();
+
+            var request = new XCloudServiceRequestViewModel
+            {
+                Service = "xrs::dxGet24hrTradeHistory",
+                Parameters = new object[] { "0" },
+                NodeCount = 1
+            };
+
+            var tradeHistoryResponse = await ServiceAsync<XCloudServiceResponse<List<DXAtomicSwap>>>(request);
+
+            var tradeHistories = tradeHistoryResponse.Reply
+                .Where(p =>
+                {
+                    var trade = new List<string> { p.Maker, p.Taker };
+                    var result = trade.All(ta => assetWhiteList.Select(awl => awl.Ticker).Contains(ta));
+                    return result;
+                })
+                .ToList();
+
+            var coins = new HashSet<string>();
+            foreach (var item in tradeHistoryResponse.Reply)
+            {
+                coins.Add(item.Maker);
+                coins.Add(item.Taker);
+            }
+
+            var unitSet = new HashSet<string>(units);
+            foreach (var coin in coins)
+            {
+                unitSet.Add(coin);
+            }
+
+            request = new XCloudServiceRequestViewModel
+            {
+                Service = "xrs::CCMultiPrice",
+                Parameters = new object[] { string.Join(",", coins), string.Join(",", unitSet) },
+                NodeCount = 1
+            };
+            var multiPriceResponse = await ServiceAsync<XCloudServiceResponse<Dictionary<string, Dictionary<string, decimal>>>>(request);
+
+            var tradeStatisticsTokens = new List<TokenTradeStatistics>();
+
+            foreach (var coin in coins)
+            {
+                var sumTaker = tradeHistories.Where(th => th.Taker.Equals(coin)).Sum(th => th.TakerSize);
+                var sumMaker = tradeHistories.Where(th => th.Maker.Equals(coin)).Sum(th => th.MakerSize);
+
+                var tokenVolumesPerUnit = new List<TokenVolumeViewModel>();
+
+                var unitsOfCoin = new HashSet<string>(units);
+                unitsOfCoin.Add(coin);
+                foreach (var unit in unitsOfCoin)
+                {
+                    var coinPrice = multiPriceResponse.Reply[coin][unit];
+                    tokenVolumesPerUnit.Add(new TokenVolumeViewModel
+                    {
+                        Unit = unit,
+                        Volume = (sumTaker + sumMaker) * coinPrice
+                    });
+                }
+                var countCoinTrades = tradeHistories.Count(th => th.Taker.Equals(coin) || th.Maker.Equals(coin));
+                tradeStatisticsTokens.Add(new TokenTradeStatistics
+                {
+                    Token = coin,
+                    TradeCount = countCoinTrades,
+                    Volumes = tokenVolumesPerUnit
+                });
+            }
+            return tradeStatisticsTokens;
+        }
+
+        [HttpGet("[action]")]
         public async Task<IActionResult> GetOneDayTotalVolume([FromQuery] string token, [FromQuery]List<string> units) 
         {
             if (string.IsNullOrEmpty(token))
@@ -65,75 +142,25 @@ namespace BlockDX.Api.Controllers
             if (units.Count == 0)
                 return BadRequest("No units specified");
 
-            var assetWhiteList = await GetBlockDXAssets();
+            var oneDayTotalVolumePerCoin = await getOneDayTotalVolumePerCoin(units);
 
-            var request = new XCloudServiceRequestViewModel
-            {
-                Service = "xrs::dxGet24hrTradeSummary",
-                Parameters = new object[] { token },
-                NodeCount = 1
-            };
-            var tradeSummaryResponse = await ServiceAsync<XCloudServiceResponse<List<Dictionary<string, DXTradePair>>>>(request);
+            var totalVolumePerUnit = new List<TokenVolumeViewModel>();
 
-            if (tradeSummaryResponse.Reply == null)
-            {
-                
-                var responseMessage = new HttpResponseMessage();
-                responseMessage.Content = new StringContent("Error at XCloud Service " + request.Service + ". Parameters: " + request.Parameters + ".");
-                responseMessage.StatusCode = HttpStatusCode.InternalServerError;
-                return StatusCode(StatusCodes.Status500InternalServerError, responseMessage);
-            }
-            var trades = tradeSummaryResponse.Reply
-                .Where(p =>
-                {
-                    var tradedAssets = new HashSet<string>();
-
-                    foreach (var item in p.Keys)
-                    {
-                        tradedAssets.Add(item.Split('-')[0]);
-                    }
-
-                    var result = tradedAssets.All(ta => assetWhiteList.Select(awl => awl.Ticker).Contains(ta));
-                    return result;
-                })
-                .SelectMany(d => d)
-                .ToDictionary(e => e.Key, e => e.Value);
-
-
-            var coins = new HashSet<string>();
-            foreach (var item in trades.Keys)
-            {
-                coins.Add(item.Split('-')[0]);
-            }
-
-            var volumes = new List<TokenVolumeViewModel>();
-
-            if (coins.Count == 0)
-            {
-                foreach (var unit in units)
-                {
-                    volumes.Add(new TokenVolumeViewModel { Unit = unit, Volume = 0 });
-                }
-                return Ok(volumes);
-            }
-
-            request = new XCloudServiceRequestViewModel
-            {
-                Service = "xrs::CCMultiPrice",
-                Parameters = new object[] { string.Join(",", coins), string.Join(",", units) },
-                NodeCount = 1
-            };
-            var multiPriceResponse = await ServiceAsync<XCloudServiceResponse<Dictionary<string, Dictionary<string, decimal>>>>(request);
-
-            
             foreach (var unit in units)
             {
-                volumes.Add(new TokenVolumeViewModel { Unit = unit, Volume = CalculateVolume(unit, multiPriceResponse.Reply, trades) });
+                var sumVolume = oneDayTotalVolumePerCoin.Sum(vc => vc.Volumes.Where(vc => vc.Unit.Equals(unit)).Sum(vc => vc.Volume));
+
+                totalVolumePerUnit.Add(new TokenVolumeViewModel
+                {
+                    Unit = unit,
+                    Volume = sumVolume
+                });
             }
-            return Ok(volumes);
+
+            return Ok(totalVolumePerUnit);
         }
 
-        public async Task<List<Asset>> GetBlockDXAssets()
+        private async Task<List<Asset>> GetBlockDXAssets()
         {
             string baseUrl = "https://raw.githubusercontent.com/blocknetdx/blockchain-configuration-files/master/manifest-latest.json";
 

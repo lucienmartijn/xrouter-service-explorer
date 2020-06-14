@@ -26,10 +26,6 @@ spec:
           servicePort: 8081
         path: /api/xrs
       - backend:
-          serviceName: statistics-api
-          servicePort: 8083
-        path: /api/stats
-      - backend:
           serviceName: servicenode-api
           servicePort: 8084
         path: /api/servicenode
@@ -37,3 +33,7 @@ spec:
           serviceName: blocknetwallet-api
           servicePort: 8085
         path: /api/blocknet
+      - backend:
+          serviceName: blockdx-api
+          servicePort: 8086
+        path: /api/dx
