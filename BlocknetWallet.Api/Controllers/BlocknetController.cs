@@ -22,11 +22,6 @@ namespace BlocknetWallet.Api.Controllers
             this.blocknetService = blocknetService;
         }
 
-        //[HttpGet("[action]")]
-        //public IActionResult BlockCount(){
-        //    return Ok(coinService.GetBlockCount());
-        //}
-
         [HttpGet("[action]")]
         public IActionResult VerifyMessage(string address, string signature, string message)
         {
