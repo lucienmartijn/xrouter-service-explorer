@@ -9,18 +9,4 @@
     <PackageReference Include="System.Configuration.ConfigurationManager" Version="4.7.0" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Services\Coins\Alqocoin\" />
-    <Folder Include="Services\Coins\BitBay\" />
-    <Folder Include="Services\Coins\Dash\" />
-    <Folder Include="Services\Coins\Digibyte\" />
-    <Folder Include="Services\Coins\Dogecoin\" />
-    <Folder Include="Services\Coins\Phore\" />
-    <Folder Include="Services\Coins\Pivx\" />
-    <Folder Include="Services\Coins\Polis\" />
-    <Folder Include="Services\Coins\Ravencoin\" />
-    <Folder Include="Services\Coins\Syscoin\" />
-    <Folder Include="Services\Coins\Tezos\" />
-  </ItemGroup>
-
 </Project>
