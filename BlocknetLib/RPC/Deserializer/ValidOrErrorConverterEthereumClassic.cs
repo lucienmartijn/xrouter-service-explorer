@@ -22,7 +22,7 @@ using BlocknetLib.Services.Coins.Blocknet.Xrouter.Ethereum;
 
 namespace BlocknetLib.RPC.Deserializer
 {
-    public class ValidOrErrorEthereumConverter : JsonConverter
+    public class ValidOrErrorEthereumClassicConverter : JsonConverter
     {
         public override bool CanConvert(Type objectType)
         {
@@ -62,6 +62,11 @@ namespace BlocknetLib.RPC.Deserializer
         {
             var token = JToken.Load(reader);
 
+
+            if (objectType == typeof(ServiceResponse))
+            {
+                return Populate<ServiceResponse>(token, objectType, serializer);
+            }
             if (objectType == typeof(GetBlockCountResponse))
             {
                 return Populate<GetBlockCountResponse>(token, objectType, serializer);

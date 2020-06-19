@@ -17,12 +17,12 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using BlocknetLib.Services.Coins.Blocknet.Xrouter;
 using BlocknetLib.Responses;
+using BlocknetLib.Services.Coins.Blocknet.Xrouter.BitcoinBased;
 using System.Reflection;
-using BlocknetLib.Services.Coins.Blocknet.Xrouter.Ethereum;
 
 namespace BlocknetLib.RPC.Deserializer
 {
-    public class ValidOrErrorEthereumConverter : JsonConverter
+    public class ValidOrErrorConverterMonero : JsonConverter
     {
         public override bool CanConvert(Type objectType)
         {
@@ -62,24 +62,29 @@ namespace BlocknetLib.RPC.Deserializer
         {
             var token = JToken.Load(reader);
 
+            
+            if (objectType == typeof(ServiceResponse))
+            {
+                return Populate<ServiceResponse>(token, objectType, serializer);
+            }
             if (objectType == typeof(GetBlockCountResponse))
             {
                 return Populate<GetBlockCountResponse>(token, objectType, serializer);
             }
 
-            if (objectType == typeof(GetBlockHashResponse))
+            if(objectType == typeof(GetBlockHashResponse))
             {
                 return Populate<GetBlockHashResponse>(token, objectType, serializer);
             }
 
-            if (objectType == typeof(Services.Coins.Blocknet.Xrouter.Ethereum.GetBlockResponse))
+            if (objectType == typeof(Services.Coins.Blocknet.Xrouter.BitcoinBased.GetBlockResponse))
             {
-                return Populate<Services.Coins.Blocknet.Xrouter.Ethereum.GetBlockResponse>(token, objectType, serializer);
+                return Populate<Services.Coins.Blocknet.Xrouter.BitcoinBased.GetBlockResponse>(token, objectType, serializer);
             }
 
-            if (objectType == typeof(Services.Coins.Blocknet.Xrouter.Ethereum.GetTransactionResponse))
+            if (objectType == typeof(Services.Coins.Blocknet.Xrouter.BitcoinBased.GetTransactionResponse))
             {
-                return Populate<Services.Coins.Blocknet.Xrouter.Ethereum.GetTransactionResponse>(token, objectType, serializer);
+                return Populate<Services.Coins.Blocknet.Xrouter.BitcoinBased.GetTransactionResponse>(token, objectType, serializer);
             }
 
             if (objectType == typeof(GetBlocksResponse))
@@ -89,7 +94,7 @@ namespace BlocknetLib.RPC.Deserializer
 
             if (objectType == typeof(GetTransactionsResponse))
             {
-                return Populate<GetTransactionsResponse>(token, objectType, serializer);
+                return Populate<GetTransactionsResponse>(token, objectType, serializer);                
             }
 
             if (objectType == typeof(GetDecodeRawTransactionResponse))
@@ -103,7 +108,7 @@ namespace BlocknetLib.RPC.Deserializer
             }
 
             throw new NotImplementedException();
-        }
+            }
 
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {

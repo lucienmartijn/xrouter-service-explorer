@@ -369,27 +369,27 @@ namespace Servicenode.Api.Controllers
 
             string xcloudConfig = sb.ToString();
 
-            if (serviceNodeConfig?.Plugins.Count > 0)
-            {
-                // Try get help key from config string
-                var listConfig = serviceNodeConfig.Plugins[serviceName]
-                        .Split(new string[] { "\n", "\r\n" }, StringSplitOptions.RemoveEmptyEntries)
-                        .Select(value => value.Split('=')).ToList();
+            //if (serviceNodeConfig?.Plugins.Count > 0)
+            //{
+            //    // Try get help key from config string
+            //    var listConfig = serviceNodeConfig.Plugins[serviceName]
+            //            .Split(new string[] { "\n", "\r\n" }, StringSplitOptions.RemoveEmptyEntries)
+            //            .Select(value => value.Split('=')).ToList();
 
-                if (listConfig.Any(lc => lc[0] == "help"))
-                {
-                    int i = 0;
-                    foreach (var config in listConfig)
-                    {
-                        if (config[0] == "help")
-                            break;
-                        i++;
-                    }
-                    help = listConfig[i][1];
+            //    if (listConfig.Any(lc => lc[0] == "help"))
+            //    {
+            //        int i = 0;
+            //        foreach (var config in listConfig)
+            //        {
+            //            if (config[0] == "help")
+            //                break;
+            //            i++;
+            //        }
+            //        help = listConfig[i][1];
 
-                    xcloudConfig = serviceNodeConfig.Plugins[serviceName];
-                }
-            }
+            //        xcloudConfig = serviceNodeConfig.Plugins[serviceName];
+            //    }
+            //}
 
             //TODO: Add AutoMapper to replace      
             var viewModel = new XCloudServiceResultViewModel
@@ -485,10 +485,10 @@ namespace Servicenode.Api.Controllers
                         Error = "Servicenode info cannot be retrieved." + Environment.NewLine + "Node Public Key: " + nodePubKey,
                     });
             }
+            string config = string.Empty;
                
             var configReply = xrouterService.xrShowConfigs();            
 
-            string config = string.Empty;
             var serviceNodeConfig = configReply.Find(c => c.NodePubKey == serviceNode.NodePubKey);
             
             if(serviceNodeConfig != null)

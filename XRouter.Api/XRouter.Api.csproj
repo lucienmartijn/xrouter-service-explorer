@@ -14,8 +14,4 @@
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.0.0" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Controllers\ViewModels\Ethereum\" />
-  </ItemGroup>
-
 </Project>

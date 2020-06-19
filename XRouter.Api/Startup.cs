@@ -80,6 +80,7 @@ namespace XRouter.Api
             var mappingConfig = new MapperConfiguration(mc =>
             {
                 mc.AddProfile(new XRouterMappingProfile());
+                mc.AddProfile(new XRouterEthereumMappingProfile());
             });
 
             IMapper mapper = mappingConfig.CreateMapper();

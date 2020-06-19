@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using BlocknetLib.Responses;
+using BlocknetLib.Responses.Ethereum;
 using BlocknetLib.RPC.Deserializer;
 using BlocknetLib.RPC.RequestResponse;
 using Newtonsoft.Json;
@@ -7,7 +7,7 @@ using Newtonsoft.Json;
 namespace BlocknetLib.Services.Coins.Blocknet.Xrouter.Ethereum
 {
     [JsonConverter(typeof(ValidOrErrorEthereumConverter))]
-    public class GetBlockResponse
+    public class GetBlockResponse : ErrorResponse
     {
         public BlockResponse Reply { get; set; }
         public string Uuid { get; set; }

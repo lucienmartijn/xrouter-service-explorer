@@ -4,12 +4,12 @@ using BlocknetLib.RPC.Deserializer;
 using BlocknetLib.RPC.RequestResponse;
 using Newtonsoft.Json;
 
-namespace BlocknetLib.Services.Coins.Blocknet.Xrouter.Ethereum
+namespace BlocknetLib.Services.Coins.Blocknet.Xrouter.Monero
 {
     [JsonConverter(typeof(ValidOrErrorEthereumConverter))]
-    public class GetBlockHashResponse : ErrorResponse
+    public class GetTransactionsResponse : ErrorResponse
     {
-        public BlockHashResponse Reply { get; set; }
+        public List<Responses.Ethereum.TransactionResponse> Reply { get; set; }
         public string Uuid { get; set; }
-    }
+    } 
 }

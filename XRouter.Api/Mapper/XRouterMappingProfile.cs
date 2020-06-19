@@ -24,16 +24,24 @@ namespace XRouter.Api.Mapper
             CreateMap<ScriptPubKey, ScriptPubKeyViewModel>();
             CreateMap<Vin, VinViewModel>();
             CreateMap<Vout, VoutViewModel>();
+            CreateMap<BlockResponse, BlockViewModel>();
+
             CreateMap<GetRawTransactionResponse, GetRawTransactionResponseViewModel>();
             CreateMap<RawTransactionResponse, RawTransactionResponseViewModel>();
             CreateMap<BlocknetLib.Services.Coins.Blocknet.Xrouter.BitcoinBased.GetBlockResponse, BlockResponseViewModel>();
             CreateMap<GetBlocksResponse, BlocksResponseViewModel>();
-            CreateMap<BlocknetLib.Services.Coins.Blocknet.Xrouter.BitcoinBased.GetBlocksResponse, BlocksResponseViewModel>();
-            CreateMap<BlockResponse, BlockViewModel>();
             CreateMap<BlocknetLib.Services.Coins.Blocknet.Xrouter.BitcoinBased.GetTransactionResponse, TransactionResponseViewModel>();
-            CreateMap<BlocknetLib.Services.Coins.Blocknet.Xrouter.BitcoinBased.GetTransactionsResponse, TransactionsResponseViewModel>();
-
+            CreateMap<GetTransactionsResponse, TransactionsResponseViewModel>();
             CreateMap<SendTransactionResponse, SendTransactionResponseViewModel>();
+            CreateMap<GetBlockCountResponse, BlockCountResponseViewModel>()
+                .ForSourceMember(bc => bc.Code, opt => opt.DoNotValidate())
+                .ForSourceMember(bc => bc.Error, opt => opt.DoNotValidate())
+                .ForSourceMember(bc => bc.Id, opt => opt.DoNotValidate());
+            CreateMap<GetBlockHashResponse, BlockHashResponseViewModel>()
+                .ForSourceMember(bc => bc.Code, opt => opt.DoNotValidate())
+                .ForSourceMember(bc => bc.Error, opt => opt.DoNotValidate())
+                .ForSourceMember(bc => bc.Id, opt => opt.DoNotValidate());
+
             CreateMap<NetworkServicesResponse, NetworkServicesResponseViewModel>();
             CreateMap<GetNetworkServicesResponse, NetworkServicesResponseViewModel>();
             CreateMap<GetNetworkServicesResponse, GetNetworkServicesResponseViewModel>();

@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using XRouter.Api.Controllers.ViewModels;
 using XRouter.Api.Controllers.ViewModels.BitcoinBased;
+using XRouter.Api.Controllers.ViewModels.Ethereum;
 
 namespace XRouter.Api.Controllers
 {
@@ -15,6 +16,7 @@ namespace XRouter.Api.Controllers
     public class XRouterController : ControllerBase 
     {
         private readonly IMapper mapper;
+
 
         private readonly IXRouterService xrouterService;
         private readonly IXRouterEthereumService xrouterEthereumService;
@@ -44,7 +46,16 @@ namespace XRouter.Api.Controllers
             {
                 if (viewModel.Token.Equals("xr::ETH"))
                 {
-                    return Ok(xrouterEthereumService.xrGetBlockCount(viewModel.Token, viewModel.NodeCount));
+                    var blockCountETHResponse = xrouterEthereumService.xrGetBlockCount(viewModel.Token, viewModel.NodeCount);
+
+                    if (blockCountETHResponse.Error != null)
+                        return Ok(new ErrorResponseViewModel
+                        {
+                            Error = blockCountETHResponse.Error,
+                            Code = blockCountETHResponse.Code,
+                            Id = blockCountETHResponse.Id
+                        });
+                    return Ok(mapper.Map<ViewModels.Ethereum.BlockCountResponseViewModel>(blockCountETHResponse));
                 }
 
                 var blockCountResponse = xrouterService.xrGetBlockCount(viewModel.Token, viewModel.NodeCount);
@@ -57,11 +68,7 @@ namespace XRouter.Api.Controllers
                         Id = blockCountResponse.Id
                     });
 
-                return Ok(new BlockCountResponseViewModel 
-                {
-                    Reply = blockCountResponse.Reply,
-                    Uuid = blockCountResponse.Uuid
-                });
+                return Ok(mapper.Map<ViewModels.BitcoinBased.BlockCountResponseViewModel>(blockCountResponse));
             }
             catch (RpcInternalServerErrorException e)
             {
@@ -93,6 +100,20 @@ namespace XRouter.Api.Controllers
             
             try
             {
+                if (viewModel.Token.Equals("xr::ETH"))
+                {
+                    var decodeRawTransactionETHResponse = xrouterEthereumService.xrDecodeRawTransaction(viewModel.Token, viewModel.TxHex, viewModel.NodeCount);
+
+                    if (decodeRawTransactionETHResponse.Error != null)
+                        return Ok(new ErrorResponseViewModel
+                        {
+                            Error = decodeRawTransactionETHResponse.Error,
+                            Code = decodeRawTransactionETHResponse.Code,
+                            Id = decodeRawTransactionETHResponse.Id
+                        });
+                    return Ok(mapper.Map<ViewModels.Ethereum.DecodeRawTransactionResponseViewModel>(decodeRawTransactionETHResponse));
+                }
+
                 var decodeRawTransactionResponse = xrouterService.xrDecodeRawTransaction(viewModel.Token, viewModel.TxHex, viewModel.NodeCount);
                 if (decodeRawTransactionResponse.Error != null)
                     return Ok(new ErrorResponseViewModel
@@ -102,7 +123,7 @@ namespace XRouter.Api.Controllers
                         Id = decodeRawTransactionResponse.Id
                     });
 
-                return Ok(mapper.Map<DecodeRawTransactionResponseViewModel>(decodeRawTransactionResponse));
+                return Ok(mapper.Map<ViewModels.BitcoinBased.DecodeRawTransactionResponseViewModel>(decodeRawTransactionResponse));
             }
             catch (RpcInternalServerErrorException e)
             {
@@ -124,8 +145,19 @@ namespace XRouter.Api.Controllers
         {
             try
             {
-                if(viewModel.Token.Equals("xr::ETH"))
-                    return Ok(xrouterEthereumService.xrGetBlockHash(viewModel.Token, viewModel.BlockNumber, viewModel.NodeCount));
+                if (viewModel.Token.Equals("xr::ETH"))
+                {
+                    var getBlockHashETHResponse = xrouterEthereumService.xrGetBlockHash(viewModel.Token, viewModel.BlockNumber, viewModel.NodeCount);
+
+                    if (getBlockHashETHResponse.Error != null)
+                        return Ok(new ErrorResponseViewModel
+                        {
+                            Error = getBlockHashETHResponse.Error,
+                            Code = getBlockHashETHResponse.Code,
+                            Id = getBlockHashETHResponse.Id
+                        });
+                    return Ok(mapper.Map<ViewModels.Ethereum.BlockHashResponseViewModel>(getBlockHashETHResponse));
+                }
 
                 var blockHashResponse = xrouterService.xrGetBlockHash(viewModel.Token, viewModel.BlockNumber, viewModel.NodeCount);
                 if (blockHashResponse.Error != null)
@@ -136,11 +168,7 @@ namespace XRouter.Api.Controllers
                         Id = blockHashResponse.Id
                     });
 
-                return Ok(new BlockHashResponseViewModel 
-                {
-                    Reply = blockHashResponse.Reply,
-                    Uuid = blockHashResponse.Uuid
-                });
+                return Ok(mapper.Map<ViewModels.BitcoinBased.BlockHashResponseViewModel>(blockHashResponse));
             }
             catch (RpcInternalServerErrorException e)
             {
@@ -161,9 +189,20 @@ namespace XRouter.Api.Controllers
         public IActionResult GetBlock([FromBody] BlockRequestViewModel viewModel)
         {
             try
-            {      
-                if(viewModel.Token.Equals("xr::ETH"))          
-                    return Ok(xrouterEthereumService.xrGetBlock(viewModel.Token, viewModel.BlockHash, viewModel.NodeCount));
+            {
+                if (viewModel.Token.Equals("xr::ETH"))
+                {
+                    var getBlockETHResponse = xrouterEthereumService.xrGetBlock(viewModel.Token, viewModel.BlockHash, viewModel.NodeCount);
+
+                    if (getBlockETHResponse.Error != null)
+                        return Ok(new ErrorResponseViewModel
+                        {
+                            Error = getBlockETHResponse.Error,
+                            Code = getBlockETHResponse.Code,
+                            Id = getBlockETHResponse.Id
+                        });
+                    return Ok(mapper.Map<ViewModels.Ethereum.BlockResponseViewModel>(getBlockETHResponse));
+                }          
 
                 var blockResponse = xrouterService.xrGetBlock(viewModel.Token, viewModel.BlockHash, viewModel.NodeCount);
                 if (blockResponse.Error != null)
@@ -174,7 +213,7 @@ namespace XRouter.Api.Controllers
                         Id = blockResponse.Id
                     });
 
-                return Ok(mapper.Map<BlockResponseViewModel>(blockResponse));
+                return Ok(mapper.Map<ViewModels.BitcoinBased.BlockResponseViewModel>(blockResponse));
 
             }
             catch (RpcInternalServerErrorException e)
@@ -198,8 +237,19 @@ namespace XRouter.Api.Controllers
         {
             try
             {
-                if(viewModel.Token.Equals("xr::ETH"))
-                    return Ok(xrouterEthereumService.xrGetBlocks(viewModel.Token, string.Join(",", viewModel.BlockHashes), viewModel.NodeCount));
+                if (viewModel.Token.Equals("xr::ETH"))
+                {
+                    var getBlocksETHResponse = xrouterEthereumService.xrGetBlocks(viewModel.Token, string.Join(",", viewModel.BlockHashes), viewModel.NodeCount);
+
+                    if (getBlocksETHResponse.Error != null)
+                        return Ok(new ErrorResponseViewModel
+                        {
+                            Error = getBlocksETHResponse.Error,
+                            Code = getBlocksETHResponse.Code,
+                            Id = getBlocksETHResponse.Id
+                        });
+                    return Ok(mapper.Map<ViewModels.Ethereum.BlocksResponseViewModel>(getBlocksETHResponse));
+                }
 
                 var blocksResponse = xrouterService.xrGetBlocks(viewModel.Token, string.Join(",", viewModel.BlockHashes), viewModel.NodeCount);
 
@@ -210,7 +260,7 @@ namespace XRouter.Api.Controllers
                         Code = blocksResponse.Code,
                     });
 
-                return Ok(mapper.Map<BlocksResponseViewModel>(blocksResponse));
+                return Ok(mapper.Map<ViewModels.BitcoinBased.BlocksResponseViewModel>(blocksResponse));
             }
             catch (RpcInternalServerErrorException e)
             {
@@ -232,8 +282,19 @@ namespace XRouter.Api.Controllers
         {
             try
             {
-                if(viewModel.Token.Equals("xr::ETH"))
-                    return Ok(xrouterEthereumService.xrGetTransaction(viewModel.Token, viewModel.TxId, viewModel.NodeCount));
+                if (viewModel.Token.Equals("xr::ETH"))
+                {
+                    var getTransactionETHResponse = xrouterEthereumService.xrGetTransaction(viewModel.Token, viewModel.TxId, viewModel.NodeCount);
+
+                    if (getTransactionETHResponse.Error != null)
+                        return Ok(new ErrorResponseViewModel
+                        {
+                            Error = getTransactionETHResponse.Error,
+                            Code = getTransactionETHResponse.Code,
+                            Id = getTransactionETHResponse.Id
+                        });
+                    return Ok(mapper.Map<ViewModels.Ethereum.TransactionResponseViewModel>(getTransactionETHResponse));
+                }
 
                 var transactionResponse = xrouterService.xrGetTransaction(viewModel.Token, viewModel.TxId, viewModel.NodeCount);
 
@@ -245,7 +306,7 @@ namespace XRouter.Api.Controllers
                         Id = transactionResponse.Id
                     });
 
-                return Ok(mapper.Map<TransactionResponseViewModel>(transactionResponse));
+                return Ok(mapper.Map<ViewModels.BitcoinBased.TransactionResponseViewModel>(transactionResponse));
             }
             catch (RpcInternalServerErrorException e)
             {
@@ -267,8 +328,19 @@ namespace XRouter.Api.Controllers
         {   
             try
             {
-                if(viewModel.Token.Equals("xr::ETH"))
-                    return Ok(xrouterEthereumService.xrGetTransactions(viewModel.Token, string.Join(",", viewModel.TxIds), viewModel.NodeCount));
+                if (viewModel.Token.Equals("xr::ETH"))
+                {
+                    var getTransactionsETHResponse = xrouterEthereumService.xrGetTransactions(viewModel.Token, string.Join(",", viewModel.TxIds), viewModel.NodeCount);
+
+                    if (getTransactionsETHResponse.Error != null)
+                        return Ok(new ErrorResponseViewModel
+                        {
+                            Error = getTransactionsETHResponse.Error,
+                            Code = getTransactionsETHResponse.Code,
+                            Id = getTransactionsETHResponse.Id
+                        });
+                    return Ok(mapper.Map<ViewModels.Ethereum.TransactionsResponseViewModel>(getTransactionsETHResponse));
+                }
 
                 var transactionsResponse = xrouterService.xrGetTransactions(viewModel.Token, string.Join(",", viewModel.TxIds), viewModel.NodeCount);
 
@@ -279,7 +351,7 @@ namespace XRouter.Api.Controllers
                         Code = transactionsResponse.Code,
                     });
 
-                return Ok(mapper.Map<TransactionsResponseViewModel>(transactionsResponse));
+                return Ok(mapper.Map<ViewModels.BitcoinBased.TransactionsResponseViewModel>(transactionsResponse));
             }
             catch (RpcInternalServerErrorException e)
             {
@@ -301,8 +373,19 @@ namespace XRouter.Api.Controllers
         {
             try
             {
-                if(viewModel.Token.Equals("xr::ETH"))
-                    return Ok(xrouterEthereumService.xrSendTransaction(viewModel.Token, viewModel.SignedTx, viewModel.NodeCount));
+                if (viewModel.Token.Equals("xr::ETH"))
+                {
+                    var sendTransactionETHResponse = xrouterEthereumService.xrSendTransaction(viewModel.Token, viewModel.SignedTx, viewModel.NodeCount);
+
+                    if (sendTransactionETHResponse.Error != null)
+                        return Ok(new ErrorResponseViewModel
+                        {
+                            Error = sendTransactionETHResponse.Error,
+                            Code = sendTransactionETHResponse.Code,
+                            Id = sendTransactionETHResponse.Id
+                        });
+                    return Ok(mapper.Map<ViewModels.Ethereum.SendTransactionResponseViewModel>(sendTransactionETHResponse));
+                }
 
                 var sendTransactionResponse = xrouterService.xrSendTransaction(viewModel.Token, viewModel.SignedTx, viewModel.NodeCount);
 
