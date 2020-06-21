@@ -6,7 +6,7 @@ using Newtonsoft.Json;
 
 namespace BlocknetLib.Services.Coins.Blocknet.Xrouter.Ethereum
 {
-    [JsonConverter(typeof(ValidOrErrorEthereumConverter))]
+    [JsonConverter(typeof(ValidOrErrorConverterEthereum))]
     public class GetBlockHashResponse : ErrorResponse
     {
         public BlockHashResponse Reply { get; set; }

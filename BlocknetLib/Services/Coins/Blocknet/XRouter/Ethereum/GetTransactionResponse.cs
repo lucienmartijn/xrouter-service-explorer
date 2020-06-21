@@ -7,7 +7,7 @@ using Newtonsoft.Json;
 
 namespace BlocknetLib.Services.Coins.Blocknet.Xrouter.Ethereum
 {
-    [JsonConverter(typeof(ValidOrErrorEthereumConverter))]
+    [JsonConverter(typeof(ValidOrErrorConverterEthereum))]
     public class GetTransactionResponse : ErrorResponse
     {
         public TransactionResponse Reply { get; set; }

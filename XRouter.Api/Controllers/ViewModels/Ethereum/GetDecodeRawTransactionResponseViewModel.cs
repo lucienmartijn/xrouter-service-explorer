@@ -4,8 +4,8 @@ using Newtonsoft.Json;
 
 namespace XRouter.Api.Controllers.ViewModels.Ethereum
 {
-    public class DecodeRawTransactionResponseViewModel: XRouterBaseResponseViewModel
+    public class GetDecodeRawTransactionResponseViewModel: XRouterBaseResponseViewModel
     {
-        public GetTransactionResponseViewModel Reply { get; set; }
+        public TransactionResponseViewModel Reply { get; set; }
     }
 }

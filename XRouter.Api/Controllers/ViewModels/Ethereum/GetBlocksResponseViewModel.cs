@@ -1,12 +1,13 @@
 using System.Collections.Generic;
+using BlocknetLib.Responses;
 using BlocknetLib.RPC.Deserializer;
 using BlocknetLib.RPC.RequestResponse;
 using Newtonsoft.Json;
 
 namespace XRouter.Api.Controllers.ViewModels.Ethereum
 {
-    public class BlockCountResponseViewModel: XRouterBaseResponseViewModel
+    public class GetBlocksResponseViewModel : XRouterBaseResponseViewModel
     {
-        public string Reply { get; set; }
+        public List<BlockResponseViewModel> Reply { get; set; }
     }
 }

@@ -1,15 +1,15 @@
 using System.Collections.Generic;
-using BlocknetLib.Responses.Ethereum;
+using BlocknetLib.Responses.Neo;
 using BlocknetLib.RPC.Deserializer;
 using BlocknetLib.RPC.RequestResponse;
 using Newtonsoft.Json;
 
 namespace BlocknetLib.Services.Coins.Blocknet.Xrouter.Neo
 {
-    [JsonConverter(typeof(ValidOrErrorEthereumConverter))]
+    [JsonConverter(typeof(ValidOrErrorConverterNeo))]
     public class GetTransactionsResponse : ErrorResponse
     {
-        public List<Responses.Ethereum.TransactionResponse> Reply { get; set; }
+        public List<Responses.Neo.TransactionResponse> Reply { get; set; }
         public string Uuid { get; set; }
     } 
 }

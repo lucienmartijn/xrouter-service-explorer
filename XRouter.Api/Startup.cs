@@ -77,10 +77,22 @@ namespace XRouter.Api
                     )
             );
 
+            services.AddTransient<IXRouterNeoService>(service =>
+               new XRouterNeoService(
+                   //rpcSettings.Blocknet.DaemonUrl_testnet, 
+                   rpcSettings.Blocknet.DaemonUrl,
+                   rpcSettings.Blocknet.RpcUserName,
+                   rpcSettings.Blocknet.RpcPassword,
+                   rpcSettings.Blocknet.WalletPassword,
+                   rpcSettings.Blocknet.RpcRequestTimeoutInSeconds
+                   )
+           );
+
             var mappingConfig = new MapperConfiguration(mc =>
             {
                 mc.AddProfile(new XRouterMappingProfile());
                 mc.AddProfile(new XRouterEthereumMappingProfile());
+                mc.AddProfile(new XRouterNeoMappingProfile());
             });
 
             IMapper mapper = mappingConfig.CreateMapper();

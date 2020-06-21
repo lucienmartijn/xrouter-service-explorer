@@ -16,19 +16,19 @@ namespace XRouter.Api.Mapper
     {
         public XRouterEthereumMappingProfile()
         {
-            CreateMap<BlocknetLib.Responses.Ethereum.BlockHashResponse, GetBlockHashResponseViewModel>();
-            CreateMap<BlocknetLib.Responses.Ethereum.BlockResponse, GetBlockResponseViewModel>();
-            CreateMap<BlocknetLib.Responses.Ethereum.TransactionResponse, GetTransactionResponseViewModel>();
-            CreateMap<BlocknetLib.Services.Coins.Blocknet.Xrouter.Ethereum.GetBlockResponse, BlockResponseViewModel>();
-            CreateMap<GetBlocksResponse, BlocksResponseViewModel>();
-            CreateMap<BlocknetLib.Services.Coins.Blocknet.Xrouter.Ethereum.GetTransactionResponse, TransactionResponseViewModel>();
-            CreateMap<GetTransactionsResponse, TransactionsResponseViewModel>();
+            CreateMap<BlocknetLib.Responses.Ethereum.BlockHashResponse, BlockHashResponseViewModel>();
+            CreateMap<BlocknetLib.Responses.Ethereum.BlockResponse, BlockResponseViewModel>();
+            CreateMap<BlocknetLib.Responses.Ethereum.TransactionResponse, TransactionResponseViewModel>();
+            CreateMap<BlocknetLib.Services.Coins.Blocknet.Xrouter.Ethereum.GetBlockResponse, GetBlockResponseViewModel>();
+            CreateMap<GetBlocksResponse, GetBlocksResponseViewModel>();
+            CreateMap<BlocknetLib.Services.Coins.Blocknet.Xrouter.Ethereum.GetTransactionResponse, GetTransactionResponseViewModel>();
+            CreateMap<GetTransactionsResponse, GetTransactionsResponseViewModel>();
             CreateMap<SendTransactionResponse, SendTransactionResponseViewModel>();
-            CreateMap<GetBlockCountResponse, BlockCountResponseViewModel>()
+            CreateMap<GetBlockCountResponse, GetBlockCountResponseViewModel>()
                 .ForSourceMember(bc => bc.Code, opt => opt.DoNotValidate())
                 .ForSourceMember(bc => bc.Error, opt => opt.DoNotValidate())
                 .ForSourceMember(bc => bc.Id, opt => opt.DoNotValidate());
-            CreateMap<GetBlockHashResponse, BlockHashResponseViewModel>();
+            CreateMap<GetBlockHashResponse, GetBlockHashResponseViewModel>();
             
         }
     }

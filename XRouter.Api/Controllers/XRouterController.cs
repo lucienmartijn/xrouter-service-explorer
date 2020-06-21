@@ -20,13 +20,18 @@ namespace XRouter.Api.Controllers
 
         private readonly IXRouterService xrouterService;
         private readonly IXRouterEthereumService xrouterEthereumService;
+        private readonly IXRouterNeoService xrouterNeoService;
         public XRouterController(
             IMapper mapper,
             IXRouterService xrouterService, 
-            IXRouterEthereumService xrouterEthereumService){
+            IXRouterEthereumService xrouterEthereumService,
+            IXRouterNeoService xrouterNeoService
+            )
+        {
             this.mapper = mapper;
             this.xrouterService = xrouterService;
             this.xrouterEthereumService = xrouterEthereumService;
+            this.xrouterNeoService = xrouterNeoService;
         }
 
         [HttpPost("[action]")]
@@ -55,7 +60,21 @@ namespace XRouter.Api.Controllers
                             Code = blockCountETHResponse.Code,
                             Id = blockCountETHResponse.Id
                         });
-                    return Ok(mapper.Map<ViewModels.Ethereum.BlockCountResponseViewModel>(blockCountETHResponse));
+                    return Ok(mapper.Map<ViewModels.Ethereum.GetBlockCountResponseViewModel>(blockCountETHResponse));
+                }
+
+                if (viewModel.Token.Equals("xr::NEO"))
+                {
+                    var blockCountNEOResponse = xrouterNeoService.xrGetBlockCount(viewModel.Token, viewModel.NodeCount);
+
+                    if (blockCountNEOResponse.Error != null)
+                        return Ok(new ErrorResponseViewModel
+                        {
+                            Error = blockCountNEOResponse.Error,
+                            Code = blockCountNEOResponse.Code,
+                            Id = blockCountNEOResponse.Id
+                        });
+                    return Ok(mapper.Map<ViewModels.Neo.GetBlockCountResponseViewModel>(blockCountNEOResponse));
                 }
 
                 var blockCountResponse = xrouterService.xrGetBlockCount(viewModel.Token, viewModel.NodeCount);
@@ -111,7 +130,21 @@ namespace XRouter.Api.Controllers
                             Code = decodeRawTransactionETHResponse.Code,
                             Id = decodeRawTransactionETHResponse.Id
                         });
-                    return Ok(mapper.Map<ViewModels.Ethereum.DecodeRawTransactionResponseViewModel>(decodeRawTransactionETHResponse));
+                    return Ok(mapper.Map<ViewModels.Ethereum.GetDecodeRawTransactionResponseViewModel>(decodeRawTransactionETHResponse));
+                }
+
+                if (viewModel.Token.Equals("xr::NEO"))
+                {
+                    var decodeRawTransactionNEOResponse = xrouterNeoService.xrDecodeRawTransaction(viewModel.Token, viewModel.TxHex, viewModel.NodeCount);
+
+                    if (decodeRawTransactionNEOResponse.Error != null)
+                        return Ok(new ErrorResponseViewModel
+                        {
+                            Error = decodeRawTransactionNEOResponse.Error,
+                            Code = decodeRawTransactionNEOResponse.Code,
+                            Id = decodeRawTransactionNEOResponse.Id
+                        });
+                    return Ok(mapper.Map<ViewModels.Neo.GetDecodeRawTransactionResponseViewModel>(decodeRawTransactionNEOResponse));
                 }
 
                 var decodeRawTransactionResponse = xrouterService.xrDecodeRawTransaction(viewModel.Token, viewModel.TxHex, viewModel.NodeCount);
@@ -156,7 +189,20 @@ namespace XRouter.Api.Controllers
                             Code = getBlockHashETHResponse.Code,
                             Id = getBlockHashETHResponse.Id
                         });
-                    return Ok(mapper.Map<ViewModels.Ethereum.BlockHashResponseViewModel>(getBlockHashETHResponse));
+                    return Ok(mapper.Map<ViewModels.Ethereum.GetBlockHashResponseViewModel>(getBlockHashETHResponse));
+                }
+                if (viewModel.Token.Equals("xr::NEO"))
+                {
+                    var getBlockHashNeoResponse = xrouterNeoService.xrGetBlockHash(viewModel.Token, viewModel.BlockNumber, viewModel.NodeCount);
+
+                    if (getBlockHashNeoResponse.Error != null)
+                        return Ok(new ErrorResponseViewModel
+                        {
+                            Error = getBlockHashNeoResponse.Error,
+                            Code = getBlockHashNeoResponse.Code,
+                            Id = getBlockHashNeoResponse.Id
+                        });
+                    return Ok(mapper.Map<ViewModels.Neo.GetBlockHashResponseViewModel>(getBlockHashNeoResponse));
                 }
 
                 var blockHashResponse = xrouterService.xrGetBlockHash(viewModel.Token, viewModel.BlockNumber, viewModel.NodeCount);
@@ -201,8 +247,22 @@ namespace XRouter.Api.Controllers
                             Code = getBlockETHResponse.Code,
                             Id = getBlockETHResponse.Id
                         });
-                    return Ok(mapper.Map<ViewModels.Ethereum.BlockResponseViewModel>(getBlockETHResponse));
-                }          
+                    return Ok(mapper.Map<ViewModels.Ethereum.GetBlockResponseViewModel>(getBlockETHResponse));
+                }
+
+                if (viewModel.Token.Equals("xr::NEO"))
+                {
+                    var getBlockNEOResponse = xrouterNeoService.xrGetBlock(viewModel.Token, viewModel.BlockHash, viewModel.NodeCount);
+
+                    if (getBlockNEOResponse.Error != null)
+                        return Ok(new ErrorResponseViewModel
+                        {
+                            Error = getBlockNEOResponse.Error,
+                            Code = getBlockNEOResponse.Code,
+                            Id = getBlockNEOResponse.Id
+                        });
+                    return Ok(mapper.Map<ViewModels.Neo.GetBlockResponseViewModel>(getBlockNEOResponse));
+                }
 
                 var blockResponse = xrouterService.xrGetBlock(viewModel.Token, viewModel.BlockHash, viewModel.NodeCount);
                 if (blockResponse.Error != null)
@@ -248,7 +308,21 @@ namespace XRouter.Api.Controllers
                             Code = getBlocksETHResponse.Code,
                             Id = getBlocksETHResponse.Id
                         });
-                    return Ok(mapper.Map<ViewModels.Ethereum.BlocksResponseViewModel>(getBlocksETHResponse));
+                    return Ok(mapper.Map<ViewModels.Ethereum.GetBlocksResponseViewModel>(getBlocksETHResponse));
+                }
+
+                if (viewModel.Token.Equals("xr::NEO"))
+                {
+                    var getBlocksNEOResponse = xrouterNeoService.xrGetBlocks(viewModel.Token, string.Join(",", viewModel.BlockHashes), viewModel.NodeCount);
+
+                    if (getBlocksNEOResponse.Error != null)
+                        return Ok(new ErrorResponseViewModel
+                        {
+                            Error = getBlocksNEOResponse.Error,
+                            Code = getBlocksNEOResponse.Code,
+                            Id = getBlocksNEOResponse.Id
+                        });
+                    return Ok(mapper.Map<ViewModels.Neo.GetBlocksResponseViewModel>(getBlocksNEOResponse));
                 }
 
                 var blocksResponse = xrouterService.xrGetBlocks(viewModel.Token, string.Join(",", viewModel.BlockHashes), viewModel.NodeCount);
@@ -293,7 +367,21 @@ namespace XRouter.Api.Controllers
                             Code = getTransactionETHResponse.Code,
                             Id = getTransactionETHResponse.Id
                         });
-                    return Ok(mapper.Map<ViewModels.Ethereum.TransactionResponseViewModel>(getTransactionETHResponse));
+                    return Ok(mapper.Map<ViewModels.Ethereum.GetTransactionResponseViewModel>(getTransactionETHResponse));
+                }
+
+                if (viewModel.Token.Equals("xr::NEO"))
+                {
+                    var getTransactionNEOResponse = xrouterNeoService.xrGetTransaction(viewModel.Token, viewModel.TxId, viewModel.NodeCount);
+
+                    if (getTransactionNEOResponse.Error != null)
+                        return Ok(new ErrorResponseViewModel
+                        {
+                            Error = getTransactionNEOResponse.Error,
+                            Code = getTransactionNEOResponse.Code,
+                            Id = getTransactionNEOResponse.Id
+                        });
+                    return Ok(mapper.Map<ViewModels.Neo.GetTransactionResponseViewModel>(getTransactionNEOResponse));
                 }
 
                 var transactionResponse = xrouterService.xrGetTransaction(viewModel.Token, viewModel.TxId, viewModel.NodeCount);
@@ -339,7 +427,21 @@ namespace XRouter.Api.Controllers
                             Code = getTransactionsETHResponse.Code,
                             Id = getTransactionsETHResponse.Id
                         });
-                    return Ok(mapper.Map<ViewModels.Ethereum.TransactionsResponseViewModel>(getTransactionsETHResponse));
+                    return Ok(mapper.Map<ViewModels.Ethereum.GetTransactionsResponseViewModel>(getTransactionsETHResponse));
+                }
+
+                if (viewModel.Token.Equals("xr::NEO"))
+                {
+                    var getTransactionsNEOResponse = xrouterNeoService.xrGetTransactions(viewModel.Token, string.Join(",", viewModel.TxIds), viewModel.NodeCount);
+
+                    if (getTransactionsNEOResponse.Error != null)
+                        return Ok(new ErrorResponseViewModel
+                        {
+                            Error = getTransactionsNEOResponse.Error,
+                            Code = getTransactionsNEOResponse.Code,
+                            Id = getTransactionsNEOResponse.Id
+                        });
+                    return Ok(mapper.Map<ViewModels.Neo.GetTransactionsResponseViewModel>(getTransactionsNEOResponse));
                 }
 
                 var transactionsResponse = xrouterService.xrGetTransactions(viewModel.Token, string.Join(",", viewModel.TxIds), viewModel.NodeCount);
@@ -385,6 +487,20 @@ namespace XRouter.Api.Controllers
                             Id = sendTransactionETHResponse.Id
                         });
                     return Ok(mapper.Map<ViewModels.Ethereum.SendTransactionResponseViewModel>(sendTransactionETHResponse));
+                }
+
+                if (viewModel.Token.Equals("xr::NEO"))
+                {
+                    var sendTransactionNEOResponse = xrouterNeoService.xrSendTransaction(viewModel.Token, viewModel.SignedTx, viewModel.NodeCount);
+
+                    if (sendTransactionNEOResponse.Error != null)
+                        return Ok(new ErrorResponseViewModel
+                        {
+                            Error = sendTransactionNEOResponse.Error,
+                            Code = sendTransactionNEOResponse.Code,
+                            Id = sendTransactionNEOResponse.Id
+                        });
+                    return Ok(mapper.Map<ViewModels.Neo.SendTransactionResponseViewModel>(sendTransactionNEOResponse));
                 }
 
                 var sendTransactionResponse = xrouterService.xrSendTransaction(viewModel.Token, viewModel.SignedTx, viewModel.NodeCount);

@@ -7,10 +7,10 @@ using BlocknetLib.RPC.Deserializer;
 
 namespace BlocknetLib.Services.Coins.Blocknet.Xrouter.Neo
 {
-    [JsonConverter(typeof(ValidOrErrorEthereumConverter))]
+    [JsonConverter(typeof(ValidOrErrorConverterNeo))]
     public class GetBlockCountResponse : ErrorResponse
     {
-        public string Reply { get; set; }
+        public int Reply { get; set; }
         public string Uuid { get; set; }
     }
 }
