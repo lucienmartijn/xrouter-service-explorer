@@ -16,6 +16,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using XRouter.Api.ExceptionHandling;
 using XRouter.Api.Mapper;
 
 namespace XRouter.Api
@@ -66,28 +67,6 @@ namespace XRouter.Api
                     )
             );
 
-            services.AddTransient<IXRouterEthereumService>(service =>
-                new XRouterEthereumService(
-                    //rpcSettings.Blocknet.DaemonUrl_testnet, 
-                    rpcSettings.Blocknet.DaemonUrl,
-                    rpcSettings.Blocknet.RpcUserName,
-                    rpcSettings.Blocknet.RpcPassword,
-                    rpcSettings.Blocknet.WalletPassword,
-                    rpcSettings.Blocknet.RpcRequestTimeoutInSeconds
-                    )
-            );
-
-            services.AddTransient<IXRouterNeoService>(service =>
-               new XRouterNeoService(
-                   //rpcSettings.Blocknet.DaemonUrl_testnet, 
-                   rpcSettings.Blocknet.DaemonUrl,
-                   rpcSettings.Blocknet.RpcUserName,
-                   rpcSettings.Blocknet.RpcPassword,
-                   rpcSettings.Blocknet.WalletPassword,
-                   rpcSettings.Blocknet.RpcRequestTimeoutInSeconds
-                   )
-           );
-
             var mappingConfig = new MapperConfiguration(mc =>
             {
                 mc.AddProfile(new XRouterMappingProfile());
@@ -106,6 +85,12 @@ namespace XRouter.Api
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseExceptionHandler(new ExceptionHandlerOptions
+            {
+                ExceptionHandler = new JsonExceptionMiddleware().Invoke
+            }
+  );
 
             //app.UseHttpsRedirection();
 

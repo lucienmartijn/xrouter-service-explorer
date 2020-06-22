@@ -97,6 +97,23 @@ namespace BlocknetLib.RPC.Connector
                 Console.WriteLine("Rpc Call Time Elapsed: {0} ms", timer.ElapsedMilliseconds); 
 
                 var rpcResponse = JsonConvert.DeserializeObject<JsonRpcResponse<T>>(json);
+
+                var errorProperty = rpcResponse.Result.GetType().GetProperty("Error");
+
+                if (errorProperty != null)
+                {
+                    var errorValue = (JsonRpcError)errorProperty.GetValue(rpcResponse.Result);
+                    if (errorValue != null)
+                    {
+                        var internalServerErrorException = new RpcInternalServerErrorException(errorValue.Message)
+                        {
+                            RpcErrorCode = errorValue.Code
+                        };
+                        internalServerErrorException.Data["rpcResponse"] = rpcResponse.Result;
+                        throw internalServerErrorException;
+                    }
+                }
+                
                 return rpcResponse.Result;
             }
             catch (WebException webException)
@@ -167,6 +184,10 @@ namespace BlocknetLib.RPC.Connector
             catch (ProtocolViolationException protocolViolationException)
             {
                 throw new RpcException("Unable to connect to the server", protocolViolationException);
+            }
+            catch (RpcInternalServerErrorException rpcInternalServerErrorException)
+            {
+                throw new RpcInternalServerErrorException(rpcInternalServerErrorException.Message, rpcInternalServerErrorException);
             }
             catch (Exception exception)
             {
