@@ -7,7 +7,7 @@ using BlocknetLib.RPC.Deserializer;
 
 namespace BlocknetLib.Services.Coins.Blocknet.Xrouter.EthereumClassic
 {
-    [JsonConverter(typeof(ValidOrErrorConverterEthereum))]
+    [JsonConverter(typeof(ValidOrErrorEthereumClassicConverter))]
     public class GetBlockCountResponse : ErrorResponse
     {
         public string Reply { get; set; }

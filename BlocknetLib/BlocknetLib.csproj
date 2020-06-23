@@ -10,8 +10,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Responses\EthereumClassic\" />
-    <Folder Include="Responses\Monero\" />
     <Folder Include="Services\Coins\Blocknet\Network\" />
   </ItemGroup>
 

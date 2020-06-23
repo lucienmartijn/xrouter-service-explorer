@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 
 namespace BlocknetLib.Services.Coins.Blocknet.Xrouter.Monero
 {
-    [JsonConverter(typeof(ValidOrErrorConverterEthereum))]
+    [JsonConverter(typeof(ValidOrErrorConverterMonero))]
     public class SendTransactionResponse : ErrorResponse
     {
         public string Reply { get; set; }

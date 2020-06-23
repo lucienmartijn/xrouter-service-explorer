@@ -71,7 +71,9 @@ namespace XRouter.Api
             {
                 mc.AddProfile(new XRouterMappingProfile());
                 mc.AddProfile(new XRouterEthereumMappingProfile());
+                mc.AddProfile(new XRouterEthereumClassicMappingProfile());
                 mc.AddProfile(new XRouterNeoMappingProfile());
+                mc.AddProfile(new XRouterMoneroMappingProfile());
             });
 
             IMapper mapper = mappingConfig.CreateMapper();

@@ -6,10 +6,10 @@ using Newtonsoft.Json;
 
 namespace BlocknetLib.Services.Coins.Blocknet.Xrouter.Monero
 {
-    [JsonConverter(typeof(ValidOrErrorConverterEthereum))]
+    [JsonConverter(typeof(ValidOrErrorConverterMonero))]
     public class GetBlockHashResponse : ErrorResponse
     {
-        public GetBlockHashResponse Reply { get; set; }
+        public string Reply { get; set; }
         public string Uuid { get; set; }
     }
 }

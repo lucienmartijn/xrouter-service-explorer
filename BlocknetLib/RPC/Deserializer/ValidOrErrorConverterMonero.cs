@@ -17,7 +17,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using BlocknetLib.Services.Coins.Blocknet.Xrouter;
 using BlocknetLib.Responses;
-using BlocknetLib.Services.Coins.Blocknet.Xrouter.BitcoinBased;
+using BlocknetLib.Services.Coins.Blocknet.Xrouter.Monero;
 using System.Reflection;
 
 namespace BlocknetLib.RPC.Deserializer
@@ -62,11 +62,6 @@ namespace BlocknetLib.RPC.Deserializer
         {
             var token = JToken.Load(reader);
 
-            
-            if (objectType == typeof(ServiceResponse))
-            {
-                return Populate<ServiceResponse>(token, objectType, serializer);
-            }
             if (objectType == typeof(GetBlockCountResponse))
             {
                 return Populate<GetBlockCountResponse>(token, objectType, serializer);
@@ -77,14 +72,14 @@ namespace BlocknetLib.RPC.Deserializer
                 return Populate<GetBlockHashResponse>(token, objectType, serializer);
             }
 
-            if (objectType == typeof(Services.Coins.Blocknet.Xrouter.BitcoinBased.GetBlockResponse))
+            if (objectType == typeof(Services.Coins.Blocknet.Xrouter.Monero.GetBlockResponse))
             {
-                return Populate<Services.Coins.Blocknet.Xrouter.BitcoinBased.GetBlockResponse>(token, objectType, serializer);
+                return Populate<Services.Coins.Blocknet.Xrouter.Monero.GetBlockResponse>(token, objectType, serializer);
             }
 
-            if (objectType == typeof(Services.Coins.Blocknet.Xrouter.BitcoinBased.GetTransactionResponse))
+            if (objectType == typeof(Services.Coins.Blocknet.Xrouter.Monero.GetTransactionResponse))
             {
-                return Populate<Services.Coins.Blocknet.Xrouter.BitcoinBased.GetTransactionResponse>(token, objectType, serializer);
+                return Populate<Services.Coins.Blocknet.Xrouter.Monero.GetTransactionResponse>(token, objectType, serializer);
             }
 
             if (objectType == typeof(GetBlocksResponse))

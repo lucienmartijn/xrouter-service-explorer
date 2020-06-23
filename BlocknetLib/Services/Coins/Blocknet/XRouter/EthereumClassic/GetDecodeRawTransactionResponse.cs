@@ -1,12 +1,12 @@
 using System.Collections.Generic;
-using BlocknetLib.Responses.Ethereum;
+using BlocknetLib.Responses.EthereumClassic;
 using BlocknetLib.RPC.Deserializer;
 using BlocknetLib.RPC.RequestResponse;
 using Newtonsoft.Json;
 
 namespace BlocknetLib.Services.Coins.Blocknet.Xrouter.EthereumClassic
 {
-    [JsonConverter(typeof(ValidOrErrorConverterEthereum))]
+    [JsonConverter(typeof(ValidOrErrorEthereumClassicConverter))]
     public class GetDecodeRawTransactionResponse : ErrorResponse
     {
         public GetTransactionResponse Reply { get; set; }

@@ -11,12 +11,9 @@ namespace BlocknetLib.Responses.Neo
         public int Version { get; set; }
         public Attribute[] Attributes { get; set; }
         public Vin[] Vin { get; set; }
-
         public Vout[] Vout { get; set; }
-        //sys_fee
         [JsonProperty("sys_fee")]
         public int SysFee { get; set; }
-        //net_fee
         [JsonProperty("net_fee")]
         public int NetFee { get; set; }
         public Script[] Scripts { get; set; }
