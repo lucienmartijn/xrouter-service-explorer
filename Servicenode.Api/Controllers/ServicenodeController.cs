@@ -34,55 +34,18 @@ namespace Servicenode.Api.Controllers
         [HttpGet("[action]")]
         public IActionResult GetServiceNodeCount()
         {
-            List<ShowConfigsResponse> configReply;
-            try
-            {                
-                configReply = xrouterService.xrShowConfigs();
-            }
-            catch (RpcInternalServerErrorException e)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, new JsonRpcXrError
-                {
-                    Error = e.Message,
-                    Code = (int)e.RpcErrorCode.Value
-                });
-            }
-            catch (RpcRequestTimeoutException e)
-            {
-                return StatusCode(StatusCodes.Status408RequestTimeout, new JsonRpcXrError
-                {
-                    Error = e.Message,
-                });
-            }
-
+            var configReply = xrouterService.xrShowConfigs();
+            
             return Ok(configReply.Count());
         }
 
         [HttpGet("[action]")]
         public IActionResult GetNodesByService(string service, int node_count = 1)
         {
-            ConnectResponse connectResponse;
-            List<ShowConfigsResponse> configReply;
-            try
-            {
-                connectResponse = xrouterService.xrConnect(service, node_count);
-                configReply = xrouterService.xrShowConfigs();
-            }
-            catch (RpcInternalServerErrorException e)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, new JsonRpcXrError
-                {
-                    Error = e.Message,
-                    Code = (int)e.RpcErrorCode.Value
-                });
-            }
-            catch (RpcRequestTimeoutException e)
-            {
-                return StatusCode(StatusCodes.Status408RequestTimeout, new JsonRpcXrError
-                {
-                    Error = e.Message,
-                });
-            }
+
+            var connectResponse = xrouterService.xrConnect(service, node_count);
+            var configReply = xrouterService.xrShowConfigs();
+
             var connectReply = connectResponse.Reply;
 
             if(service.Contains("xrs::"))
@@ -93,7 +56,8 @@ namespace Servicenode.Api.Controllers
             {
                 connectReply = connectReply.Where(cr => cr.SpvWallets.Contains(service.Replace("xr::", ""))).ToList();
             }
-            
+
+            connectReply = connectReply.Where(c => c.NodePubKey != string.Empty).ToList();
             var nodes = connectReply.Select(cr => 
             {
                 var serviceNodeConfig = configReply.Find(c => c.NodePubKey == cr.NodePubKey);
@@ -130,35 +94,8 @@ namespace Servicenode.Api.Controllers
             ConnectedNodeResponse serviceNode;
             List<ConnectedNodeResponse> otherNodes;
 
-            ConnectResponse connectResponse;
-            List<ShowConfigsResponse> configReply;
-            try
-            {
-                connectResponse = xrouterService.xrConnect(service, node_count);    
-                configReply = xrouterService.xrShowConfigs();
-            }
-            catch (RpcInternalServerErrorException e)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, new JsonRpcXrError
-                {
-                    Error = e.Message,
-                    Code = (int)e.RpcErrorCode.Value
-                });
-            }
-            catch (RpcRequestTimeoutException e)
-            {
-                return StatusCode(StatusCodes.Status408RequestTimeout, new JsonRpcXrError
-                {
-                    Error = e.Message,
-                });                
-            }
-            
-            if(connectResponse.Error != null){
-                return StatusCode(StatusCodes.Status500InternalServerError, new JsonRpcXrError{
-                    Error = connectResponse.Error,
-                    Code = connectResponse.Code
-                });
-            }
+            var connectResponse = xrouterService.xrConnect(service, node_count);    
+            var configReply = xrouterService.xrShowConfigs();
 
             var connectReply = connectResponse.Reply;                
 
@@ -258,34 +195,8 @@ namespace Servicenode.Api.Controllers
             ConnectedNodeResponse serviceNode;
             List<ConnectedNodeResponse> otherNodes;
 
-            ConnectResponse connectResponse;
-            List<ShowConfigsResponse> configReply;
-            try
-            {
-                connectResponse = xrouterService.xrConnect(service, node_count);    
-                configReply = xrouterService.xrShowConfigs();
-            }
-            catch (RpcInternalServerErrorException e)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, new JsonRpcXrError
-                {
-                    Error = e.Message,
-                    Code = (int)e.RpcErrorCode.Value
-                });
-            }
-            catch (RpcRequestTimeoutException e)
-            {
-                 return StatusCode(StatusCodes.Status408RequestTimeout, new JsonRpcXrError{
-                    Error = e.Message
-                });                
-            }
-
-            if(connectResponse.Error != null){
-                return StatusCode(StatusCodes.Status500InternalServerError, new JsonRpcXrError{
-                    Error = connectResponse.Error,
-                    Code = connectResponse.Code
-                });
-            }
+            var connectResponse = xrouterService.xrConnect(service, node_count);    
+            var configReply = xrouterService.xrShowConfigs();
 
             var connectReply = connectResponse.Reply;
                 
@@ -298,6 +209,9 @@ namespace Servicenode.Api.Controllers
                 serviceNode = connectReply.Find(s => s.NodePubKey == nodePubKey);
                 otherNodes = connectReply.Where(s => s.NodePubKey != nodePubKey).ToList();
             }
+
+            if (string.IsNullOrEmpty(serviceNode.NodePubKey))
+                return StatusCode(StatusCodes.Status500InternalServerError, "Service node SnodeKey is empty.");
 
             var serviceNodeConfig = configReply.Find(c => c.NodePubKey == serviceNode.NodePubKey);
 
@@ -316,8 +230,7 @@ namespace Servicenode.Api.Controllers
             {
                 serviceNodePort = serviceNodeConfigElements.FirstOrDefault(e => e[0] == "port")[1];
             }
-            
-            string help = string.Empty;
+           
 
             var serviceName = service.Replace("xrs::", "");
             var serviceConfig = serviceNode.Services[serviceName];
@@ -369,34 +282,31 @@ namespace Servicenode.Api.Controllers
 
             string xcloudConfig = sb.ToString();
 
-            //if (serviceNodeConfig?.Plugins.Count > 0)
-            //{
-            //    // Try get help key from config string
-            //    var listConfig = serviceNodeConfig.Plugins[serviceName]
-            //            .Split(new string[] { "\n", "\r\n" }, StringSplitOptions.RemoveEmptyEntries)
-            //            .Select(value => value.Split('=')).ToList();
+            string help = string.Empty;
+            string description = string.Empty;
+            if (serviceNodeConfig?.Plugins.Count > 0)
+            {
+                // Try get help key from config string
+                var configDictionary = serviceNodeConfig.Plugins[serviceName]
+                        .Split(new string[] { "\n", "\r\n" }, StringSplitOptions.RemoveEmptyEntries)
+                        .Select(value => value.Split('=')).ToDictionary(l => l[0], l => string.Join("", l.Skip(1).ToArray()));
 
-            //    if (listConfig.Any(lc => lc[0] == "help"))
-            //    {
-            //        int i = 0;
-            //        foreach (var config in listConfig)
-            //        {
-            //            if (config[0] == "help")
-            //                break;
-            //            i++;
-            //        }
-            //        help = listConfig[i][1];
+                if (configDictionary.ContainsKey("help"))
+                    help = configDictionary["help"];
+                else
+                    help = serviceNodeConfig.Plugins[serviceName];
 
-            //        xcloudConfig = serviceNodeConfig.Plugins[serviceName];
-            //    }
-            //}
+                if(configDictionary.ContainsKey("description"))
+                    description = configDictionary["description"];
+            }
 
             //TODO: Add AutoMapper to replace      
             var viewModel = new XCloudServiceResultViewModel
             {
                 Service = new XCloudServiceViewModel
                 {
-                    HelpDescription = help,
+                    Help = help,
+                    Description = description,
                     Disabled = serviceConfig.Disabled,
                     Fee = serviceConfig.Fee,
                     FetchLimit = serviceConfig.FetchLimit,
@@ -433,49 +343,16 @@ namespace Servicenode.Api.Controllers
             if (string.IsNullOrWhiteSpace(nodePubKey))
                 return BadRequest("NodePubKey was not supplied");
 
-            GetConnectedNodesResponse getConnectedResponse;
-            try
-            {
-                getConnectedResponse = xrouterService.xrConnectedNodes();    
-            }
-            catch (RpcInternalServerErrorException e)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, new JsonRpcXrError{
-                    Error = e.Message + Environment.NewLine + "Node Public Key: " + nodePubKey,
-                    Code = (int) e.RpcErrorCode.Value
-                });
-            }
-            catch (RpcRequestTimeoutException e)
-            {
-                 return StatusCode(StatusCodes.Status408RequestTimeout, new JsonRpcXrError{
-                    Error = e.Message + Environment.NewLine + "Node Public Key: " + nodePubKey,
-                });                
-            }
-
+            var getConnectedResponse = xrouterService.xrConnectedNodes();    
             var connectReply = getConnectedResponse.Reply;
 
-            ConnectResponse connectResponse;
             var serviceNode = connectReply.Find(s => s.NodePubKey == nodePubKey);
             if (serviceNode == null)
             {
-                if(service == null) service = "xr::BLOCK";
-                try
-                {
-                    connectResponse = xrouterService.xrConnect(service, node_count);    
-                }
-                catch (RpcInternalServerErrorException e)
-                {
-                    return StatusCode(StatusCodes.Status500InternalServerError, new JsonRpcXrError{
-                        Error = e.Message + Environment.NewLine + "Node Public Key: " + nodePubKey,
-                        Code = (int) e.RpcErrorCode.Value
-                    });
-                }
-                catch (RpcRequestTimeoutException e)
-                {
-                    return StatusCode(StatusCodes.Status408RequestTimeout, new JsonRpcXrError{
-                        Error = e.Message + Environment.NewLine + "Node Public Ke5y: " + nodePubKey,
-                    });                
-                }
+                if(service == null) 
+                    service = "xr::BLOCK";
+                
+                var connectResponse = xrouterService.xrConnect(service, node_count);                    
                  
                 serviceNode = connectResponse.Reply.Find(s => s.NodePubKey == nodePubKey);
 
@@ -509,6 +386,7 @@ namespace Servicenode.Api.Controllers
             {
                 serviceNodePort = serviceNodeConfigElements.FirstOrDefault(e => e[0] == "port")[1];
             }
+
             var viewModel = new NodeInfoViewModel
             {
                 Type = (serviceNodePort == "41412" || string.IsNullOrEmpty(serviceNodePort))? "Regular" : "Enterprise",
@@ -542,28 +420,10 @@ namespace Servicenode.Api.Controllers
         public IActionResult GetServiceNodeList([FromQuery]ServiceNodeQueryViewModel filterViewModel)
         {
             var result = new ServiceNodeQueryResult<Core.Models.ServiceNodeInfoResponse>();
-            List<ShowConfigsResponse> configs;
-            List<BlocknetLib.Services.Coins.Blocknet.Xrouter.ServiceNodeInfoResponse> servicenodes;
-            try
-            {
-                configs = xrouterService.xrShowConfigs();
-                servicenodes = servicenodeService.serviceNodeList();
-            }
-            catch (RpcInternalServerErrorException e)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, new JsonRpcXrError
-                {
-                    Error = e.Message,
-                    Code = (int)e.RpcErrorCode.Value
-                });
-            }
-            catch (RpcRequestTimeoutException e)
-            {
-                return StatusCode(StatusCodes.Status408RequestTimeout, new JsonRpcXrError
-                {
-                    Error = e.Message
-                });
-            }
+            
+            var configs = xrouterService.xrShowConfigs();
+            var servicenodes = servicenodeService.serviceNodeList();
+
             var xrouterEnabledServicenodes = servicenodes.Join(configs, sn => sn.SNodeKey, c => c.NodePubKey, (sn, c) => new {
                 Config = c, ServiceNode = sn
             });
@@ -655,9 +515,9 @@ namespace Servicenode.Api.Controllers
         }
 
         [HttpGet("[action]")]
-        public IActionResult Test()
+        public IActionResult Ping()
         {
-            return Ok("Test");
+            return Ok("Pong");
         }
     }
 }

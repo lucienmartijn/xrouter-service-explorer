@@ -14,13 +14,15 @@ using CloudChainsSPVLib.Services.Coins.Litecoin;
 using CloudChainsSpvWallet.Api.Controllers.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using CloudChainsSpvWallet.Api.Hubs;
+using Microsoft.AspNetCore.SignalR;
 
 namespace CloudChainsSpvWallet.Api.Controllers
 {
     [Route("api/Dogecoin")]
     public class DogecoinController : CoinController
     {
-        public DogecoinController(IMapper mapper, IDogecoinService DogecoinService) : base(mapper, DogecoinService)
+        public DogecoinController(IMapper mapper, IHubContext<ListUnspentHub> hub, IDogecoinService DogecoinService) : base(mapper, hub, DogecoinService)
         {
         }
 

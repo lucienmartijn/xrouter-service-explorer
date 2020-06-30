@@ -14,13 +14,15 @@ using CloudChainsSPVLib.Services.Coins.Litecoin;
 using CloudChainsSpvWallet.Api.Controllers.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using CloudChainsSpvWallet.Api.Hubs;
+using Microsoft.AspNetCore.SignalR;
 
 namespace CloudChainsSpvWallet.Api.Controllers
 {
     [Route("api/tezos")]
     public class TezosController : CoinController
     {
-        public TezosController(IMapper mapper, ITezosService TezosService) : base(mapper, TezosService)
+        public TezosController(IMapper mapper, IHubContext<ListUnspentHub> hub, ITezosService TezosService) : base(mapper, hub, TezosService)
         {
         }
 

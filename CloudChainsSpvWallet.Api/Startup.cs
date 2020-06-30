@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 using AutoMapper;
 using CloudChainsSPVLib.CoinConfig;
@@ -19,6 +20,10 @@ using CloudChainsSPVLib.Services.Coins.Polis;
 using CloudChainsSPVLib.Services.Coins.Ravencoin;
 using CloudChainsSPVLib.Services.Coins.Syscoin;
 using CloudChainsSPVLib.Services.Coins.Tezos;
+
+using CloudChainsSpvWallet.Api.ExceptionHandling;
+using CloudChainsSpvWallet.Api.Hubs;
+
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -43,19 +48,18 @@ namespace CloudChainsSpvWallet.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
-
             services.AddCors(corsOptions =>
             {
-                corsOptions.AddPolicy("fully permissive", configurePolicy => configurePolicy
-                .AllowAnyOrigin()
-                .AllowAnyMethod()
-                .AllowAnyHeader()
-                );
-                //.WithOrigins("http://localhost:44305")
-                // .AllowCredentials()); //localhost:4200 is the default port an angular runs in dev mode with ng serve
-
+                corsOptions.AddPolicy("CorsPolicy", configurePolicy => configurePolicy
+                    .WithOrigins("http://localhost:4200")
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()
+                    .AllowCredentials());
             });
+
+            services.AddSignalR();
+
+            services.AddControllers();
 
             var rpcSettings = Configuration.GetSection("CoinConfig").Get<CoinRpcConfig>();
             services.AddTransient<ICoinService, CoinService>();
@@ -90,7 +94,7 @@ namespace CloudChainsSpvWallet.Api
                     )
             );
 
-            services.AddTransient<IAlqocoinService>(service =>
+            services.AddTransient<ICoinService>(service =>
                 new AlqocoinService(
                     //rpcSettings.Blocknet.DaemonUrl_testnet, 
                     rpcSettings.Alqocoin.DaemonUrl,
@@ -101,7 +105,7 @@ namespace CloudChainsSpvWallet.Api
                     )
             );
 
-            services.AddTransient<IBitBayService>(service =>
+            services.AddTransient<ICoinService>(service =>
                 new BitBayService(
                     //rpcSettings.Blocknet.DaemonUrl_testnet, 
                     rpcSettings.BitBay.DaemonUrl,
@@ -112,7 +116,7 @@ namespace CloudChainsSpvWallet.Api
                     )
             );
 
-            services.AddTransient<IDashService>(service =>
+            services.AddTransient<ICoinService>(service =>
                 new DashService(
                     //rpcSettings.Blocknet.DaemonUrl_testnet, 
                     rpcSettings.Dash.DaemonUrl,
@@ -123,7 +127,7 @@ namespace CloudChainsSpvWallet.Api
                     )
             );
 
-            services.AddTransient<IDigibyteService>(service =>
+            services.AddTransient<ICoinService>(service =>
                 new DigibyteService(
                     //rpcSettings.Blocknet.DaemonUrl_testnet, 
                     rpcSettings.Digibyte.DaemonUrl,
@@ -134,7 +138,7 @@ namespace CloudChainsSpvWallet.Api
                     )
             );
 
-            services.AddTransient<IDogecoinService>(service =>
+            services.AddTransient<ICoinService>(service =>
                 new DogecoinService(
                     //rpcSettings.Blocknet.DaemonUrl_testnet, 
                     rpcSettings.Dogecoin.DaemonUrl,
@@ -145,7 +149,7 @@ namespace CloudChainsSpvWallet.Api
                     )
             );
 
-            services.AddTransient<IPivxService>(service =>
+            services.AddTransient<ICoinService>(service =>
                 new PivxService(
                     //rpcSettings.Blocknet.DaemonUrl_testnet, 
                     rpcSettings.Pivx.DaemonUrl,
@@ -156,7 +160,7 @@ namespace CloudChainsSpvWallet.Api
                     )
             );
 
-            services.AddTransient<IPolisService>(service =>
+            services.AddTransient<ICoinService>(service =>
                 new PolisService(
                     //rpcSettings.Blocknet.DaemonUrl_testnet, 
                     rpcSettings.Polis.DaemonUrl,
@@ -167,7 +171,7 @@ namespace CloudChainsSpvWallet.Api
                     )
             );
 
-            services.AddTransient<IRavencoinService>(service =>
+            services.AddTransient<ICoinService>(service =>
                 new RavencoinService(
                     //rpcSettings.Blocknet.DaemonUrl_testnet, 
                     rpcSettings.Ravencoin.DaemonUrl,
@@ -178,7 +182,7 @@ namespace CloudChainsSpvWallet.Api
                     )
             );
 
-            services.AddTransient<ISyscoinService>(service =>
+            services.AddTransient<ICoinService>(service =>
                 new SyscoinService(
                     //rpcSettings.Blocknet.DaemonUrl_testnet, 
                     rpcSettings.Syscoin.DaemonUrl,
@@ -189,7 +193,7 @@ namespace CloudChainsSpvWallet.Api
                     )
             );
 
-            services.AddTransient<ITezosService>(service =>
+            services.AddTransient<ICoinService>(service =>
                 new TezosService(
                     //rpcSettings.Blocknet.DaemonUrl_testnet, 
                     rpcSettings.Tezos.DaemonUrl,
@@ -212,22 +216,31 @@ namespace CloudChainsSpvWallet.Api
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseWebSockets();
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
 
-            //app.UseHttpsRedirection();
+            app.UseExceptionHandler(new ExceptionHandlerOptions
+            {
+                ExceptionHandler = new JsonExceptionMiddleware().Invoke
+            });
 
-            app.UseCors("fully permissive");
+            app.UseHttpsRedirection();
 
             app.UseRouting();
 
+            app.UseCors("CorsPolicy");
+
             app.UseAuthorization();
+
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapHub<ListUnspentHub>("/data");
             });
         }
     }

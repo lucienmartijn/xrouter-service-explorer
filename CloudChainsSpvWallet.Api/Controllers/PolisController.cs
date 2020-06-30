@@ -14,13 +14,15 @@ using CloudChainsSPVLib.Services.Coins.Litecoin;
 using CloudChainsSpvWallet.Api.Controllers.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using CloudChainsSpvWallet.Api.Hubs;
+using Microsoft.AspNetCore.SignalR;
 
 namespace CloudChainsSpvWallet.Api.Controllers
 {
     [Route("api/Polis")]
     public class PolisController : CoinController
     {
-        public PolisController(IMapper mapper, IPolisService PolisService) : base(mapper, PolisService)
+        public PolisController(IMapper mapper, IHubContext<ListUnspentHub> hub, IPolisService PolisService) : base(mapper, hub, PolisService)
         {
         }
 

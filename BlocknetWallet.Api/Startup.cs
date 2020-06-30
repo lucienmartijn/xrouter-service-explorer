@@ -6,6 +6,7 @@ using BlocknetLib.CoinConfig;
 using BlocknetLib.Services;
 using BlocknetLib.Services.Coins.Base;
 using BlocknetLib.Services.Coins.Blocknet;
+using BlocknetWallet.Api.ExceptionHandling;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -65,8 +66,13 @@ namespace BlocknetWallet.Api
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseExceptionHandler(new ExceptionHandlerOptions
+            {
+                ExceptionHandler = new JsonExceptionMiddleware().Invoke
+            });
+
             //app.UseHttpsRedirection();
-            
+
             app.UseCors("fully permissive");
 
             app.UseRouting();

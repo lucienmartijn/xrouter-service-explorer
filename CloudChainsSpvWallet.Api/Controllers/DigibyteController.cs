@@ -14,13 +14,15 @@ using CloudChainsSPVLib.Services.Coins.Litecoin;
 using CloudChainsSpvWallet.Api.Controllers.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using CloudChainsSpvWallet.Api.Hubs;
+using Microsoft.AspNetCore.SignalR;
 
 namespace CloudChainsSpvWallet.Api.Controllers
 {
     [Route("api/Digibyte")]
     public class DigibyteController : CoinController
     {
-        public DigibyteController(IMapper mapper, IDigibyteService DigibyteService) : base(mapper, DigibyteService)
+        public DigibyteController(IMapper mapper, IHubContext<ListUnspentHub> hub, IDigibyteService DigibyteService) : base(mapper, hub, DigibyteService)
         {
         }
 

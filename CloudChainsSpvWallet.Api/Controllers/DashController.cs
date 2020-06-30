@@ -14,13 +14,15 @@ using CloudChainsSPVLib.Services.Coins.Litecoin;
 using CloudChainsSpvWallet.Api.Controllers.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
+using CloudChainsSpvWallet.Api.Hubs;
 
 namespace CloudChainsSpvWallet.Api.Controllers
 {
     [Route("api/dash")]
     public class DashController : CoinController
     {
-        public DashController(IMapper mapper, IDashService DashService) : base(mapper, DashService)
+        public DashController(IMapper mapper, IHubContext<ListUnspentHub> hub, IDashService DashService) : base(mapper, hub, DashService)
         {
         }
 

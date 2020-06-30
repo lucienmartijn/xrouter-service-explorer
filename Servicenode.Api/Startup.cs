@@ -14,6 +14,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Servicenode.Api.ExceptionHandling;
 
 namespace Servicenode.Api
 {
@@ -78,6 +79,10 @@ namespace Servicenode.Api
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseExceptionHandler(new ExceptionHandlerOptions
+            {
+                ExceptionHandler = new JsonExceptionMiddleware().Invoke
+            });
             //app.UseHttpsRedirection();
 
             app.UseCors("fully permissive");

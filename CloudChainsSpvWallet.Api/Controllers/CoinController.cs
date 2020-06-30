@@ -9,105 +9,129 @@ using CloudChainsSPVLib.Responses;
 using CloudChainsSPVLib.RPC.RequestResponse;
 using CloudChainsSPVLib.Services.Coins.Base;
 using CloudChainsSPVLib.Services.Coins.Blocknet;
+using CloudChainsSpvWallet.Api.Controllers.TimerFeatures;
 using CloudChainsSpvWallet.Api.Controllers.ViewModels;
+using CloudChainsSpvWallet.Api.DataStorage;
+using CloudChainsSpvWallet.Api.Hubs;
+
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 
 namespace CloudChainsSpvWallet.Api.Controllers
 {
     public class CoinController : ControllerBase
     {
-        private readonly IMapper mapper;
-        private readonly ICoinService coinService;
+        private readonly IMapper _mapper;
+        private readonly IHubContext<ListUnspentHub> _hub;
+        private readonly ICoinService _coinService;
 
-        public CoinController(IMapper mapper, ICoinService coinService)
+        public CoinController(IMapper mapper, IHubContext<ListUnspentHub> hub, ICoinService coinService)
         {
-            this.mapper = mapper;
-            this.coinService = coinService;
+            _mapper = mapper;
+            _coinService = coinService;
+            _hub = hub;
         }
 
         [HttpGet("[action]")]
         public IActionResult DecodeRawTransaction(string rawtx)
         {
-            return Ok(coinService.DecodeRawTransaction(rawtx));
+            return Ok(_coinService.DecodeRawTransaction(rawtx));
         }
 
         [HttpGet("[action]")]
         public IActionResult GetBlock(string hash)
         {
-            return Ok(coinService.GetBlock(hash));
+            return Ok(_coinService.GetBlock(hash));
         }
 
         [HttpGet("[action]")]
         public IActionResult GetBlockchainInfo()
         {
-            return Ok(coinService.GetBlockchainInfo());
+            return Ok(_coinService.GetBlockchainInfo());
         }
         [HttpGet("[action]")]
         public IActionResult GetBlockHash(ulong height)
         {
-            return Ok(coinService.GetBlockHash(height));
+            return Ok(_coinService.GetBlockHash(height));
         }
 
         [HttpGet("[action]")]
         public IActionResult GetNewAddress()
         {
-            return Ok(coinService.GetNewAddress());
+            return Ok(_coinService.GetNewAddress());
+        }
+
+        [HttpGet("[action]")]
+        public IActionResult GetAddress()
+        {
+            var addresses = _coinService.GetAddressesByAccount("main");
+
+            if (addresses.Count.Equals(0))
+                return StatusCode(500, "No addresses found in main account");
+
+            var random = new Random();
+
+            var address = addresses[random.Next(0, addresses.Count - 1)];
+
+            return Ok(address);
         }
 
         [HttpGet("[action]")]
         public IActionResult GetRawMemPool()
         {
-            return Ok(coinService.GetRawMemPool());
+            return Ok(_coinService.GetRawMemPool());
         }
 
         [HttpGet("[action]")]
         public IActionResult GetTransaction(string txId)
         {
-            return Ok(coinService.GetTransaction(txId));
+            return Ok(_coinService.GetTransaction(txId));
         }
 
         [HttpGet("[action]")]
         public IActionResult GetTxOut(string txId, int vout)
         {
-            return Ok(coinService.GetTxOut(txId, vout));
+            return Ok(_coinService.GetTxOut(txId, vout));
         }
 
         [HttpGet("[action]")]
         public IActionResult ListUnspent()
         {
-            return Ok(coinService.ListUnspent());
+            var timerManager = new TimerManager(() => _hub.Clients.All.SendAsync("transferlistunspent", _coinService.ListUnspent()));
+
+            return Ok(new { Message = "List Unspent Request Completed" });
         }
 
         [HttpGet("[action]")]
         public IActionResult SignMessage(string address, string message)
         {
-            return Ok(coinService.SignMessage(address, message));
+            return Ok(_coinService.SignMessage(address, message));
         }
 
         [HttpGet("[action]")]
         public IActionResult VerifyMessage(string address, string signature, string message)
         {
-            return Ok(coinService.VerifyMessage(address, signature, message));
+            return Ok(_coinService.VerifyMessage(address, signature, message));
         }
         [HttpGet("[action]")]
         public IActionResult GetAddressesByAccount()
         {
-            return Ok(coinService.GetAddressesByAccount("main"));
+            return Ok(_coinService.GetAddressesByAccount("main"));
         }
 
 
         [HttpPost("[action]")]
         public IActionResult SignRawTransaction([FromBody]string rawTx)
         {
-            return Ok(coinService.SignRawTransaction(rawTx));
+            return Ok(_coinService.SignRawTransaction(rawTx));
         }
 
 
         [HttpPost("[action]")]
         public IActionResult SendRawTransaction([FromBody]string rawTx)
         {
-            return Ok(coinService.SendRawTransaction(rawTx));
+            return Ok(_coinService.SendRawTransaction(rawTx));
         }
 
         [HttpPost("[action]")]
@@ -119,53 +143,18 @@ namespace CloudChainsSpvWallet.Api.Controllers
             if (rawTransactionViewModel.Outputs == null)
                 return BadRequest("No Outputs provided");
 
-            string rawTransactionResponse;
-            try
-            {
-                var rawTransaction = mapper.Map<CreateRawTransactionRequest>(rawTransactionViewModel);
-                rawTransactionResponse = coinService.CreateRawTransaction(rawTransaction);
-            }
-            catch (RpcInternalServerErrorException e)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, new JsonRpcError
-                {
-                    Message = e.Message,
-                    Code = e.RpcErrorCode.Value
-                });
-            }
-            catch (RpcRequestTimeoutException e)
-            {
-                return StatusCode(StatusCodes.Status408RequestTimeout, new JsonRpcError
-                {
-                    Message = e.Message,
-                });
-            }
+            
+            var rawTransaction = _mapper.Map<CreateRawTransactionRequest>(rawTransactionViewModel);
+            var rawTransactionResponse = _coinService.CreateRawTransaction(rawTransaction);
+            
             return Ok(rawTransactionResponse);
         }
 
         [HttpGet("[action]")]
         public IActionResult GetNetworkInfo()
         {
-            GetNetworkInfoResponse networkInfoResponse;
-            try
-            {
-                networkInfoResponse = coinService.GetNetworkInfo();
-            }
-            catch (RpcInternalServerErrorException e)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, new JsonRpcError
-                {
-                    Message = e.Message,
-                    Code = e.RpcErrorCode.Value
-                });
-            }
-            catch (RpcRequestTimeoutException e)
-            {
-                return StatusCode(StatusCodes.Status408RequestTimeout, new JsonRpcError
-                {
-                    Message = e.Message,
-                });
-            }
+            var networkInfoResponse = _coinService.GetNetworkInfo();
+
             return Ok(networkInfoResponse);
         }
 

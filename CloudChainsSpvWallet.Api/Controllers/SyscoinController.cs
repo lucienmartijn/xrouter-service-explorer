@@ -14,13 +14,15 @@ using CloudChainsSPVLib.Services.Coins.Litecoin;
 using CloudChainsSpvWallet.Api.Controllers.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using CloudChainsSpvWallet.Api.Hubs;
+using Microsoft.AspNetCore.SignalR;
 
 namespace CloudChainsSpvWallet.Api.Controllers
 {
     [Route("api/Syscoin")]
     public class SyscoinController : CoinController
     {
-        public SyscoinController(IMapper mapper, ISyscoinService SyscoinService) : base(mapper, SyscoinService)
+        public SyscoinController(IMapper mapper, IHubContext<ListUnspentHub> hub, ISyscoinService SyscoinService) : base(mapper, hub, SyscoinService)
         {
         }
 

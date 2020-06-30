@@ -14,13 +14,15 @@ using CloudChainsSPVLib.Services.Coins.Litecoin;
 using CloudChainsSpvWallet.Api.Controllers.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using CloudChainsSpvWallet.Api.Hubs;
+using Microsoft.AspNetCore.SignalR;
 
 namespace CloudChainsSpvWallet.Api.Controllers
 {
     [Route("api/Ravencoin")]
     public class RavencoinController : CoinController
     {
-        public RavencoinController(IMapper mapper, IRavencoinService RavencoinService) : base(mapper, RavencoinService)
+        public RavencoinController(IMapper mapper, IHubContext<ListUnspentHub> hub, IRavencoinService RavencoinService) : base(mapper, hub, RavencoinService)
         {
         }
 

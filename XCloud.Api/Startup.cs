@@ -15,6 +15,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using XCloud.Api.ExceptionHandling;
 
 namespace XCloud.Api
 {
@@ -71,6 +72,11 @@ namespace XCloud.Api
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseExceptionHandler(new ExceptionHandlerOptions
+            {
+                ExceptionHandler = new JsonExceptionMiddleware().Invoke
+            });
 
             //app.UseHttpsRedirection();
 

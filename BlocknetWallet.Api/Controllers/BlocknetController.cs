@@ -16,8 +16,8 @@ namespace BlocknetWallet.Api.Controllers
     [Route("api/blocknet")]
     public class BlocknetController : ControllerBase 
     {
-        private readonly IBlocknetService blocknetService;
-        public BlocknetController(IBlocknetService blocknetService)
+        private readonly ICoinService blocknetService;
+        public BlocknetController(ICoinService blocknetService)
         {
             this.blocknetService = blocknetService;
         }
@@ -31,26 +31,8 @@ namespace BlocknetWallet.Api.Controllers
         [HttpGet("[action]")]
         public IActionResult GetNetworkInfo()
         {
-            GetNetworkInfoResponse networkInfoResponse;
-            try
-            {
-                networkInfoResponse = blocknetService.GetNetworkInfo();
-            }
-            catch (RpcInternalServerErrorException e)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, new JsonRpcXrError
-                {
-                    Error = e.Message,
-                    Code = (int)e.RpcErrorCode.Value
-                });
-            }
-            catch (RpcRequestTimeoutException e)
-            {
-                return StatusCode(StatusCodes.Status408RequestTimeout, new JsonRpcXrError
-                {
-                    Error = e.Message,
-                });
-            }
+            var networkInfoResponse = blocknetService.GetNetworkInfo();
+            
             return Ok(new GetNetworkResponseViewModel
             {
                 ProtocolVersion = networkInfoResponse.ProtocolVersion,

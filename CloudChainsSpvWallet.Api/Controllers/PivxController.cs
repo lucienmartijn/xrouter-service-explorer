@@ -14,13 +14,15 @@ using CloudChainsSPVLib.Services.Coins.Litecoin;
 using CloudChainsSpvWallet.Api.Controllers.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using CloudChainsSpvWallet.Api.Hubs;
+using Microsoft.AspNetCore.SignalR;
 
 namespace CloudChainsSpvWallet.Api.Controllers
 {
     [Route("api/Pivx")]
     public class PivxController : CoinController
     {
-        public PivxController(IMapper mapper, IPivxService PivxService) : base(mapper, PivxService)
+        public PivxController(IMapper mapper, IHubContext<ListUnspentHub> hub, IPivxService PivxService) : base(mapper, hub, PivxService)
         {
         }
 

@@ -11,15 +11,17 @@ using CloudChainsSPVLib.Services.Coins.Base;
 using CloudChainsSPVLib.Services.Coins.Blocknet;
 using CloudChainsSPVLib.Services.Coins.Litecoin;
 using CloudChainsSpvWallet.Api.Controllers.ViewModels;
+using CloudChainsSpvWallet.Api.Hubs;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 
 namespace CloudChainsSpvWallet.Api.Controllers
 {
     [Route("api/litecoin")]
     public class LitecoinController : CoinController
     {
-        public LitecoinController(IMapper mapper, ILitecoinService litecoinService) : base(mapper, litecoinService)
+        public LitecoinController(IMapper mapper, IHubContext<ListUnspentHub> hub, ILitecoinService litecoinService) : base(mapper, hub, litecoinService)
         {
         }
 

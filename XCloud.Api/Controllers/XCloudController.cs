@@ -29,14 +29,6 @@ namespace XCloud.Api.Controllers
 
             var serviceResponse = xcloudService.xrService(request.Service, request.Parameters);
 
-            if (serviceResponse.Error != null)
-                return Ok(new ErrorResponseViewModel
-                {
-                    Error = serviceResponse.Error,
-                    Code = serviceResponse.Code,
-                    Id = serviceResponse.Id
-                });
-
             return Ok(new ServiceResponseViewModel
             {
                 Reply = serviceResponse.Reply,

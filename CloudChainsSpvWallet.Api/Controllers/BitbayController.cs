@@ -12,15 +12,17 @@ using CloudChainsSPVLib.Services.Coins.BitBay;
 using CloudChainsSPVLib.Services.Coins.Blocknet;
 using CloudChainsSPVLib.Services.Coins.Litecoin;
 using CloudChainsSpvWallet.Api.Controllers.ViewModels;
+using CloudChainsSpvWallet.Api.Hubs;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 
 namespace CloudChainsSpvWallet.Api.Controllers
 {
     [Route("api/Bitbay")]
     public class BitBayController : CoinController
     {
-        public BitBayController(IMapper mapper, IBitBayService bitBayService) : base(mapper, bitBayService)
+        public BitBayController(IMapper mapper, IHubContext<ListUnspentHub> hub, IBitBayService bitBayService) : base(mapper, hub, bitBayService)
         {
         }
 
