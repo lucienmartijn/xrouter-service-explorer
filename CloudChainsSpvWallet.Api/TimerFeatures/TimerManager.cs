@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace CloudChainsSpvWallet.Api.Controllers.TimerFeatures
+namespace CloudChainsSpvWallet.Api.TimerFeatures
 {
     public class TimerManager
     {

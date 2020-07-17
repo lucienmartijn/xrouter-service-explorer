@@ -1,6 +1,6 @@
 
 namespace CloudChainsSPVLib.CoinConfig{
-    public class CoinRpcConfig
+    public class CoinRpcSPVConfig
     {
         public RpcInput Blocknet { get; set; }
         public RpcInput Bitcoin { get; set; }
@@ -10,7 +10,7 @@ namespace CloudChainsSPVLib.CoinConfig{
         public RpcInput Dogecoin { get; set; }
         public RpcInput Pivx { get; set; }
         public RpcInput Ravencoin { get; set; }
-        public RpcInput Tezos { get; set; }
+        public RpcInput Trezarcoin { get; set; }
         public RpcInput Syscoin { get; set; }
         public RpcInput Alqocoin { get; set; }
         public RpcInput BitBay { get; set; }

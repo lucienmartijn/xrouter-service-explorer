@@ -5,20 +5,25 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using CloudChainsSPVLib.CoinConfig;
 using CloudChainsSPVLib.Requests.CreateRawTransaction;
 using CloudChainsSPVLib.Responses;
 using CloudChainsSPVLib.RPC.Connector;
 using CloudChainsSPVLib.RPC.Specifications;
 using CloudChainsSPVLib.Services.Coins.Base;
 using CloudChainsSPVLib.SpvParameters;
+
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json.Linq;
 
 namespace CloudChainsSPVLib.Services
 {
     //   Implementation of API calls list, as found at: https://en.bitcoin.it/wiki/Original_Bitcoin_client/API_Calls_list (note: this list is often out-of-date so call "help" in your bitcoin-cli to get the latest signatures)
+    //[Pluggable]
     public partial class CoinService : ICoinService
     {
         protected readonly IRpcConnector _rpcConnector;
+        
 
         public CoinService()
         {

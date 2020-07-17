@@ -12,11 +12,13 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="3.0.0" />
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.0.0" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.0-preview1-19509-03" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\CloudChainsSPVLib\CloudChainsSPVLib.csproj" />
+    <ProjectReference Include="..\XCloud.Api\XCloud.Api.csproj" />
+    <ProjectReference Include="..\XRouter.Api\XRouter.Api.csproj" />
   </ItemGroup>
 
 </Project>

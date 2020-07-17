@@ -29,6 +29,8 @@ namespace BlockDX.Api
         {
             services.AddControllers();
 
+            services.AddHttpClient();
+
             services.AddCors(corsOptions =>
             {
                 corsOptions.AddPolicy("fully permissive", configurePolicy => configurePolicy

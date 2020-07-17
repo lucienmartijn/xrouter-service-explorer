@@ -1,12 +1,13 @@
 ﻿using CloudChainsSPVLib.CoinParameters.Litecoin;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace CloudChainsSPVLib.Services.Coins.Litecoin
 {
-    public class LitecoinService : CoinService, ILitecoinService
+    public class LitecoinService : CoinService
     {
+        public LitecoinService()
+        {
+
+        }
         public LitecoinService(string daemonUrl, string rpcUsername, string rpcPassword, string walletPassword = null)
             : base(daemonUrl, rpcUsername, rpcPassword, walletPassword)
         {

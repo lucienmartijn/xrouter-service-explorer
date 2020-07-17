@@ -47,6 +47,8 @@ namespace XCloud.Api
                 // .AllowCredentials()); //localhost:4200 is the default port an angular runs in dev mode with ng serve
 
             });
+
+            services.AddHttpClient();
             services.AddControllers();
 
             var rpcSettings = Configuration.GetSection("CoinConfig").Get<CoinRpcConfig>();

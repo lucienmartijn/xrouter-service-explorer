@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 
 namespace XCloud.Api.Controllers.ViewModel
 {
-    public class ServiceResponseViewModel
+    public class ServiceResponseViewModel<T>
     {
-        public object Reply { get; set; }
+        public T Reply { get; set; }
         public string Uuid { get; set; }
     }
 }

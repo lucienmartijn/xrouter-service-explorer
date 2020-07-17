@@ -18,6 +18,7 @@ using Servicenode.Api.Core.Models;
 using Servicenode.Api.Extensions;
 using System.Text;
 using Servicenode.Api.Helpers;
+using System.Globalization;
 
 namespace Servicenode.Api.Controllers
 {
@@ -238,49 +239,53 @@ namespace Servicenode.Api.Controllers
             var configReader = new ConfigReader(serviceNodeConfig.Config);
 
             var mainSectionSettings = configReader.EnumSection("Main");
-            
-            var sb = new StringBuilder();
 
-            if(!string.IsNullOrEmpty(serviceConfig.Parameters))
-                sb.Append("parameters=").Append(serviceConfig.Parameters).AppendLine();
+            string xcloudConfig = string.Empty;
+
+            if (!string.IsNullOrEmpty(serviceConfig.Parameters))
+                xcloudConfig += ("parameters=" + serviceConfig.Parameters + "\n");
 
             var mainFee = configReader.GetSetting("Main", "fee");
             if (!string.IsNullOrEmpty(mainFee))
             {
                 if (serviceConfig.Fee != double.Parse(mainFee))
-                    sb.Append("fee=").Append(serviceConfig.Fee).AppendLine();
+                {
+                    xcloudConfig += ("fee=" + serviceConfig.Fee.ToString(new NumberFormatInfo() { NumberDecimalSeparator = "."}) + "\n");
+                }
             }
             else
             {
-                sb.Append("fee=").Append(serviceConfig.Fee).AppendLine();
+                xcloudConfig += ("fee=" + serviceConfig.Fee.ToString(new NumberFormatInfo() { NumberDecimalSeparator = "." } + "\n"));
             }
-                
-            if(serviceConfig.Disabled)
-                sb.Append("disabled=").Append(Convert.ToByte(serviceConfig.Disabled)).AppendLine();
+
+            if (serviceConfig.Disabled)
+                xcloudConfig += ("disabled=" + Convert.ToByte(serviceConfig.Disabled) + "\n");
 
             var mainFetchLimit = configReader.GetSetting("Main", "fetchlimit");
             if (!string.IsNullOrEmpty(mainFetchLimit))
             {
                 if (serviceConfig.FetchLimit != int.Parse(mainFetchLimit))
-                    sb.Append("fetchlimit=").Append(serviceConfig.FetchLimit).AppendLine();
+                {
+                    xcloudConfig += ("fetchlimit=" + serviceConfig.FetchLimit + "\n");
+                }
             }
             else
             {
-                sb.Append("fetchlimit=").Append(serviceConfig.FetchLimit).AppendLine();
+                xcloudConfig += ("fetchlimit=" + serviceConfig.FetchLimit + "\n");
             }
 
             var mainClientRequestLimit = configReader.GetSetting("Main", "clientrequestlimit");
             if (!string.IsNullOrEmpty(mainClientRequestLimit))
             {
                 if (serviceConfig.RequestLimit != int.Parse(mainClientRequestLimit))
-                    sb.Append("clientrequestlimit=").Append(serviceConfig.RequestLimit).AppendLine();
+                {
+                    xcloudConfig += ("clientrequestlimit=" + serviceConfig.RequestLimit + "\n");
+                }
             }
             else
             {
-                sb.Append("clientrequestlimit=").Append(serviceConfig.RequestLimit).AppendLine();
+                xcloudConfig += ("clientrequestlimit=" + int.Parse(mainClientRequestLimit) + "\n");
             }
-
-            string xcloudConfig = sb.ToString();
 
             string help = string.Empty;
             string description = string.Empty;
@@ -293,8 +298,6 @@ namespace Servicenode.Api.Controllers
 
                 if (configDictionary.ContainsKey("help"))
                     help = configDictionary["help"];
-                else
-                    help = serviceNodeConfig.Plugins[serviceName];
 
                 if(configDictionary.ContainsKey("description"))
                     description = configDictionary["description"];
@@ -429,16 +432,9 @@ namespace Servicenode.Api.Controllers
             });
             
             var query = xrouterEnabledServicenodes.Select(q => {
-                var serviceNodeConfigElements = q.Config.Config.Split(new string[] { "\n", "\r\n" }, StringSplitOptions.RemoveEmptyEntries).Select(value => value.Split('='));
-                string type = "Regular";
-                if(serviceNodeConfigElements.Any(lc => lc[0] == "port"))
-                {
-                     type = (serviceNodeConfigElements.FirstOrDefault(e => e[0] == "port")[1] != "41412") ? "Enterprise" : type;
-                }
-
                 return new Core.Models.ServiceNodeInfoResponse
                 { 
-                    Type = type,
+                    Type = q.ServiceNode.Exr ? "Enterprise" : "Regular",
                     Address = q.ServiceNode.Address,
                     Score = q.ServiceNode.Score,
                     SNodeKey = q.ServiceNode.SNodeKey,

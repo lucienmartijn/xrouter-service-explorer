@@ -23,9 +23,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Database", "Database\Databa
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlockDX.Api", "BlockDX.Api\BlockDX.Api.csproj", "{5F1D6213-9927-44EA-98A9-1185D9DE8626}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CloudChainsSPVLib", "CloudChainsSPVLib\CloudChainsSPVLib.csproj", "{8230AA03-3E09-4091-9C6F-D14088FDB445}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CloudChainsSPVLib", "CloudChainsSPVLib\CloudChainsSPVLib.csproj", "{8230AA03-3E09-4091-9C6F-D14088FDB445}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CloudChainsSpvWallet.Api", "CloudChainsSpvWallet.Api\CloudChainsSpvWallet.Api.csproj", "{EB4F458B-8514-4A6A-9D02-3B5894B1C429}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CloudChainsSpvWallet.Api", "CloudChainsSpvWallet.Api\CloudChainsSpvWallet.Api.csproj", "{EB4F458B-8514-4A6A-9D02-3B5894B1C429}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

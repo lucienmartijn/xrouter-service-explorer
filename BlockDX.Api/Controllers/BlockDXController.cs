@@ -11,6 +11,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using XCloud.Api.Controllers.ViewModel;
+using XCloud.Api.Controllers.ViewModels;
 
 namespace BlockDX.Api.Controllers
 {
@@ -31,15 +33,10 @@ namespace BlockDX.Api.Controllers
         public async Task<IActionResult> GetOneDayTotalTradesCount()
         {
             var assetWhiteList = await GetBlockDXAssets();
-            var request = new XCloudServiceRequestViewModel
-            {
-                Service = "xrs::dxGet24hrTradeHistory",
-                Parameters = new object[] { "0" },
-                NodeCount = 1
-            };
-            var tradeHistoryResponse = await ServiceAsync<XCloudServiceResponse<List<DXAtomicSwap>>>(request);
 
-            var tradeHistories = tradeHistoryResponse.Reply
+            var tradeHistoryResponse = await GetOneDayTradeHistory();
+
+            var tradeHistories = tradeHistoryResponse
                 .Where(p =>
                 {
                     var trade = new List<string> { p.Maker, p.Taker };
@@ -64,16 +61,14 @@ namespace BlockDX.Api.Controllers
         {
             var assetWhiteList = await GetBlockDXAssets();
 
-            var request = new XCloudServiceRequestViewModel
-            {
-                Service = "xrs::dxGet24hrTradeHistory",
-                Parameters = new object[] { "0" },
-                NodeCount = 1
-            };
+            var tradeHistoryResponse = await GetOneDayTradeHistory();
 
-            var tradeHistoryResponse = await ServiceAsync<XCloudServiceResponse<List<DXAtomicSwap>>>(request);
+            var tradeStatisticsTokens = new List<TokenTradeStatistics>();
 
-            var tradeHistories = tradeHistoryResponse.Reply
+            if (tradeHistoryResponse.Count == 0)
+                return tradeStatisticsTokens;
+
+            var tradeHistories = tradeHistoryResponse
                 .Where(p =>
                 {
                     var trade = new List<string> { p.Maker, p.Taker };
@@ -82,32 +77,20 @@ namespace BlockDX.Api.Controllers
                 })
                 .ToList();
 
-            var coins = new HashSet<string>();
-            foreach (var item in tradeHistoryResponse.Reply)
-            {
-                coins.Add(item.Maker);
-                coins.Add(item.Taker);
-            }
+            var coins = tradeHistoryResponse.Select(r => r.Maker).Distinct().ToList();
 
-            var unitSet = new HashSet<string>(units);
-            foreach (var coin in coins)
-            {
-                unitSet.Add(coin);
-            }
+            var unitSet = units.Union(coins).Distinct().ToList();
 
-            request = new XCloudServiceRequestViewModel
+            var request = new ServiceRequestViewModel
             {
                 Service = "xrs::CCMultiPrice",
                 Parameters = new object[] { string.Join(",", coins), string.Join(",", unitSet) },
                 NodeCount = 1
             };
-            var multiPriceResponse = await ServiceAsync<XCloudServiceResponse<Dictionary<string, Dictionary<string, decimal>>>>(request);
-
-            var tradeStatisticsTokens = new List<TokenTradeStatistics>();
+            var multiPriceResponse = await ServiceAsync<ServiceResponseViewModel<Dictionary<string, Dictionary<string, decimal>>>>(request);
 
             foreach (var coin in coins)
             {
-                var sumTaker = tradeHistories.Where(th => th.Taker.Equals(coin)).Sum(th => th.TakerSize);
                 var sumMaker = tradeHistories.Where(th => th.Maker.Equals(coin)).Sum(th => th.MakerSize);
 
                 var tokenVolumesPerUnit = new List<TokenVolumeViewModel>();
@@ -120,10 +103,10 @@ namespace BlockDX.Api.Controllers
                     tokenVolumesPerUnit.Add(new TokenVolumeViewModel
                     {
                         Unit = unit,
-                        Volume = (sumTaker + sumMaker) * coinPrice
+                        Volume = (sumMaker) * coinPrice
                     });
                 }
-                var countCoinTrades = tradeHistories.Count(th => th.Taker.Equals(coin) || th.Maker.Equals(coin));
+                var countCoinTrades = tradeHistories.Count(th => th.Maker.Equals(coin));
                 tradeStatisticsTokens.Add(new TokenTradeStatistics
                 {
                     Token = coin,
@@ -135,10 +118,10 @@ namespace BlockDX.Api.Controllers
         }
 
         [HttpGet("[action]")]
-        public async Task<IActionResult> GetOneDayTotalVolume([FromQuery] string token, [FromQuery]List<string> units) 
+        public async Task<IActionResult> GetOneDayTotalVolume([FromQuery] string coin, [FromQuery]List<string> units) 
         {
-            if (string.IsNullOrEmpty(token))
-                return BadRequest("No token specified");
+            if (string.IsNullOrEmpty(coin))
+                return BadRequest("No coins specified");
             if (units.Count == 0)
                 return BadRequest("No units specified");
 
@@ -146,7 +129,7 @@ namespace BlockDX.Api.Controllers
 
             var totalVolumePerUnit = new List<TokenVolumeViewModel>();
 
-            if (!oneDayTotalVolumePerCoin.Any(vc => vc.Token.Equals(token)) && !token.Equals("0"))
+            if (!oneDayTotalVolumePerCoin.Any(vc => vc.Token.Equals(coin)) && !coin.Equals("0"))
             {
                 foreach (var unit in units)
                 {
@@ -173,6 +156,46 @@ namespace BlockDX.Api.Controllers
             return Ok(totalVolumePerUnit);
         }
 
+        [HttpGet("[action]")]
+        public async Task<IActionResult> GetOneDayCompletedOrders()
+        {
+            var assetWhiteList = await GetBlockDXAssets();
+
+            var tradeHistoryResponse = await GetOneDayTradeHistory();
+
+            var tradeStatisticsTokens = new List<TokenTradeStatistics>();
+
+            var tradeHistories = tradeHistoryResponse
+                .Where(p =>
+                {
+                    var trade = new List<string> { p.Maker, p.Taker };
+                    var result = trade.All(ta => assetWhiteList.Select(awl => awl.Ticker).Contains(ta));
+                    return result;
+                })
+                .ToList();
+
+            var coins = tradeHistoryResponse
+                .SelectMany(coin => new[] { coin.Taker, coin.Maker })
+                .GroupBy(c => c).Select(group => new {
+                    Coin = group.Key,
+                    Count = group.Count()
+                })
+                .ToList();
+
+            return Ok(coins);
+
+        }
+
+        private async Task<List<DXAtomicSwap>> GetOneDayTradeHistory()
+        {
+            string baseUrl = "https://data.blocknet.co/api/v2.0/history";
+
+            var client = _httpClientFactory.CreateClient();
+
+            var getTradeHistoryTask = client.GetStringAsync(baseUrl);
+            return JsonConvert.DeserializeObject<List<DXAtomicSwap>>(await getTradeHistoryTask);
+        }
+
         private async Task<List<Asset>> GetBlockDXAssets()
         {
             string baseUrl = "https://raw.githubusercontent.com/blocknetdx/blockchain-configuration-files/master/manifest-latest.json";
@@ -180,10 +203,16 @@ namespace BlockDX.Api.Controllers
             var client = _httpClientFactory.CreateClient();
 
             var getAssetsTask = client.GetStringAsync(baseUrl);
-            return JsonConvert.DeserializeObject<List<Asset>>(await getAssetsTask);
+            var assets = JsonConvert.DeserializeObject<List<Asset>>(await getAssetsTask);
+
+            var BCHAsset = new Asset() { Ticker = "BCH" };
+            assets.Add(BCHAsset);
+
+            return assets;
+
         }
 
-        private async Task<T> ServiceAsync<T>(XCloudServiceRequestViewModel request)
+        private async Task<T> ServiceAsync<T>(ServiceRequestViewModel request)
         {
             var client = _httpClientFactory.CreateClient("xcloud");
 
@@ -193,24 +222,6 @@ namespace BlockDX.Api.Controllers
 
             string result = await response.Content.ReadAsStringAsync();
             return JsonConvert.DeserializeObject<T>(result);
-        }
-
-        private decimal CalculateVolume(string unit, Dictionary<string, Dictionary<string, decimal>> coinPrices, Dictionary<string, DXTradePair> tradepairs)
-        {
-            decimal volume = 0;
-            foreach (KeyValuePair<string, DXTradePair> entry in tradepairs)
-            {
-                var coinOne = entry.Key.Split("-")[0];
-                var coinTwo = entry.Key.Split("-")[1];
-
-                var coinPrice = coinPrices[coinOne];
-
-                var price = coinPrice[unit];
-
-                volume += entry.Value.Volume * price;
-
-            }
-            return volume;
         }
     }
 }

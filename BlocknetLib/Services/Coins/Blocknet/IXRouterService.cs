@@ -6,7 +6,7 @@ using BlocknetLib.Services.Coins.Blocknet.Xrouter;
 using BlocknetLib.Services.Coins.Blocknet.Xrouter.BitcoinBased;
 using Xrouter.Service.Explorer.BitcoinLib.Services.Coins.Blocknet.XRouter;
 
-public interface IXRouterService : ICoinService, IBlocknetConstants{
+public interface IXRouterService{
     ConnectResponse xrConnect(string service, int node_count);    
     T xrDecodeRawTransaction<T>(string blockchain, string tx_hex, int node_count);
     T xrGetBlockCount<T>(string blockchain, int node_count);     

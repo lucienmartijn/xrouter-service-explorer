@@ -33,6 +33,7 @@ namespace XRouter.Api.Mapper
             CreateMap<BlocknetLib.Services.Coins.Blocknet.Xrouter.BitcoinBased.GetTransactionResponse, TransactionResponseViewModel>();
             CreateMap<GetTransactionsResponse, TransactionsResponseViewModel>();
             CreateMap<SendTransactionResponse, SendTransactionResponseViewModel>();
+            CreateMap<GetDecodeRawTransactionResponse, DecodeRawTransactionResponseViewModel>();
             CreateMap<GetBlockCountResponse, BlockCountResponseViewModel>()
                 .ForSourceMember(bc => bc.Code, opt => opt.DoNotValidate())
                 .ForSourceMember(bc => bc.Error, opt => opt.DoNotValidate())

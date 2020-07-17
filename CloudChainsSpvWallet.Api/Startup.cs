@@ -1,9 +1,7 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text.Json;
-using System.Threading.Tasks;
 using AutoMapper;
+using BlocknetLib.CoinConfig;
+using BlocknetLib.Services.Coins.Blocknet;
 using CloudChainsSPVLib.CoinConfig;
 using CloudChainsSPVLib.Services;
 using CloudChainsSPVLib.Services.Coins.Alqocoin;
@@ -19,19 +17,16 @@ using CloudChainsSPVLib.Services.Coins.Pivx;
 using CloudChainsSPVLib.Services.Coins.Polis;
 using CloudChainsSPVLib.Services.Coins.Ravencoin;
 using CloudChainsSPVLib.Services.Coins.Syscoin;
-using CloudChainsSPVLib.Services.Coins.Tezos;
-
+using CloudChainsSPVLib.Services.Coins.TrezarCoin;
+using CloudChainsSpvWallet.Api.Core.Models;
 using CloudChainsSpvWallet.Api.ExceptionHandling;
 using CloudChainsSpvWallet.Api.Hubs;
-
+using CloudChainsSpvWallet.Api.Middleware;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using XRouter.Api.Mapper;
 
 namespace CloudChainsSpvWallet.Api
@@ -59,13 +54,19 @@ namespace CloudChainsSpvWallet.Api
 
             services.AddSignalR();
 
+            var apiSettings = Configuration.GetSection("Api").Get<ApiSettings>();
+            services.AddHttpClient("xcloud", c =>
+            {
+                c.BaseAddress = new Uri(apiSettings.XCloudBaseAddress + "/api/xrs/");
+                //c.DefaultRequestHeaders.Add("Content-Type", "application/json");
+            });
+
             services.AddControllers();
 
-            var rpcSettings = Configuration.GetSection("CoinConfig").Get<CoinRpcConfig>();
-            services.AddTransient<ICoinService, CoinService>();
-            services.AddTransient<IBlocknetService>(service =>
-                new BlocknetService(
-                    //rpcSettings.Blocknet.DaemonUrl_testnet, 
+            var rpcSettings = Configuration.GetSection("XRouterConfig").Get<CoinRpcConfig>();
+
+            services.AddTransient<IXRouterService>(service =>
+                new XRouterService(
                     rpcSettings.Blocknet.DaemonUrl,
                     rpcSettings.Blocknet.RpcUserName,
                     rpcSettings.Blocknet.RpcPassword,
@@ -73,135 +74,55 @@ namespace CloudChainsSpvWallet.Api
                     rpcSettings.Blocknet.RpcRequestTimeoutInSeconds
                     )
             );
-            services.AddTransient<IBitcoinService>(service =>
-                new BitcoinService(
-                    //rpcSettings.Blocknet.DaemonUrl_testnet, 
-                    rpcSettings.Bitcoin.DaemonUrl,
-                    rpcSettings.Bitcoin.RpcUserName,
-                    rpcSettings.Bitcoin.RpcPassword,
-                    rpcSettings.Bitcoin.WalletPassword,
-                    rpcSettings.Bitcoin.RpcRequestTimeoutInSeconds
-                    )
+            services.AddTransient<ICoinService>(service =>
+                new BitcoinService()
             );
-            services.AddTransient<ILitecoinService>(service =>
-                new LitecoinService(
-                    //rpcSettings.Blocknet.DaemonUrl_testnet, 
-                    rpcSettings.Litecoin.DaemonUrl,
-                    rpcSettings.Litecoin.RpcUserName,
-                    rpcSettings.Litecoin.RpcPassword,
-                    rpcSettings.Litecoin.WalletPassword,
-                    rpcSettings.Litecoin.RpcRequestTimeoutInSeconds
-                    )
+            services.AddTransient<ICoinService>(service =>
+                new LitecoinService()
             );
 
             services.AddTransient<ICoinService>(service =>
-                new AlqocoinService(
-                    //rpcSettings.Blocknet.DaemonUrl_testnet, 
-                    rpcSettings.Alqocoin.DaemonUrl,
-                    rpcSettings.Alqocoin.RpcUserName,
-                    rpcSettings.Alqocoin.RpcPassword,
-                    rpcSettings.Alqocoin.WalletPassword,
-                    rpcSettings.Alqocoin.RpcRequestTimeoutInSeconds
-                    )
+                new AlqocoinService()
             );
 
             services.AddTransient<ICoinService>(service =>
-                new BitBayService(
-                    //rpcSettings.Blocknet.DaemonUrl_testnet, 
-                    rpcSettings.BitBay.DaemonUrl,
-                    rpcSettings.BitBay.RpcUserName,
-                    rpcSettings.BitBay.RpcPassword,
-                    rpcSettings.BitBay.WalletPassword,
-                    rpcSettings.BitBay.RpcRequestTimeoutInSeconds
-                    )
+                new BitbayService()
             );
 
             services.AddTransient<ICoinService>(service =>
-                new DashService(
-                    //rpcSettings.Blocknet.DaemonUrl_testnet, 
-                    rpcSettings.Dash.DaemonUrl,
-                    rpcSettings.Dash.RpcUserName,
-                    rpcSettings.Dash.RpcPassword,
-                    rpcSettings.Dash.WalletPassword,
-                    rpcSettings.Dash.RpcRequestTimeoutInSeconds
-                    )
+                new DashService()
             );
 
             services.AddTransient<ICoinService>(service =>
-                new DigibyteService(
-                    //rpcSettings.Blocknet.DaemonUrl_testnet, 
-                    rpcSettings.Digibyte.DaemonUrl,
-                    rpcSettings.Digibyte.RpcUserName,
-                    rpcSettings.Digibyte.RpcPassword,
-                    rpcSettings.Digibyte.WalletPassword,
-                    rpcSettings.Digibyte.RpcRequestTimeoutInSeconds
-                    )
+                new DigibyteService()
             );
 
             services.AddTransient<ICoinService>(service =>
-                new DogecoinService(
-                    //rpcSettings.Blocknet.DaemonUrl_testnet, 
-                    rpcSettings.Dogecoin.DaemonUrl,
-                    rpcSettings.Dogecoin.RpcUserName,
-                    rpcSettings.Dogecoin.RpcPassword,
-                    rpcSettings.Dogecoin.WalletPassword,
-                    rpcSettings.Dogecoin.RpcRequestTimeoutInSeconds
-                    )
+                new DogecoinService()
             );
 
             services.AddTransient<ICoinService>(service =>
-                new PivxService(
-                    //rpcSettings.Blocknet.DaemonUrl_testnet, 
-                    rpcSettings.Pivx.DaemonUrl,
-                    rpcSettings.Pivx.RpcUserName,
-                    rpcSettings.Pivx.RpcPassword,
-                    rpcSettings.Pivx.WalletPassword,
-                    rpcSettings.Pivx.RpcRequestTimeoutInSeconds
-                    )
+                new PivxService()
             );
 
             services.AddTransient<ICoinService>(service =>
-                new PolisService(
-                    //rpcSettings.Blocknet.DaemonUrl_testnet, 
-                    rpcSettings.Polis.DaemonUrl,
-                    rpcSettings.Polis.RpcUserName,
-                    rpcSettings.Polis.RpcPassword,
-                    rpcSettings.Polis.WalletPassword,
-                    rpcSettings.Polis.RpcRequestTimeoutInSeconds
-                    )
+                new PolisService()
             );
 
             services.AddTransient<ICoinService>(service =>
-                new RavencoinService(
-                    //rpcSettings.Blocknet.DaemonUrl_testnet, 
-                    rpcSettings.Ravencoin.DaemonUrl,
-                    rpcSettings.Ravencoin.RpcUserName,
-                    rpcSettings.Ravencoin.RpcPassword,
-                    rpcSettings.Ravencoin.WalletPassword,
-                    rpcSettings.Ravencoin.RpcRequestTimeoutInSeconds
-                    )
+                new RavencoinService()
             );
 
             services.AddTransient<ICoinService>(service =>
-                new SyscoinService(
-                    //rpcSettings.Blocknet.DaemonUrl_testnet, 
-                    rpcSettings.Syscoin.DaemonUrl,
-                    rpcSettings.Syscoin.RpcUserName,
-                    rpcSettings.Syscoin.RpcPassword,
-                    rpcSettings.Syscoin.WalletPassword,
-                    rpcSettings.Syscoin.RpcRequestTimeoutInSeconds
-                    )
+                new SyscoinService()
             );
 
             services.AddTransient<ICoinService>(service =>
-                new TezosService(
-                    //rpcSettings.Blocknet.DaemonUrl_testnet, 
-                    rpcSettings.Tezos.DaemonUrl,
-                    rpcSettings.Tezos.RpcUserName,
-                    rpcSettings.Tezos.RpcPassword,
-                    rpcSettings.Tezos.WalletPassword,
-                    rpcSettings.Tezos.RpcRequestTimeoutInSeconds
-                    )
+                new BlocknetzService()
+            );
+
+            services.AddTransient<ICoinService>(service =>
+                new TrezarcoinService()
             );
 
             var mappingConfig = new MapperConfiguration(mc =>
@@ -227,6 +148,8 @@ namespace CloudChainsSpvWallet.Api
             {
                 ExceptionHandler = new JsonExceptionMiddleware().Invoke
             });
+
+            app.UseMiddleware<CheckCoinMiddleware>();
 
             app.UseHttpsRedirection();
 

@@ -10,6 +10,7 @@ namespace BlocknetLib.Services.Coins.Blocknet.Xrouter
         public int Score { get; set; }
         public string Tier { get; set; }
         public string Address { get; set; }
+        public bool Exr { get; set; }
         public string Status { get; set; }
         public long TimeLastSeen { get; set; }
         public DateTime TimeLastSeenStr { get; set; }
