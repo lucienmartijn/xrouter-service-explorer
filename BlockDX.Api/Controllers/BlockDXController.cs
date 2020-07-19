@@ -30,6 +30,26 @@ namespace BlockDX.Api.Controllers
         }
 
         [HttpGet("[action]")]
+        public async Task<IActionResult> GetOpenOrdersPerMarket()
+        {
+            string baseUrl = "https://data.blocknet.co/api/v2.0/dxgetorders";
+
+            var client = _httpClientFactory.CreateClient();
+
+            var getOrdersTask = client.GetStringAsync(baseUrl);
+            var orders = JsonConvert.DeserializeObject<List<OpenOrder>>(await getOrdersTask);
+
+            var activeMarkets = orders.GroupBy(o => new { o.Maker, o.Taker })
+                    .Select(group => new
+                    {
+                        Market = group.Key,
+                        Count = group.Count()
+                    }).OrderByDescending(am => am.Count).ToList();
+
+            return Ok(activeMarkets);
+        }
+
+        [HttpGet("[action]")]
         public async Task<IActionResult> GetOneDayTotalTradesCount()
         {
             var assetWhiteList = await GetBlockDXAssets();
@@ -40,7 +60,7 @@ namespace BlockDX.Api.Controllers
                 .Where(p =>
                 {
                     var trade = new List<string> { p.Maker, p.Taker };
-                    var result = trade.All(ta => assetWhiteList.Select(awl => awl.Ticker).Contains(ta));
+                    var result = trade.All(ta => assetWhiteList.Contains(ta));
                     return result;
                 })
                 .ToList();
@@ -72,7 +92,7 @@ namespace BlockDX.Api.Controllers
                 .Where(p =>
                 {
                     var trade = new List<string> { p.Maker, p.Taker };
-                    var result = trade.All(ta => assetWhiteList.Select(awl => awl.Ticker).Contains(ta));
+                    var result = trade.All(ta => assetWhiteList.Contains(ta));
                     return result;
                 })
                 .ToList();
@@ -109,7 +129,7 @@ namespace BlockDX.Api.Controllers
                 var countCoinTrades = tradeHistories.Count(th => th.Maker.Equals(coin));
                 tradeStatisticsTokens.Add(new TokenTradeStatistics
                 {
-                    Token = coin,
+                    Coin = coin,
                     TradeCount = countCoinTrades,
                     Volumes = tokenVolumesPerUnit
                 });
@@ -129,7 +149,7 @@ namespace BlockDX.Api.Controllers
 
             var totalVolumePerUnit = new List<TokenVolumeViewModel>();
 
-            if (!oneDayTotalVolumePerCoin.Any(vc => vc.Token.Equals(coin)) && !coin.Equals("0"))
+            if (!oneDayTotalVolumePerCoin.Any(vc => vc.Coin.Equals(coin)) && !coin.Equals("0"))
             {
                 foreach (var unit in units)
                 {
@@ -169,7 +189,7 @@ namespace BlockDX.Api.Controllers
                 .Where(p =>
                 {
                     var trade = new List<string> { p.Maker, p.Taker };
-                    var result = trade.All(ta => assetWhiteList.Select(awl => awl.Ticker).Contains(ta));
+                    var result = trade.All(ta => assetWhiteList.Contains(ta));
                     return result;
                 })
                 .ToList();
@@ -183,7 +203,6 @@ namespace BlockDX.Api.Controllers
                 .ToList();
 
             return Ok(coins);
-
         }
 
         private async Task<List<DXAtomicSwap>> GetOneDayTradeHistory()
@@ -196,20 +215,16 @@ namespace BlockDX.Api.Controllers
             return JsonConvert.DeserializeObject<List<DXAtomicSwap>>(await getTradeHistoryTask);
         }
 
-        private async Task<List<Asset>> GetBlockDXAssets()
+        private async Task<List<string>> GetBlockDXAssets()
         {
-            string baseUrl = "https://raw.githubusercontent.com/blocknetdx/blockchain-configuration-files/master/manifest-latest.json";
+            string baseUrl = "https://data.blocknet.co/api/v2.0/dxgetnetworktokens";
 
             var client = _httpClientFactory.CreateClient();
 
             var getAssetsTask = client.GetStringAsync(baseUrl);
-            var assets = JsonConvert.DeserializeObject<List<Asset>>(await getAssetsTask);
-
-            var BCHAsset = new Asset() { Ticker = "BCH" };
-            assets.Add(BCHAsset);
+            var assets = JsonConvert.DeserializeObject<List<string>>(await getAssetsTask);
 
             return assets;
-
         }
 
         private async Task<T> ServiceAsync<T>(ServiceRequestViewModel request)
