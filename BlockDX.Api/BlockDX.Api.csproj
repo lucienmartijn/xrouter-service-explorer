@@ -11,6 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\CoinInfo.Api\CoinInfo.Api.csproj" />
     <ProjectReference Include="..\XCloud.Api\XCloud.Api.csproj" />
   </ItemGroup>
 

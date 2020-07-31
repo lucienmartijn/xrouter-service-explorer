@@ -1,18 +1,11 @@
-﻿using System;
+﻿using BlockDX.Api.Controllers.ViewModels;
+using BlockDX.Api.Core.Models;
+using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
-using BlockDX.Api.Controllers.ViewModels;
-using BlockDX.Api.Core.Models;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
-using XCloud.Api.Controllers.ViewModel;
-using XCloud.Api.Controllers.ViewModels;
 
 namespace BlockDX.Api.Controllers
 {
@@ -20,12 +13,10 @@ namespace BlockDX.Api.Controllers
     [Route("api/dx")]
     public class BlockDXController : ControllerBase
     {
-        private readonly ILogger<BlockDXController> _logger;
-        private readonly IHttpClientFactory _httpClientFactory; 
+        private readonly IHttpClientFactory _httpClientFactory;
 
-        public BlockDXController(ILogger<BlockDXController> logger, IHttpClientFactory httpClientFactory)
+        public BlockDXController(IHttpClientFactory httpClientFactory)
         {
-            _logger = logger;
             _httpClientFactory = httpClientFactory;
         }
 
@@ -69,12 +60,13 @@ namespace BlockDX.Api.Controllers
         }
 
         [HttpGet("[action]")]
-        public async Task<IActionResult> GetOneDayTotalVolumePerCoin([FromQuery]List<string> units)
+        public async Task<IActionResult> GetOneDayTotalVolumePerCoin([FromQuery]string units)
         {
-            if (units.Count == 0)
+            var unitList = units.Split(",").ToList();
+            if (unitList.Count == 0)
                 return BadRequest("No units specified");
 
-            return Ok(await getOneDayTotalVolumePerCoin(units));
+            return Ok(await getOneDayTotalVolumePerCoin(unitList));
         }
 
         private async Task<List<TokenTradeStatistics>> getOneDayTotalVolumePerCoin(List<string> units)
@@ -101,35 +93,50 @@ namespace BlockDX.Api.Controllers
 
             var unitSet = units.Union(coins).Distinct().ToList();
 
-            var request = new ServiceRequestViewModel
-            {
-                Service = "xrs::CCMultiPrice",
-                Parameters = new object[] { string.Join(",", coins), string.Join(",", unitSet) },
-                NodeCount = 1
-            };
-            var multiPriceResponse = await ServiceAsync<ServiceResponseViewModel<Dictionary<string, Dictionary<string, decimal>>>>(request);
+            var client = _httpClientFactory.CreateClient("coininfo");
 
-            foreach (var coin in coins)
+            string url = "GetExchangeRates?coins=" + string.Join(",", coins) + "&units=" + string.Join(",", unitSet);
+
+            var httpRequest = new HttpRequestMessage(HttpMethod.Get, url);
+            httpRequest.Headers.Add("apiName", "CryptoCompare");
+
+            var multiPriceTask = await client.SendAsync(httpRequest);
+            var multiPriceResponse = await multiPriceTask.Content.ReadAsStringAsync();
+            var multiPrice = JsonConvert.DeserializeObject<List<CoinInfo.Api.Core.Models.CoinExchangeRate>>(multiPriceResponse);
+
+            foreach (var coin in multiPrice)
             {
-                var sumMaker = tradeHistories.Where(th => th.Maker.Equals(coin)).Sum(th => th.MakerSize);
+                var sumMaker = tradeHistories.Where(th => th.Maker.Equals(coin.Coin)).Sum(th => th.MakerSize);
 
                 var tokenVolumesPerUnit = new List<TokenVolumeViewModel>();
 
                 var unitsOfCoin = new HashSet<string>(units);
-                unitsOfCoin.Add(coin);
+                unitsOfCoin.Add(coin.Coin);
                 foreach (var unit in unitsOfCoin)
                 {
-                    var coinPrice = multiPriceResponse.Reply[coin][unit];
-                    tokenVolumesPerUnit.Add(new TokenVolumeViewModel
+                    var coinPrice = coin.Rates.FirstOrDefault(r => r.Quote.Equals(unit));
+                    if (coinPrice == null)
                     {
-                        Unit = unit,
-                        Volume = (sumMaker) * coinPrice
-                    });
+                        tokenVolumesPerUnit.Add(new TokenVolumeViewModel
+                        {
+                            Unit = unit,
+                            Volume = (sumMaker) * 1
+                        });
+                    }
+                    else
+                    {
+                        tokenVolumesPerUnit.Add(new TokenVolumeViewModel
+                        {
+                            Unit = unit,
+                            Volume = (sumMaker) * coinPrice.Rate
+                        });
+                    }
+
                 }
-                var countCoinTrades = tradeHistories.Count(th => th.Maker.Equals(coin));
+                var countCoinTrades = tradeHistories.Count(th => th.Maker.Equals(coin.Coin));
                 tradeStatisticsTokens.Add(new TokenTradeStatistics
                 {
-                    Coin = coin,
+                    Coin = coin.Coin,
                     TradeCount = countCoinTrades,
                     Volumes = tokenVolumesPerUnit
                 });
@@ -138,20 +145,21 @@ namespace BlockDX.Api.Controllers
         }
 
         [HttpGet("[action]")]
-        public async Task<IActionResult> GetOneDayTotalVolume([FromQuery] string coin, [FromQuery]List<string> units) 
+        public async Task<IActionResult> GetOneDayTotalVolume([FromQuery] string coin, [FromQuery]string units)
         {
+            var unitList = units.Split(",").ToList();
             if (string.IsNullOrEmpty(coin))
                 return BadRequest("No coins specified");
-            if (units.Count == 0)
+            if (unitList.Count == 0)
                 return BadRequest("No units specified");
 
-            var oneDayTotalVolumePerCoin = await getOneDayTotalVolumePerCoin(units);
+            var oneDayTotalVolumePerCoin = await getOneDayTotalVolumePerCoin(unitList);
 
             var totalVolumePerUnit = new List<TokenVolumeViewModel>();
 
             if (!oneDayTotalVolumePerCoin.Any(vc => vc.Coin.Equals(coin)) && !coin.Equals("0"))
             {
-                foreach (var unit in units)
+                foreach (var unit in unitList)
                 {
                     totalVolumePerUnit.Add(new TokenVolumeViewModel
                     {
@@ -161,8 +169,8 @@ namespace BlockDX.Api.Controllers
                 }
                 return Ok(totalVolumePerUnit);
             }
-            
-            foreach (var unit in units)
+
+            foreach (var unit in unitList)
             {
                 var sumVolume = oneDayTotalVolumePerCoin.Sum(vc => vc.Volumes.Where(vc => vc.Unit.Equals(unit)).Sum(vc => vc.Volume));
 
@@ -196,7 +204,8 @@ namespace BlockDX.Api.Controllers
 
             var coins = tradeHistoryResponse
                 .SelectMany(coin => new[] { coin.Taker, coin.Maker })
-                .GroupBy(c => c).Select(group => new {
+                .GroupBy(c => c).Select(group => new
+                {
                     Coin = group.Key,
                     Count = group.Count()
                 })
@@ -225,18 +234,6 @@ namespace BlockDX.Api.Controllers
             var assets = JsonConvert.DeserializeObject<List<string>>(await getAssetsTask);
 
             return assets;
-        }
-
-        private async Task<T> ServiceAsync<T>(ServiceRequestViewModel request)
-        {
-            var client = _httpClientFactory.CreateClient("xcloud");
-
-            var content = JsonConvert.SerializeObject(request);
-            HttpContent httpContent = new StringContent(content, Encoding.UTF8, "application/json");
-            HttpResponseMessage response = await client.PostAsync($"Service", httpContent);
-
-            string result = await response.Content.ReadAsStringAsync();
-            return JsonConvert.DeserializeObject<T>(result);
         }
     }
 }

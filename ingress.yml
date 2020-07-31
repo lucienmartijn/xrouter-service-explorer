@@ -37,3 +37,7 @@ spec:
           serviceName: blockdx-api
           servicePort: 8086
         path: /api/dx
+      - backend:
+          serviceName: coininfo-api
+          servicePort: 8089
+        path: /api/coininfo

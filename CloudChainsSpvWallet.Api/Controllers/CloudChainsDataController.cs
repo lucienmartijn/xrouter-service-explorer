@@ -28,36 +28,43 @@ namespace CloudChainsSpvWallet.Api.Controllers
         {
             var cloudChainsCoins = await GetCloudChainsCoins();
 
-            var allCoins = await GetAllCoins();
+            var client = _httpClientFactory.CreateClient("coininfo");
 
-            if(cloudChainsCoins.Error != null)
+            var allCoinsTask = client.GetStringAsync("GetAllCoins");
+
+            var allCoinsResponse = JsonConvert.DeserializeObject<List<CoinAPI.REST.V1.ExchangeCurrentrate>>(await allCoinsTask);
+
+            if (cloudChainsCoins.Error != null)
                 return BadRequest(cloudChainsCoins.Error.ToString());
 
 
             var availableCoins = cloudChainsCoins.Result.Keys.Select(coinTicker =>
             {
-                var coin = allCoins.Find(ac => ac.Symbol.Equals(coinTicker.ToLower()));
+                var coin = allCoinsResponse.Find(ac => ac.asset_id_base.Equals(coinTicker.ToUpper()));
 
                 return new AvailableCloudChainsCoin
                 {
-                    Name = coin.Name,
+                    Name = coin.asset_id_base,
                     Ticker = coinTicker
                 };
-            });
+            }).ToList();
 
-            var request = new ServiceRequestViewModel
+            var coins = availableCoins.Select(ac => ac.Name.ToLower()).ToList();
+
+            string queryString = "GetCryptoCurrencyPrices?coins=" + string.Join(",", coins) + "&units=BLOCK";
+
+            var multiPriceTask = client.GetStringAsync(queryString);
+
+            var multiPriceResponse = JsonConvert.DeserializeObject<List<CoinAPI.REST.V1.ExchangeCurrentrate>>(await multiPriceTask);
+
+            availableCoins.Select(ac =>
             {
-                Service = "xrs::CCMultiPrice",
-                Parameters = new object[] { string.Join(",", availableCoins.Select(ac => ac.Ticker.ToUpper()).ToList()), "BLOCK" },
-                NodeCount = 1
-            };
-            var multiPriceResponse = await ServiceAsync<ServiceResponseViewModel<Dictionary<string, Dictionary<string, decimal>>>>(request);
-
-            availableCoins = availableCoins.Select(ac =>
-            {
-                if (multiPriceResponse.Reply.ContainsKey(ac.Ticker))
-                    ac.Price = multiPriceResponse.Reply[ac.Ticker]["BLOCK"];
-
+                if(multiPriceResponse.Select(mr => mr.asset_id_base).Contains(ac.Ticker))
+                {
+                    var priceCoin = multiPriceResponse.SingleOrDefault(mr => mr.asset_id_base.Equals(ac.Ticker));
+                    var rate = priceCoin.rates.SingleOrDefault(r => r.asset_id_quote.Equals(ac.Ticker) && r.asset_id_quote.Equals("BLOCK"));
+                    ac.Price = rate.rate;
+                }
                 return ac;
             }).ToList();
 
@@ -72,16 +79,6 @@ namespace CloudChainsSpvWallet.Api.Controllers
             var getCoinsTask = client.GetStringAsync(baseUrl);
 
             return JsonConvert.DeserializeObject<CloudChainCoinViewModel>(await getCoinsTask);
-        }
-
-        private async Task<List<CoinGeckoCoinViewModel>> GetAllCoins()
-        {
-            string baseUrl = "https://api.coingecko.com/api/v3/coins/list";
-
-            var client = _httpClientFactory.CreateClient();
-
-            var getCoinsTask = client.GetStringAsync(baseUrl);
-            return JsonConvert.DeserializeObject<List<CoinGeckoCoinViewModel>>(await getCoinsTask);
         }
 
         private async Task<T> ServiceAsync<T>(ServiceRequestViewModel request)

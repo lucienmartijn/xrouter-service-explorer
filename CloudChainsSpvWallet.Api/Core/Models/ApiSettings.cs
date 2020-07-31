@@ -8,5 +8,6 @@ namespace CloudChainsSpvWallet.Api.Core.Models
     public class ApiSettings
     {
         public string XCloudBaseAddress { get; set; }
+        public string CoinInfoBaseAddress { get; set; }
     }
 }

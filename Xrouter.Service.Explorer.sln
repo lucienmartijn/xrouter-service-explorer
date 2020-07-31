@@ -27,6 +27,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CloudChainsSPVLib", "CloudC
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CloudChainsSpvWallet.Api", "CloudChainsSpvWallet.Api\CloudChainsSpvWallet.Api.csproj", "{EB4F458B-8514-4A6A-9D02-3B5894B1C429}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoinInfo.Api", "CoinInfo.Api\CoinInfo.Api.csproj", "{40B8BF1F-AA2D-4752-A7ED-3EEBA76730CC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -131,6 +133,14 @@ Global
 		{EB4F458B-8514-4A6A-9D02-3B5894B1C429}.Release|Any CPU.Build.0 = Release|Any CPU
 		{EB4F458B-8514-4A6A-9D02-3B5894B1C429}.Staging|Any CPU.ActiveCfg = Debug|Any CPU
 		{EB4F458B-8514-4A6A-9D02-3B5894B1C429}.Staging|Any CPU.Build.0 = Debug|Any CPU
+		{40B8BF1F-AA2D-4752-A7ED-3EEBA76730CC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{40B8BF1F-AA2D-4752-A7ED-3EEBA76730CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{40B8BF1F-AA2D-4752-A7ED-3EEBA76730CC}.QA|Any CPU.ActiveCfg = Debug|Any CPU
+		{40B8BF1F-AA2D-4752-A7ED-3EEBA76730CC}.QA|Any CPU.Build.0 = Debug|Any CPU
+		{40B8BF1F-AA2D-4752-A7ED-3EEBA76730CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{40B8BF1F-AA2D-4752-A7ED-3EEBA76730CC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{40B8BF1F-AA2D-4752-A7ED-3EEBA76730CC}.Staging|Any CPU.ActiveCfg = Debug|Any CPU
+		{40B8BF1F-AA2D-4752-A7ED-3EEBA76730CC}.Staging|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

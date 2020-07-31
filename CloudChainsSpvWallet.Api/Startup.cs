@@ -58,7 +58,11 @@ namespace CloudChainsSpvWallet.Api
             services.AddHttpClient("xcloud", c =>
             {
                 c.BaseAddress = new Uri(apiSettings.XCloudBaseAddress + "/api/xrs/");
-                //c.DefaultRequestHeaders.Add("Content-Type", "application/json");
+            });
+
+            services.AddHttpClient("coininfo", c =>
+            {
+                c.BaseAddress = new Uri(apiSettings.CoinInfoBaseAddress + "/api/coininfo/");
             });
 
             services.AddControllers();

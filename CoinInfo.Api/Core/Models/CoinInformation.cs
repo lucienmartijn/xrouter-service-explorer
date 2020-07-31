@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace CloudChainsSpvWallet.Api.Controllers.ViewModels
+namespace CoinInfo.Api.Core.Models
 {
-    public class CoinGeckoCoinViewModel
+    public class CoinInformation
     {
-        public string Id { get; set; }
         public string Symbol { get; set; }
         public string Name { get; set; }
     }

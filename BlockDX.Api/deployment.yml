@@ -26,7 +26,7 @@ items:
           run: blockdx-api
       spec:
         containers:
-        - image: lucienmartijn/blockdx.api:v1.1.4
+        - image: lucienmartijn/blockdx.api:v1.1.7
           imagePullPolicy: Always
           name: blockdx-api
           ports:

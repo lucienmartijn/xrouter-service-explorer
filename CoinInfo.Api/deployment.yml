@@ -4,8 +4,8 @@ items:
   kind: Deployment
   metadata:
     labels:
-      run: xcloud-api
-    name: xcloud-api
+      run: coininfo-api
+    name: coininfo-api
     namespace: luciendev
   spec:
     progressDeadlineSeconds: 600
@@ -13,7 +13,7 @@ items:
     revisionHistoryLimit: 10
     selector:
       matchLabels:
-        run: xcloud-api
+        run: coininfo-api
     strategy:
       rollingUpdate:
         maxSurge: 25%
@@ -23,14 +23,14 @@ items:
       metadata:
         creationTimestamp: null
         labels:
-          run: xcloud-api
+          run: coininfo-api
       spec:
         containers:
-        - image: lucienmartijn/xcloud.api:v1.1.11
+        - image: lucienmartijn/coininfo.api:v1.1.3
           imagePullPolicy: Always
-          name: xcloud-api
+          name: coininfo-api
           ports:
-          - containerPort: 8081
+          - containerPort: 8089
             protocol: TCP
           resources: {}
           terminationMessagePath: /dev/termination-log
@@ -43,15 +43,15 @@ items:
 - apiVersion: v1
   kind: Service
   metadata:
-    name: xcloud-api
+    name: coininfo-api
     namespace: luciendev
   spec:
     ports:
-    - port: 8081
+    - port: 8089
       protocol: TCP
-      targetPort: 8081
+      targetPort: 8089
     selector:
-      run: xcloud-api
+      run: coininfo-api
     sessionAffinity: None
     type: ClusterIP
   status:
